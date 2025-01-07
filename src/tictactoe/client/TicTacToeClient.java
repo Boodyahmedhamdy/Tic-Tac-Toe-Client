@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *
  * @author HP
  */
 public class TicTacToeClient extends Application {

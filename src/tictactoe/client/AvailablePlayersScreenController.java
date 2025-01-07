@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.text.Text;
+import tictactoe.client.ui.components.UserListItem;
+import tictactoe.client.ui.states.UserListItemUiState;
 
 /**
  * FXML Controller class
@@ -30,7 +32,7 @@ public class AvailablePlayersScreenController implements Initializable {
     @FXML
     private Button btnSignOut;
     @FXML
-    private ListView<String> lvAvailablePlayers;
+    private ListView<UserListItemUiState> lvAvailablePlayers;
     
 
     /**
@@ -40,14 +42,17 @@ public class AvailablePlayersScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        lvAvailablePlayers.getItems().addAll("boody", "Ahmed", "hamdy", "hassan");
+        lvAvailablePlayers.getItems().addAll(
+                new UserListItemUiState("boody", 33),
+                new UserListItemUiState("Ahmed", 323)
+        );
         
         lvAvailablePlayers
                 .getSelectionModel()
                 .selectedItemProperty()
-                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-                    System.out.println( lvAvailablePlayers.getSelectionModel().getSelectedItem() );
-                });
+                .addListener((ObservableValue<? extends UserListItemUiState> observable, UserListItemUiState oldValue, UserListItemUiState newValue) -> {
+                    System.out.println(lvAvailablePlayers.getSelectionModel().getSelectedItem());
+        });
         
     }    
     

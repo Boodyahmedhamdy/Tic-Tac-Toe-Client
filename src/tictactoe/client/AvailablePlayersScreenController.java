@@ -7,15 +7,12 @@ package tictactoe.client;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.text.Text;
-import tictactoe.client.ui.components.UserListItem;
 import tictactoe.client.ui.states.UserListItemUiState;
 
 /**

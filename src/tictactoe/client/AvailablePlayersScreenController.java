@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tictactoe.client;
 
 import java.net.URL;
@@ -30,10 +25,10 @@ public class AvailablePlayersScreenController implements Initializable {
     private Button btnSignOut;
     @FXML
     private ListView<UserListItemUiState> lvAvailablePlayers;
-    
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -43,14 +38,14 @@ public class AvailablePlayersScreenController implements Initializable {
                 new UserListItemUiState("boody", 33),
                 new UserListItemUiState("Ahmed", 323)
         );
-        
+
         lvAvailablePlayers
                 .getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ObservableValue<? extends UserListItemUiState> observable, UserListItemUiState oldValue, UserListItemUiState newValue) -> {
                     System.out.println(lvAvailablePlayers.getSelectionModel().getSelectedItem());
-        });
-        
-    }    
-    
+                });
+
+    }
+
 }

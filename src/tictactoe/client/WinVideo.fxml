@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.media.MediaView?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.WinVideoController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" stylesheets="@ui/styles/Alert_Dialogs_Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.WinVideoController">
    <children>
-      <MediaView fx:id="win_video" fitHeight="200.0" fitWidth="200.0" layoutX="42.0" layoutY="3.0" />
+      <MediaView fx:id="win_video" fitHeight="300.0" fitWidth="300.0" layoutX="42.0" layoutY="3.0" />
    </children>
 </Pane>

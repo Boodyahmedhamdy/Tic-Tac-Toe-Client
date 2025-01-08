@@ -1,4 +1,3 @@
-/* Main FXML Class Styles */
 .mainFxmlClass {
     -fx-opacity: 1;
 }
@@ -8,14 +7,14 @@
     -fx-hgap: 5%;
     -fx-vgap: 5%;
     /*-fx-background-color: black;*/
-    -fx-border-color: black
+    -fx-border-color: black; /* Missing semicolon added here */
     -fx-opacity: 1;
 }
 
 #grid-pane > * {
     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);
     -fx-background-radius: 0;
-    -fx-font: bold 40px 'Comic Sans MS';
+    -fx-font: bold 40px  'Comic Sans MS'; 
     -fx-opacity: 1;
 }
 

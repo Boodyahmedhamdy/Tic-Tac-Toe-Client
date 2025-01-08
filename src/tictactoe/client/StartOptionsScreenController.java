@@ -83,6 +83,7 @@ public class StartOptionsScreenController implements Initializable {
             } else {
                 try {
                     if (connectToServer(ip)) {
+                        PlayerSocket playerSocket = new PlayerSocket();
                         navigateToScreen("LoginScreen.fxml", playOnlineBtn);
                     } else {
                         showErrorAlert(ipError, "Cannot Find Server with This IP", "Connection Failed");

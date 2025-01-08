@@ -19,7 +19,7 @@ public class TicTacToeClient extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("AvailablePlayersScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("RegisterScreen.fxml"));
         
         Scene scene = new Scene(root);
         

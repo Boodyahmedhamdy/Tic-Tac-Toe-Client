@@ -1,4 +1,20 @@
 .level-one-container {
-    -fx-background-color: yellowgreen;
+    -fx-background-color: #dddddd;
     -fx-padding: 10;
 }
+.TextField{}
+.button {
+     -fx-background-color: red;
+    -fx-display: flex;
+    -fx-align-items: center;
+  -fx-gap: 10px;
+   -fx-padding: 10px 15px;
+    -fx-margin-top: 10px;
+    -fx-background-color: #007BFF;
+    -fx-color: white;
+    -fx-border: none;
+    -fx-border-radius: 5px;
+    
+    -fx-cursor: pointer;
+   
+  }

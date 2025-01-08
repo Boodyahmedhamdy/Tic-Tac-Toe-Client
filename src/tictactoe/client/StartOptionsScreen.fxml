@@ -19,7 +19,7 @@
                         <Image url="@ui/styles/xoLogo.png" /> 
                     </image>
                 </ImageView>
-                <Label fx:id="gameTitle" prefHeight="127.0" prefWidth="459.0" text="Tic Tac Toe">
+                <Label fx:id="gameTitle" prefHeight="133.0" prefWidth="375.0" text="Tic Tac Toe">
                     <font>
                         <Font size="45.0" />
                     </font>

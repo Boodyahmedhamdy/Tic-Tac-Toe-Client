@@ -51,6 +51,9 @@ public class StartOptionsScreenController implements Initializable {
             Alert iperror = new Alert(AlertType.ERROR);
             TextInputDialog ipPicker = new TextInputDialog("");
 
+            ipPicker.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
+            iperror.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
+
             ipPicker.setHeaderText("Please Enter Server IP");
             ipPicker.setTitle("Connect to Server");
             ipPicker.setContentText("IP:");

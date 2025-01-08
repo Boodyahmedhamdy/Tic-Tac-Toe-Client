@@ -1,0 +1,15 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+.CenterButton{
+    -fx-border-right-color: black;
+    -fx-border-right-width: 2px;
+    -fx-border-right-style: solid;
+    -fx-border-top: transparent; /* Optional: remove top border */
+    -fx-border-left: transparent; /* Optional: remove left border */
+    -fx-border-bottom: transparent; /* Optional: remove bottom border */
+}

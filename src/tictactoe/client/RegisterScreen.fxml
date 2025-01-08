@@ -12,18 +12,24 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.RegisterScreenController">
    <top>
-      <FlowPane prefHeight="64.0" prefWidth="600.0" styleClass="level-one-container" BorderPane.alignment="CENTER">
+      <FlowPane prefHeight="64.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="&lt;" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcom to register" textAlignment="CENTER" wrappingWidth="549.65673828125" />
+            <Button fx:id="backbtn" mnemonicParsing="false" text="&lt;">
+               <FlowPane.margin>
+                  <Insets left="20.0" />
+               </FlowPane.margin></Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Welcom to register" textAlignment="CENTER" wrappingWidth="496.65673828125">
+               <FlowPane.margin>
+                  <Insets left="20.0" />
+               </FlowPane.margin></Text>
          </children>
       </FlowPane>
    </top>
    <center>
-      <GridPane BorderPane.alignment="CENTER">
+      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="153.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="157.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="453.0" minWidth="10.0" prefWidth="443.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="190.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="453.0" minWidth="10.0" prefWidth="410.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -31,7 +37,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Text fill="#311a6f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  User name" />
+            <Text fill="#323136" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  User name" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Passwordxt" GridPane.rowIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Confirm password" GridPane.rowIndex="2" />
             <TextField maxWidth="-Infinity" prefHeight="31.0" prefWidth="316.0" GridPane.columnIndex="1" />
@@ -41,14 +47,10 @@
       </GridPane>
    </center>
    <bottom>
-      <FlowPane prefHeight="91.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER">
-         <children>
-            <Button mnemonicParsing="false" style="-fx-border-color: blue; -fx-background-size: 10; -fx-border-radius: 20;" text="Register" textAlignment="CENTER">
-               <FlowPane.margin>
-                  <Insets left="300.0" />
-               </FlowPane.margin>
-            </Button>
-         </children>
-      </FlowPane>
+     <FlowPane alignment="CENTER" prefHeight="91.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER">
+    <children>
+        <Button fx:id="registerbtn" styleClass="centerButton" text="Register" />
+    </children>
+</FlowPane>
    </bottom>
 </BorderPane>

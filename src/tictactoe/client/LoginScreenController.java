@@ -24,8 +24,7 @@ import javafx.stage.Stage;
  */
 public class LoginScreenController implements Initializable {
 
-    @FXML
-    private Button signbtn;
+   
     
     @FXML
     private Button loginbtn;
@@ -33,16 +32,19 @@ public class LoginScreenController implements Initializable {
     private TextField nameField;
     @FXML
     private TextField passwordField;
+    @FXML
+    private Button registerbtn;
 
     /**
      * Initializes the controller class.
      */
+
     @FXML
     void handleRegister() throws IOException {
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterScreen.fxml"));
         Parent root = loader.load();
-        Stage stage = (Stage) signbtn.getScene().getWindow();
+        Stage stage = (Stage) registerbtn.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -52,8 +54,20 @@ public class LoginScreenController implements Initializable {
         System.out.println("Login button clicked");
        
     }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+         registerbtn.setOnAction((event) -> {
+        try {         
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterScreen.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) registerbtn.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    });
         // TODO
     }    
     

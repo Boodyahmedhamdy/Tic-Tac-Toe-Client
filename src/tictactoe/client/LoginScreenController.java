@@ -19,8 +19,7 @@ import javafx.scene.control.TextField;
  */
 public class LoginScreenController implements Initializable {
 
-    @FXML
-    private Button signbtn;
+   
     
     @FXML
     private Button loginbtn;
@@ -28,16 +27,18 @@ public class LoginScreenController implements Initializable {
     private TextField nameField;
     @FXML
     private TextField passwordField;
+    @FXML
+    private Button registerbtn;
 
     /**
      * Initializes the controller class.
      */
-    @FXML
-    void wellcom(){
-        System.out.println("tictactoe.client.LoginScreenController.wellcom()");
-    }
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+         registerbtn.setOnAction((event) -> {
+            System.out.println("HHHHHHHHH");
+        });
         // TODO
     }    
     

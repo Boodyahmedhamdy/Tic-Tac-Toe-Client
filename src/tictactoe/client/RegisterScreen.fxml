@@ -47,9 +47,9 @@
       </GridPane>
    </center>
    <bottom>
-     <FlowPane prefHeight="91.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER" alignment="CENTER">
+     <FlowPane alignment="CENTER" prefHeight="91.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER">
     <children>
-        <Button text="Register" styleClass="centerButton" />
+        <Button styleClass="centerButton" text="Register" />
     </children>
 </FlowPane>
    </bottom>

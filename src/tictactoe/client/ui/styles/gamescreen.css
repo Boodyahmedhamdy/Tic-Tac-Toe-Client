@@ -1,0 +1,21 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+#grid-pane {
+    -fx-hgap: 5; /* Horizontal gap between cells */
+    -fx-vgap: 5; /* Vertical gap between cells */
+    -fx-background-color: black; /* Color of the grid lines */
+    
+}
+
+#grid-pane > * {
+    -fx-background-color:  linear-gradient(to bottom, #ffffff, #f2f2f2);
+    -fx-background-radius: 0;
+}
+#screen{
+     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
+}

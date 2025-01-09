@@ -14,7 +14,7 @@
    <top>
       <FlowPane prefHeight="64.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="&lt;">
+            <Button fx:id="backbtn" mnemonicParsing="false" text="&lt;">
                <FlowPane.margin>
                   <Insets left="20.0" />
                </FlowPane.margin></Button>
@@ -49,7 +49,7 @@
    <bottom>
      <FlowPane alignment="CENTER" prefHeight="91.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER">
     <children>
-        <Button styleClass="centerButton" text="Register" />
+        <Button fx:id="registerbtn" styleClass="centerButton" text="Register" />
     </children>
 </FlowPane>
    </bottom>

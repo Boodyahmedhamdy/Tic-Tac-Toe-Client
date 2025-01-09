@@ -13,27 +13,40 @@ import java.awt.Point;
  */
 public class Game {
     
-    String[][] board = new String[3][3];
-    boolean isDone = false;
-    char currentPlayer = 'X';
-    Point[] winingPoints = new Point[3];
+    public String[][] board = new String[3][3];
+    public boolean isDone = false;
+    public char currentPlayer = 'X';
+    public char winnerPlayer;
+    public Point[] winingPoints = new Point[3];
 
     public Game() {
+        initBoard();
+    }
+    
+    public Game(char currentPlayer) {
+        initBoard();
+        this.currentPlayer = currentPlayer;
+    }
+    
+    private void initBoard() {
+        for(int i = 0 ; i < 3 ; i++) {
+            for(int j = 0 ; j < 3 ; j++) {
+                board[i][j] = "";
+            }
+        }
     }
     
     
-    void playAt(int x, int y) {
+    public void playAt(int x, int y) {
         board[x][y] = String.valueOf(currentPlayer);
-        switchCurrentPlayer();
-        checkBoard();
     }
 
-    private void switchCurrentPlayer() {
+    public void switchCurrentPlayer() {
         if(currentPlayer == 'X') currentPlayer = 'O';
         else currentPlayer = 'X';
     }
 
-    private void checkBoard() {
+    public void checkBoard() {
         if(!isDone) {
             checkRows();
             checkColumns();
@@ -43,7 +56,7 @@ public class Game {
     }
 
     private void checkRows() {
-        for(int row = 0 ; row > 3 ; row++) {
+        for(int row = 0 ; row < 3 ; row++) {
             checkRow(row);
         }
     }
@@ -56,10 +69,12 @@ public class Game {
             !board[row][1].isEmpty() &&
             !board[row][2].isEmpty()
         ) {
+            System.out.println("Row #" + row + " was checked and it is the winner");
             isDone = true;
             winingPoints[0] = new Point(row, 0);
             winingPoints[1] = new Point(row, 1);
             winingPoints[2] = new Point(row, 2);
+            winnerPlayer = board[row][0].charAt(0);
         }
     }
 
@@ -77,10 +92,12 @@ public class Game {
             !board[1][col].isEmpty() &&
             !board[2][col].isEmpty()
         ) {
+            System.out.println("Column #" + col + " was checked and it is the winner");
             isDone = true;
             winingPoints[0] = new Point(0, col);
             winingPoints[1] = new Point(1, col);
             winingPoints[2] = new Point(2, col);
+            winnerPlayer = board[0][col].charAt(0);
         }
     }
 
@@ -96,6 +113,7 @@ public class Game {
             winingPoints[0] = new Point(0, 0);
             winingPoints[1] = new Point(1, 1);
             winingPoints[2] = new Point(2, 2);
+            winnerPlayer = board[0][0].charAt(0);
         }
     }
 
@@ -107,11 +125,19 @@ public class Game {
             !board[1][1].isEmpty() &&
             !board[2][0].isEmpty()
         ) {
+            isDone = true;
             winingPoints[0] = new Point(0, 2);
             winingPoints[1] = new Point(1, 1);
             winingPoints[2] = new Point(2, 0);
+            winnerPlayer = board[0][2].charAt(0);
         }
     }
     
+    public void restart() {
+        isDone = false;
+        currentPlayer = winnerPlayer;
+        winnerPlayer = 'e'; // for empty
+        initBoard();
+    }
     
 }

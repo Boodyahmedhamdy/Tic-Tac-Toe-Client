@@ -38,7 +38,23 @@ public class LoginScreenController implements Initializable {
     /**
      * Initializes the controller class.
      */
-   
+
+    @FXML
+    void handleRegister() throws IOException {
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterScreen.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) registerbtn.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    void handleLogin() {
+        System.out.println("Login button clicked");
+       
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
          registerbtn.setOnAction((event) -> {

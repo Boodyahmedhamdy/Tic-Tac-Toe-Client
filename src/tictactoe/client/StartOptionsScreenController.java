@@ -1,19 +1,26 @@
 package tictactoe.client;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -72,6 +79,17 @@ public class StartOptionsScreenController implements Initializable {
                     iperror.setTitle("Connection Failed");
                     iperror.setHeaderText("INVALID IP");
                     iperror.showAndWait();
+                } else {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+                        Parent root = loader.load();
+                        Stage stage = (Stage) playOnlineBtn.getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    } catch (IOException ex) {
+                        Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                 }
 
             });

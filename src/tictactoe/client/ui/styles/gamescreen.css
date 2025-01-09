@@ -5,11 +5,17 @@
 .mainFxmlClass {
 
 }
-.CenterButton{
-    -fx-border-right-color: black;
-    -fx-border-right-width: 2px;
-    -fx-border-right-style: solid;
-    -fx-border-top: transparent; /* Optional: remove top border */
-    -fx-border-left: transparent; /* Optional: remove left border */
-    -fx-border-bottom: transparent; /* Optional: remove bottom border */
+#grid-pane {
+    -fx-hgap: 5; /* Horizontal gap between cells */
+    -fx-vgap: 5; /* Vertical gap between cells */
+    -fx-background-color: black; /* Color of the grid lines */
+    
+}
+
+#grid-pane > * {
+    -fx-background-color:  linear-gradient(to bottom, #ffffff, #f2f2f2);
+    -fx-background-radius: 0;
+}
+#screen{
+     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
 }

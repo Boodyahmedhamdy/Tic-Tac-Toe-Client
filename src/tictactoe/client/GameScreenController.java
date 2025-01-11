@@ -16,7 +16,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import tictactoe.client.game.Game;
@@ -37,9 +36,9 @@ public class GameScreenController implements Initializable {
     @FXML
     private Label player1_name;
     @FXML
-    private Label player1_score; // x
+    private Label player1_score; // O
     @FXML
-    private Label player2_score; // o
+    private Label player2_score; // X
     @FXML
     private ImageView player2_symbol;
     @FXML
@@ -116,6 +115,7 @@ public class GameScreenController implements Initializable {
             game.playAt(clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();
+            
             if(game.isDone) {
                 System.out.println("game is done");
                 System.out.println("wining points are + " + Arrays.toString(game.winingPoints));
@@ -181,6 +181,9 @@ public class GameScreenController implements Initializable {
             ((Button) node).setStyle("-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);");
             ((Button) node).setDisable(false);
         });
+    }
+    
+    private void draw() {
         
     }
    

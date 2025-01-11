@@ -15,10 +15,31 @@ public class Game {
     
     public String[][] board = new String[3][3];
     public boolean isDone = false;
-    public char currentPlayer = 'X';
-    public char winnerPlayer;
+    public Character currentPlayer = 'X';
+    public Character winnerPlayer = null;
     public Point[] winingPoints = new Point[3];
+    public Integer playerXScore = 0;
+    public Integer playerOScore = 0;
+    public Integer status = UNKNOWN;
+    
+    public static final int UNKNOWN = 0;
+    public static final int PLAYER_X_WINS = 1;
+    public static final int PLAYER_Y_WINS = 2;
+    public static final int DRAW = 3;
+    
+    private final String TOP_LEFT = board[0][0];
+    private final String TOP_CENTER = board[0][1];
+    private final String TOP_RIGHT = board[0][2];
+    
+    private final String CENTER_LEFT = board[1][0];
+    private final String CENTER_CENTER = board[1][1];
+    private final String CENTER_RIGHT = board[1][2];
 
+    private final String BOTTOM_LEFT = board[2][0];
+    private final String BOTTOM_CENTER = board[2][1];
+    private final String BOTTOM_RIGHT = board[2][2];
+    
+    
     public Game() {
         initBoard();
     }
@@ -38,7 +59,7 @@ public class Game {
     
     
     public void playAt(int x, int y) {
-        board[x][y] = String.valueOf(currentPlayer);
+        board[x][y] = currentPlayer.toString();
     }
 
     public void switchCurrentPlayer() {
@@ -46,6 +67,10 @@ public class Game {
         else currentPlayer = 'X';
     }
 
+    /**
+     * checks for any situation for a winning through
+     * rows, columns and both diagonals
+     */
     public void checkBoard() {
         if(!isDone) {
             checkRows();
@@ -74,7 +99,7 @@ public class Game {
             winingPoints[0] = new Point(row, 0);
             winingPoints[1] = new Point(row, 1);
             winingPoints[2] = new Point(row, 2);
-            winnerPlayer = board[row][0].charAt(0);
+            winnerPlayer = board[row][0].charAt(0);       
         }
     }
 
@@ -133,11 +158,33 @@ public class Game {
         }
     }
     
+    public boolean isBoardFull() {
+        for(int i = 0 ; i < 3 ; i++) {
+            for (int j = 0 ; j < 3 ; j++) {
+                if(board[i][j].isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * called when user want to restart the game. it keeps the scores.
+    */
     public void restart() {
         isDone = false;
         currentPlayer = winnerPlayer;
-        winnerPlayer = 'e'; // for empty
+        winnerPlayer = null; // for empty
         initBoard();
+    }
+    
+    /**
+     * happens when user clicks out of game. when the game is done not to play 
+     * again. note: it doesn't keep the scores
+    */
+    public void finish() {
+        
     }
     
 }

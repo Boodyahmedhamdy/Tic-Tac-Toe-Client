@@ -62,13 +62,14 @@ public class RegisterScreenController implements Initializable {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setContentText("Requiered field is empty!");
         a.showAndWait();
-           }else if(!passwordField.getText().equals(confirmPasswordField.getText())){
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setContentText("Please confirm your password!");
-        a.showAndWait();
            }else if(!isValid(emailField.getText())){
                Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setContentText("Invalid Email!");
+        a.showAndWait();
+           }
+            else if(!passwordField.getText().equals(confirmPasswordField.getText())){
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setContentText("Please confirm your password!");
         a.showAndWait();
            }
             else{

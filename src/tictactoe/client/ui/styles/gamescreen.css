@@ -15,7 +15,24 @@
 #grid-pane > * {
     -fx-background-color:  linear-gradient(to bottom, #ffffff, #f2f2f2);
     -fx-background-radius: 0;
+              
+    -fx-font-weight: bold;        
+    -fx-font-size: 40px;  
+    -fx-font-family: 'Comic Sans MS';  
+}
+#grid-pane > *:disabled {
+   -fx-background-color: white; /* Background color when disabled */         
 }
 #screen{
      -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
+}
+
+.x-button {
+    -fx-text-fill: red; 
+    -fx-background-color: white;
+}
+
+.o-button {
+    -fx-text-fill: blue;   
+    -fx-background-color: white;
 }

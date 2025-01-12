@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="screen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="655.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="screen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="655.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
    <children>
       <Button fx:id="back" mnemonicParsing="false" prefHeight="27.0" prefWidth="20.0">
          <graphic>
@@ -89,15 +89,15 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btn00" mnemonicParsing="false" prefHeight="114.0" prefWidth="168.0" />
-                  <Button fx:id="btn01" mnemonicParsing="false" prefHeight="126.0" prefWidth="168.0" GridPane.columnIndex="1" />
-                  <Button fx:id="btn02" mnemonicParsing="false" prefHeight="147.0" prefWidth="97.0" GridPane.columnIndex="2" />
-                  <Button fx:id="btn10" mnemonicParsing="false" prefHeight="117.0" prefWidth="157.0" GridPane.rowIndex="1" />
-                  <Button id="CenterButton" fx:id="btn11" mnemonicParsing="false" prefHeight="158.0" prefWidth="176.0" stylesheets="@ui/styles/gamescreen.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Button fx:id="btn12" mnemonicParsing="false" prefHeight="144.0" prefWidth="172.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button fx:id="btn20" mnemonicParsing="false" prefHeight="124.0" prefWidth="183.0" GridPane.rowIndex="2" />
-                  <Button fx:id="btn21" mnemonicParsing="false" prefHeight="144.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Button fx:id="btn22" mnemonicParsing="false" prefHeight="155.0" prefWidth="170.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Button fx:id="btn00" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="114.0" prefWidth="168.0" />
+                  <Button fx:id="btn01" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="126.0" prefWidth="168.0" GridPane.columnIndex="1" />
+                  <Button fx:id="btn02" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="147.0" prefWidth="97.0" GridPane.columnIndex="2" />
+                  <Button fx:id="btn10" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="117.0" prefWidth="157.0" GridPane.rowIndex="1" />
+                  <Button id="CenterButton" fx:id="btn11" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="158.0" prefWidth="176.0" stylesheets="@ui/styles/gamescreen.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="btn12" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="144.0" prefWidth="172.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button fx:id="btn20" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="124.0" prefWidth="183.0" GridPane.rowIndex="2" />
+                  <Button fx:id="btn21" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="144.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button fx:id="btn22" mnemonicParsing="false" onAction="#handleOnClick" prefHeight="155.0" prefWidth="170.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                </children>
                <FlowPane.margin>
                   <Insets />

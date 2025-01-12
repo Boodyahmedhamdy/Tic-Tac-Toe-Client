@@ -65,7 +65,7 @@ public class StartOptionsScreenController implements Initializable {
 
             ipPicker.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
             iperror.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
-            
+
             ipPicker.setHeaderText("Please Enter Server IP");
             ipPicker.setTitle("Connect to Server");
             ipPicker.setContentText("IP:");
@@ -109,7 +109,15 @@ public class StartOptionsScreenController implements Initializable {
         });
 
         prevRecordsBtn.setOnAction((event) -> {
-            System.out.println("سيديهاتك كلها هنااا اوعى تنسى نفسك");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("PreviousRecordsChooseOptionsScreen.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) prevRecordsBtn.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(PreviousRecordsChooseOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
     }
@@ -123,7 +131,7 @@ public class StartOptionsScreenController implements Initializable {
     private boolean connectToServer(String serverIP) {
         try {
             System.out.println("Player Initiating Connection");
-            Alert connecting =new Alert(AlertType.INFORMATION);
+            Alert connecting = new Alert(AlertType.INFORMATION);
             connecting.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
             connecting.setTitle("Connecting");
             connecting.setHeaderText("Please Wait.....");
@@ -133,7 +141,8 @@ public class StartOptionsScreenController implements Initializable {
             return true;
         } catch (IOException ex) {
             Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        return false;
+        
     }
 }

@@ -108,10 +108,15 @@ public class GameScreenController implements Initializable {
             Point clickedPosition = getClickedButtonPosition(
                 clickedButton
             );
-
+            
             clickedButton.setText(String.valueOf(game.currentPlayer));
+             if ("X".equals(clickedButton.getText())) {
+                    clickedButton.getStyleClass().add("x-button");
+                } else if ("O".equals(clickedButton.getText())) {
+                    clickedButton.getStyleClass().add("o-button");
+                }
             clickedButton.setDisable(true);
-
+            
             game.playAt(clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();

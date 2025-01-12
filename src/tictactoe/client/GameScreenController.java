@@ -6,19 +6,25 @@
 package tictactoe.client;
 
 import java.awt.Point;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import tictactoe.client.game.Game;
+import tictactoe.client.ui.UiUtils;
 
 /**
  * FXML Controller class
@@ -75,55 +81,79 @@ public class GameScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         game = new Game();
     }    
-    
-    void updateWinnerScore() {
-        switch (game.winnerPlayer) {
-            case 'O':
-                player1_score.setText(
-                        String.valueOf(
-                                Integer.parseInt(player1_score.getText())+1
-                        )
-                );  break;
-            case 'X':
-                player2_score.setText(
-                        String.valueOf(
-                                Integer.parseInt(player2_score.getText())+1
-                        )
-                );  break;
-            default:
-                // draw
-                System.out.println("Draw NO WINNER");
-                break;
-        }
-    }
+
+    Alert alert;
     
     @FXML
     void handleOnClick(ActionEvent event) {
         if(game.isDone) {
             System.out.println("game is done");
-            restartGame();
+            // restartGame();
         } else {
             Button clickedButton = (Button) event.getSource();
         
             Point clickedPosition = getClickedButtonPosition(
                 clickedButton
             );
-
+            
             clickedButton.setText(String.valueOf(game.currentPlayer));
+             if ("X".equals(clickedButton.getText())) {
+                    clickedButton.getStyleClass().add("x-button");
+                } else if ("O".equals(clickedButton.getText())) {
+                    clickedButton.getStyleClass().add("o-button");
+                }
             clickedButton.setDisable(true);
-
+            
             game.playAt(clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();
             
-            if(game.isDone) {
-                System.out.println("game is done");
-                System.out.println("wining points are + " + Arrays.toString(game.winingPoints));
-                highlightWiningPoints();
-                updateWinnerScore();
+            switch(game.status) {
+                case Game.PLAYER_X_WINS:
+                    // increase x player score
+                    highlightWiningPoints();
+                    game.playerXScore++;
+                    System.out.println("X wins");
+                    player2_score.setText(String.valueOf(game.playerXScore));
+                    
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won",
+                            () -> { restartGame(); } ,
+                            () -> { /* Go Home Screen*/ System.out.println("I will Go Home"); },
+                            () -> { System.out.println("Dialog was closed"); }  );
+                    break;
+                    
+                case Game.PLAYER_O_WINS:
+                    // increase y player score
+                    highlightWiningPoints();
+                    game.playerOScore++;
+                    System.out.println("O wins");
+                    player1_score.setText(String.valueOf(game.playerOScore));
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won",
+                            () -> { restartGame(); } ,
+                            () -> { /* Go Home Screen*/ System.out.println("I will Go Home"); },
+                            () -> { System.out.println("Dialog was closed"); }  );
+                    break;
+                    
+                case Game.DRAW:
+                    // don't do anything 
+                    // open a dialog
+                    System.out.println("Draw Happend .. No winner");
+                    UiUtils.showReplayAlert("DRAW, No Winner",
+                            () -> { restartGame(); } ,
+                            () -> { /* Go Home Screen*/ System.out.println("I will Go Home"); },
+                            () -> { System.out.println("Dialog was closed"); } );
+                    break;
+                    
+                case Game.UNKNOWN:
+                    // continue playing
+                    System.out.println("game is still on");
+                    break;
+                    
+                default:
+                    // show error message
+                    break;
             }
         }
-      
     }
     
     void highlightWiningPoints() {
@@ -183,8 +213,5 @@ public class GameScreenController implements Initializable {
         });
     }
     
-    private void draw() {
-        
-    }
    
 }

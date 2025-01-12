@@ -20,6 +20,10 @@ public class TicTacToeClient extends Application {
    //     Parent root = FXMLLoader.load(getClass().getResource("StartOptionsScreen.fxml"));
 
 
+//        Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
+       //  Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
+
+
         Scene scene = new Scene(root);
 
         stage.setScene(scene);

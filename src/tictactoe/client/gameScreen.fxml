@@ -33,7 +33,7 @@
                         <Image url="@ui/styles/O.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="player1_name" text="AI" textFill="#0384fc">
+                  <Label id="player1_name" fx:id="player1_name" text="AI" textFill="#0384fc">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -52,7 +52,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="player2_score" text="1">
+                  <Label fx:id="player2_score" text="0">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -66,7 +66,7 @@
                         <Image url="@ui/styles/X.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="player2_name" text="YOU" textFill="#ff2a2e">
+                  <Label id="player2_name" fx:id="player2_name" stylesheets="@ui/styles/gamescreen.css" text="YOU" textFill="#ff2a2e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

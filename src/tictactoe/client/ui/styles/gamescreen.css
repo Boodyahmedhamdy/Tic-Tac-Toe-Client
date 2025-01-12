@@ -21,7 +21,8 @@
     -fx-font-family: 'Comic Sans MS';  
 }
 #grid-pane > *:disabled {
-   -fx-background-color: white; /* Background color when disabled */         
+   -fx-background-color: lightgray;
+   -fx-opacity: 1;
 }
 #screen{
      -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
@@ -29,10 +30,27 @@
 
 .x-button {
     -fx-text-fill: red; 
-    -fx-background-color: white;
 }
 
 .o-button {
-    -fx-text-fill: blue;   
-    -fx-background-color: white;
+    -fx-text-fill: blue;      
+}
+
+#player2_name{
+    _fx-border-color:  #ff2a2e;      /* Border color */
+    -fx-border-width: 2;          /* Border width */
+    -fx-font-weight: bold;        
+    -fx-font-size: 14px;  
+    -fx-font-family: 'System'; 
+    -fx-text-fill: #ff2a2e; 
+}
+
+#player1_name{
+    _fx-border-color: #0384fc;      /* Border color */
+    -fx-border-width: 2;          /* Border width */
+
+    -fx-font-weight: bold;        
+    -fx-font-size: 14px;  
+    -fx-font-family: 'System'; 
+    -fx-text-fill: #0384fc; 
 }

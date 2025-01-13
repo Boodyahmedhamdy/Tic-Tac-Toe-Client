@@ -48,11 +48,15 @@ public class StartOptionsScreenController implements Initializable {
     }
 
     private void handlePlayWithAI() {
-        System.out.println("Playing with AI");
+        System.out.println("Play With AI");
     }
 
     private void handlePlayWithFriend() {
-        System.out.println("Playing with a friend");
+        try {
+            navigateToScreen("gameScreen.fxml", playWithAIbtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void handlePlayOnline() {
@@ -79,7 +83,7 @@ public class StartOptionsScreenController implements Initializable {
             } else {
                 try {
                     if (connectToServer(ip)) {
-                        navigateToScreen("LoginScreen.fxml");
+                        navigateToScreen("LoginScreen.fxml", playOnlineBtn);
                     } else {
                         showErrorAlert(ipError, "Cannot Find Server with This IP", "Connection Failed");
                     }
@@ -92,7 +96,7 @@ public class StartOptionsScreenController implements Initializable {
 
     private void handlePreviousRecords() {
         try {
-            navigateToScreen("PreviousRecordsChooseOptionsScreen.fxml");
+            navigateToScreen("PreviousRecordsScreen.fxml", prevRecordsBtn);
         } catch (IOException ex) {
             Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,10 +127,10 @@ public class StartOptionsScreenController implements Initializable {
         }
     }
 
-    private void navigateToScreen(String fxmlFile) throws IOException {
+    private void navigateToScreen(String fxmlFile, Button b) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();
-        Stage stage = (Stage) playOnlineBtn.getScene().getWindow();
+        Stage stage = (Stage) b.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }

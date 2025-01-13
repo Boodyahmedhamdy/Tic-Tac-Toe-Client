@@ -130,7 +130,7 @@ public class GameScreenController implements Initializable {
                                 System.out.println("I will Go Home"); 
                                 
                                 try {
-                                    navigateToScreen("LoginScreen.fxml");
+                                    navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
@@ -140,7 +140,7 @@ public class GameScreenController implements Initializable {
                             () -> {
                                 System.out.println("Dialog was closed"); 
                                     try {
-                                        navigateToScreen("LoginScreen.fxml");
+                                        navigateToScreen("StartOptionsScreen.fxml");
                                     } catch (IOException ex) {
                                         ex.printStackTrace();
                                         System.out.println("error happend");
@@ -160,7 +160,7 @@ public class GameScreenController implements Initializable {
                                 /* Go Home Screen*/
                                 System.out.println("I will Go Home"); 
                                 try {
-                                    navigateToScreen("LoginScreen.fxml");
+                                    navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
@@ -169,7 +169,7 @@ public class GameScreenController implements Initializable {
                             () -> { 
                                 System.out.println("Dialog was closed"); 
                                 try {
-                                    navigateToScreen("LoginScreen.fxml");
+                                    navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
@@ -187,7 +187,7 @@ public class GameScreenController implements Initializable {
                                 /* Go Home Screen*/
                                 System.out.println("I will Go Home");
                                 try {
-                                    navigateToScreen("LoginScreen.fxml");
+                                    navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
@@ -196,7 +196,7 @@ public class GameScreenController implements Initializable {
                             () -> {
                                 System.out.println("Dialog was closed"); 
                                 try {
-                                    navigateToScreen("LoginScreen.fxml");
+                                    navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
@@ -277,7 +277,7 @@ public class GameScreenController implements Initializable {
    private void navigateToScreen(String fxmlFile) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();
-        Stage stage = (Stage) btn00.getScene().getWindow();
+        Stage stage = (Stage) board.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }

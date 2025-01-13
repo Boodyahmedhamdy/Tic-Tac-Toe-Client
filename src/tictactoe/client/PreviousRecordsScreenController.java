@@ -14,8 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.stage.Stage;
 
 /**
@@ -30,13 +30,29 @@ public class PreviousRecordsScreenController implements Initializable {
     @FXML
     private Button backBtn;
     @FXML
-    private ListView<?> recordsListView;
+    private ListView<RecordListItem> recordsListView;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        recordsListView.getStylesheets().add(getClass().getResource("ui/styles/listview.css").toExternalForm());
+        
+        recordsListView.getItems().add(new RecordListItem("Game 1", "Alice", "Bob"));
+        recordsListView.getItems().add(new RecordListItem("Game 2", "Charlie", "David"));
+        recordsListView.getItems().add(new RecordListItem("Game 3", "Eve", "Frank"));
+
+        recordsListView.setCellFactory(param -> new ListCell<RecordListItem>() {
+            @Override
+            protected void updateItem(RecordListItem item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("Record: " + item.getRecordName() + "\t" + " - Player 1: " + item.getPlayer1() + "\t" + " - Player 2: " + item.getPlayer2());
+                }
+            }
+        });
 
     }
 
@@ -52,5 +68,4 @@ public class PreviousRecordsScreenController implements Initializable {
             Logger.getLogger(PreviousRecordsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

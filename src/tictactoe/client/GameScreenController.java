@@ -7,15 +7,21 @@ package tictactoe.client;
 
 import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -23,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import tictactoe.client.game.Game;
 import tictactoe.client.ui.UiUtils;
 
@@ -116,10 +123,29 @@ public class GameScreenController implements Initializable {
                     System.out.println("X wins");
                     player2_score.setText(String.valueOf(game.playerXScore));
                     
-                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won",
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won, Do you want to Replay??",
                             () -> { restartGame(); } ,
-                            () -> { /* Go Home Screen*/ System.out.println("I will Go Home"); },
-                            () -> { System.out.println("Dialog was closed"); }  );
+                            () -> { 
+                                /* Go Home Screen*/ 
+                                System.out.println("I will Go Home"); 
+                                
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                                
+                            },
+                            () -> {
+                                System.out.println("Dialog was closed"); 
+                                    try {
+                                        navigateToScreen("StartOptionsScreen.fxml");
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                        System.out.println("error happend");
+                                    }
+                            }  );
                     break;
                     
                 case Game.PLAYER_O_WINS:
@@ -128,20 +154,54 @@ public class GameScreenController implements Initializable {
                     game.playerOScore++;
                     System.out.println("O wins");
                     player1_score.setText(String.valueOf(game.playerOScore));
-                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won",
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won , Do you want to Replay??",
                             () -> { restartGame(); } ,
-                            () -> { /* Go Home Screen*/ System.out.println("I will Go Home"); },
-                            () -> { System.out.println("Dialog was closed"); }  );
+                            () -> {
+                                /* Go Home Screen*/
+                                System.out.println("I will Go Home"); 
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            },
+                            () -> { 
+                                System.out.println("Dialog was closed"); 
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            } );
                     break;
                     
                 case Game.DRAW:
                     // don't do anything 
                     // open a dialog
                     System.out.println("Draw Happend .. No winner");
-                    UiUtils.showReplayAlert("DRAW, No Winner",
+                    UiUtils.showReplayAlert("DRAW, No Winner, Do you want to Replay??",
                             () -> { restartGame(); } ,
-                            () -> { /* Go Home Screen*/ System.out.println("I will Go Home"); },
-                            () -> { System.out.println("Dialog was closed"); } );
+                            () -> { 
+                                /* Go Home Screen*/
+                                System.out.println("I will Go Home");
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            },
+                            () -> {
+                                System.out.println("Dialog was closed"); 
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            } );
                     break;
                     
                 case Game.UNKNOWN:
@@ -151,6 +211,7 @@ public class GameScreenController implements Initializable {
                     
                 default:
                     // show error message
+                    System.out.println("UNKNOWN ERROR Happend");
                     break;
             }
         }
@@ -213,5 +274,11 @@ public class GameScreenController implements Initializable {
         });
     }
     
-   
+   private void navigateToScreen(String fxmlFile) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+        Parent root = loader.load();
+        Stage stage = (Stage) board.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 }

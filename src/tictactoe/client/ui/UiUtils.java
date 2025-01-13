@@ -31,7 +31,7 @@ public class UiUtils {
      * @param pathToFxmlFile
      * @throws java.io.IOException
      */
-    public void switchTo(Stage stage, URL pathToFxmlFile) throws IOException {
+    public static void switchTo(Stage stage, URL pathToFxmlFile) throws IOException {
         Parent root  = FXMLLoader.load(pathToFxmlFile);
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -48,7 +48,7 @@ public class UiUtils {
         if(alert.getResult() == ButtonType.YES) {
             callbackOnYes.run();
         } else if(alert.getResult() == ButtonType.NO) {
-            callbackOnClose.run();
+            callbackOnNo.run();
         } else {
             alert.setOnCloseRequest((DialogEvent event) -> {
             callbackOnClose.run();

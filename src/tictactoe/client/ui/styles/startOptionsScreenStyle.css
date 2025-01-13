@@ -13,7 +13,7 @@
     -fx-font-weight: bold; /* Bold font */
     -fx-alignment: center; /* Center alignment */
     -fx-padding: 30px; /* Padding around the label */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 3); /* Subtle shadow effect */
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 3);  Subtle shadow effect */
 }
 
 /* VBox styling for vertical alignment and spacing */

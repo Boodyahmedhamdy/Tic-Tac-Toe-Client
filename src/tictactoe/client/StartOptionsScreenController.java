@@ -29,30 +29,34 @@ public class StartOptionsScreenController implements Initializable {
     @FXML
     private Button playWithAIbtn;
     @FXML
-    private Button playWithFriendBtn;
+    private Button playWithFreindBtn;
     @FXML
     private Button playOnlineBtn;
     @FXML
     private Button prevRecordsBtn;
+
+    private void setupButtonActions() {
+        playWithAIbtn.setOnAction(event -> handlePlayWithAI());
+        playWithFreindBtn.setOnAction(event -> handlePlayWithFriend());
+        playOnlineBtn.setOnAction(event -> handlePlayOnline());
+        prevRecordsBtn.setOnAction(event -> handlePreviousRecords());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setupButtonActions();
     }
 
-    private void setupButtonActions() {
-        playWithAIbtn.setOnAction(event -> handlePlayWithAI());
-        playWithFriendBtn.setOnAction(event -> handlePlayWithFriend());
-        playOnlineBtn.setOnAction(event -> handlePlayOnline());
-        prevRecordsBtn.setOnAction(event -> handlePreviousRecords());
-    }
-
     private void handlePlayWithAI() {
-        System.out.println("Playing with AI");
+        System.out.println("Play With AI");
     }
 
     private void handlePlayWithFriend() {
-        System.out.println("Playing with a friend");
+        try {
+            navigateToScreen("gameScreen.fxml", playWithAIbtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void handlePlayOnline() {
@@ -79,7 +83,7 @@ public class StartOptionsScreenController implements Initializable {
             } else {
                 try {
                     if (connectToServer(ip)) {
-                        navigateToScreen("LoginScreen.fxml");
+                        navigateToScreen("LoginScreen.fxml", playOnlineBtn);
                     } else {
                         showErrorAlert(ipError, "Cannot Find Server with This IP", "Connection Failed");
                     }
@@ -88,6 +92,14 @@ public class StartOptionsScreenController implements Initializable {
                 }
             }
         });
+    }
+
+    private void handlePreviousRecords() {
+        try {
+            navigateToScreen("PreviousRecordsScreen.fxml", prevRecordsBtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private boolean isValidIpAddress(String ipAddress) {
@@ -115,18 +127,10 @@ public class StartOptionsScreenController implements Initializable {
         }
     }
 
-    private void handlePreviousRecords() {
-        try {
-            navigateToScreen("PreviousRecordsChooseOptionsScreen.fxml");
-        } catch (IOException ex) {
-            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void navigateToScreen(String fxmlFile) throws IOException {
+    private void navigateToScreen(String fxmlFile, Button b) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();
-        Stage stage = (Stage) playOnlineBtn.getScene().getWindow();
+        Stage stage = (Stage) b.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -142,5 +146,4 @@ public class StartOptionsScreenController implements Initializable {
         ipPicker.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
         alert.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
     }
-
-};
+}

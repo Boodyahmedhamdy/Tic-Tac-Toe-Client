@@ -29,22 +29,22 @@ public class StartOptionsScreenController implements Initializable {
     @FXML
     private Button playWithAIbtn;
     @FXML
-    private Button playWithFriendBtn;
+    private Button playWithFreindBtn;
     @FXML
     private Button playOnlineBtn;
     @FXML
     private Button prevRecordsBtn;
 
+    private void setupButtonActions() {
+        playWithAIbtn.setOnAction(event -> handlePlayWithAI());
+        playWithFreindBtn.setOnAction(event -> handlePlayWithFriend());
+        playOnlineBtn.setOnAction(event -> handlePlayOnline());
+        prevRecordsBtn.setOnAction(event -> handlePreviousRecords());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setupButtonActions();
-    }
-
-    private void setupButtonActions() {
-        playWithAIbtn.setOnAction(event -> handlePlayWithAI());
-        playWithFriendBtn.setOnAction(event -> handlePlayWithFriend());
-        playOnlineBtn.setOnAction(event -> handlePlayOnline());
-        prevRecordsBtn.setOnAction(event -> handlePreviousRecords());
     }
 
     private void handlePlayWithAI() {
@@ -90,6 +90,14 @@ public class StartOptionsScreenController implements Initializable {
         });
     }
 
+    private void handlePreviousRecords() {
+        try {
+            navigateToScreen("PreviousRecordsChooseOptionsScreen.fxml");
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private boolean isValidIpAddress(String ipAddress) {
         String regex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
         return ipAddress.matches(regex);
@@ -115,14 +123,6 @@ public class StartOptionsScreenController implements Initializable {
         }
     }
 
-    private void handlePreviousRecords() {
-        try {
-            navigateToScreen("PreviousRecordsChooseOptionsScreen.fxml");
-        } catch (IOException ex) {
-            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     private void navigateToScreen(String fxmlFile) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();
@@ -142,5 +142,4 @@ public class StartOptionsScreenController implements Initializable {
         ipPicker.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
         alert.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
     }
-
-};
+}

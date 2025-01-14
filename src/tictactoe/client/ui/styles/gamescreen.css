@@ -29,11 +29,11 @@
 }
 
 .x-button {
-    -fx-text-fill: red; 
+    -fx-text-fill: #ff2a2e; 
 }
 
 .o-button {
-    -fx-text-fill: blue;      
+    -fx-text-fill: #0384fc;      
 }
 
 #player2_name{

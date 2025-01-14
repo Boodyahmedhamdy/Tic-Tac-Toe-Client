@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="screen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="655.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
+<VBox id="screen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
    <children>
       <Button fx:id="back" mnemonicParsing="false" prefHeight="27.0" prefWidth="20.0">
          <graphic>

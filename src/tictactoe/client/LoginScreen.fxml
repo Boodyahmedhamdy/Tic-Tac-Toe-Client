@@ -9,71 +9,77 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="big-screen" stylesheets="@ui/styles/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.LoginScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1056.0" styleClass="big-screen" stylesheets="@ui/styles/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.LoginScreenController">
    <top>
-      <FlowPane prefHeight="53.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <FlowPane columnHalignment="CENTER" prefHeight="53.0" prefWidth="600.0" style="-fx-alignment: center;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" text="&lt;">
                <FlowPane.margin>
-                  <Insets left="20.0" />
-               </FlowPane.margin></Button>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Welcom to login  " textAlignment="CENTER" wrappingWidth="469.6708984375" />
+                  <Insets left="20.0" top="50.0" />
+               </FlowPane.margin>
+            </Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" styleClass="label" text="🎮 Welcome to Tic Tac Toe! 🎮" textAlignment="CENTER" wrappingWidth="1027.6708984375">
+               <FlowPane.margin>
+                  <Insets top="50.0" />
+               </FlowPane.margin>
+            </Text>
          </children>
       </FlowPane>
    </top>
    <center>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="172.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="160.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="440.0" minWidth="10.0" prefWidth="440.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <TextField fx:id="nameField" maxWidth="-Infinity" prefHeight="31.0" prefWidth="354.0" styleClass="TextField" GridPane.columnIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  User name" wrappingWidth="107.6708984375">
-               <font>
-                  <Font size="20.0" />
-               </font></Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Password" GridPane.rowIndex="1" />
-            <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="31.0" prefWidth="350.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         </children>
-      </GridPane>
+      <BorderPane prefHeight="624.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="150.0" />
+         </BorderPane.margin>
+         <top>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-alignment: top;" BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" style="-fx-alignment: center;" stylesheets="@ui/styles/style.css">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="160.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="440.0" minWidth="10.0" prefWidth="440.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TextField fx:id="nameField" maxWidth="-Infinity" prefHeight="31.0" prefWidth="354.0" styleClass="TextField" GridPane.columnIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  User name" wrappingWidth="107.6708984375">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Password" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="31.0" prefWidth="350.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+                  <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="51.0" prefWidth="552.0" style="-fx-alignment: bottom-center;" stylesheets="@ui/styles/style.css">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Don't have account ?">
+                           <FlowPane.margin>
+                              <Insets />
+                           </FlowPane.margin>
+                        </Text>
+                        <Button fx:id="registerbtn" mnemonicParsing="false" text="Register">
+                           <FlowPane.margin>
+                              <Insets left="10.0" />
+                           </FlowPane.margin>
+                        </Button>
+                        <Button fx:id="loginbtn" defaultButton="true" mnemonicParsing="false" text="Login" textAlignment="CENTER">
+                           <FlowPane.margin>
+                              <Insets left="30.0" />
+                           </FlowPane.margin>
+                        </Button>
+                     </children>
+                  </FlowPane>
+               </children>
+            </VBox>
+         </top>
+      </BorderPane>
    </center>
-   <bottom>
-      <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="119.0" prefWidth="600.0" stylesheets="@ui/styles/style.css" BorderPane.alignment="CENTER">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0">
-               <FlowPane.margin>
-                  <Insets left="20.0" top="50.0" />
-               </FlowPane.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0">
-               <FlowPane.margin>
-                  <Insets top="100.0" />
-               </FlowPane.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Don't have account ?">
-               <FlowPane.margin>
-                  <Insets left="60.0" />
-               </FlowPane.margin>
-            </Text>
-            <Button fx:id="registerbtn" mnemonicParsing="false" text="Register">
-               <FlowPane.margin>
-                  <Insets left="10.0" />
-               </FlowPane.margin>
-            </Button>
-            <Button fx:id="loginbtn" defaultButton="true" mnemonicParsing="false" text="Login" textAlignment="CENTER">
-               <FlowPane.margin>
-                  <Insets left="30.0" />
-               </FlowPane.margin>
-            </Button>
-         </children>
-      </FlowPane>
-   </bottom>
 </BorderPane>

@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tictactoe.client.ui.states;
 
-/**
- *
- * @author HP
- */
 public class UserListItemUiState {
-    
+
     public String username;
     public int score;
 
@@ -27,11 +18,5 @@ public class UserListItemUiState {
     public String toString() {
         return username + " -> " + score + " points";
     }
-    
-    
-    
-    
-    
-    
-    
+
 }

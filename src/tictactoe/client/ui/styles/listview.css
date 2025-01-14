@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 13, 2025, 3:16:32 PM
+    Author     : Abdelrahman_Elshreif
+*/
+.list-view {
+    -fx-background-color: #f4f4f4; /* Light gray background */
+    -fx-border-color: #cccccc; /* Light gray border */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-padding: 10px; /* Padding inside the ListView */
+}
+
+.list-cell {
+    -fx-background-color: #ffffff; /* White background for cells */
+    -fx-border-color: #eeeeee; /* Light gray border between cells */
+    -fx-border-width: 0 0 1px 0; /* Bottom border only */
+    -fx-padding: 10px; /* Padding inside each cell */
+    -fx-font-size: 14px; /* Font size */
+    -fx-font-family: "Arial"; /* Font family */
+    -fx-text-fill: #333333; /* Dark gray text color */
+}
+
+/* Style for a cell when it's hovered */
+.list-cell:hover {
+    -fx-background-color: #e0e0e0; /* Light gray background on hover */
+}
+
+/* Style for a cell when it's selected */
+.list-cell:selected {
+    -fx-background-color: #0078d7; /* Blue background for selected cells */
+    -fx-text-fill: #ffffff; /* White text color for selected cells */
+}
+

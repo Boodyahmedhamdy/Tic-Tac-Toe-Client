@@ -22,10 +22,15 @@ public class Game {
     public Integer playerOScore = 0;
     public Integer status = UNKNOWN;
     
-    public static final int UNKNOWN = 0;
+    /*public static final int UNKNOWN = 0;
     public static final int PLAYER_X_WINS = 1;
-    public static final int PLAYER_Y_WINS = 2;
-    public static final int DRAW = 3;
+    public static final int PLAYER_O_WINS = 2;
+    public static final int DRAW = 3;*/
+    
+    public static final int UNKNOWN = 1;
+    public static final int PLAYER_X_WINS = 2;
+    public static final int PLAYER_O_WINS = -2;
+    public static final int DRAW = 0;
     
     private final String TOP_LEFT = board[0][0];
     private final String TOP_CENTER = board[0][1];
@@ -77,6 +82,7 @@ public class Game {
             checkColumns();
             checkTopLeftToBottomRightDiagonal();
             checkTopRightToBottomLeftDiagonal();
+            checkDraw();
         }
     }
 
@@ -99,7 +105,8 @@ public class Game {
             winingPoints[0] = new Point(row, 0);
             winingPoints[1] = new Point(row, 1);
             winingPoints[2] = new Point(row, 2);
-            winnerPlayer = board[row][0].charAt(0);       
+            winnerPlayer = board[row][0].charAt(0);
+            updateGameState();
         }
     }
 
@@ -123,6 +130,7 @@ public class Game {
             winingPoints[1] = new Point(1, col);
             winingPoints[2] = new Point(2, col);
             winnerPlayer = board[0][col].charAt(0);
+            updateGameState();
         }
     }
 
@@ -139,6 +147,7 @@ public class Game {
             winingPoints[1] = new Point(1, 1);
             winingPoints[2] = new Point(2, 2);
             winnerPlayer = board[0][0].charAt(0);
+            updateGameState();
         }
     }
 
@@ -155,6 +164,13 @@ public class Game {
             winingPoints[1] = new Point(1, 1);
             winingPoints[2] = new Point(2, 0);
             winnerPlayer = board[0][2].charAt(0);
+            updateGameState();
+        }
+    }
+    
+    private void checkDraw() {
+        if(isBoardFull() && winnerPlayer == null) {
+            status = DRAW;
         }
     }
     
@@ -168,13 +184,23 @@ public class Game {
         }
         return true;
     }
+    
+    /**
+     * called only when the winner is known
+    */
+    public void updateGameState() {
+        if(winnerPlayer == 'X') status = PLAYER_X_WINS;
+        else status = PLAYER_O_WINS;
+    }
 
     /**
      * called when user want to restart the game. it keeps the scores.
     */
     public void restart() {
         isDone = false;
-        currentPlayer = winnerPlayer;
+//        currentPlayer = winnerPlayer;
+        switchCurrentPlayer();
+        status = UNKNOWN;
         winnerPlayer = null; // for empty
         initBoard();
     }

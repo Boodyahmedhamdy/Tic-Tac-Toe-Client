@@ -23,7 +23,7 @@
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); /* Reverse gradient on hover */
     -fx-border-color: #cccccc; /* Lighter border on hover */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.3, 0, 3); /* Slightly stronger shadow */
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.3, 0, 3);  Slightly stronger shadow */
 }
 .button:pressed {
     -fx-background-color: #d9d9d9; /* Slightly darker gray for pressed state */

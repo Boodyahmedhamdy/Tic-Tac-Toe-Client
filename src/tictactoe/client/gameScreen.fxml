@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +14,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="screen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="655.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
+<VBox id="screen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
+
    <children>
       <Button fx:id="back" mnemonicParsing="false" prefHeight="27.0" prefWidth="20.0">
          <graphic>
@@ -33,7 +35,7 @@
                         <Image url="@ui/styles/O.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="player1_name" text="AI" textFill="#0384fc">
+                  <Label id="player1_name" fx:id="player1_name" text="AI" textFill="#0384fc">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -52,7 +54,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="player2_score" text="1">
+                  <Label fx:id="player2_score" text="0">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -66,7 +68,7 @@
                         <Image url="@ui/styles/X.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="player2_name" text="YOU" textFill="#ff2a2e">
+                  <Label id="player2_name" fx:id="player2_name" stylesheets="@ui/styles/gamescreen.css" text="YOU" textFill="#ff2a2e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -109,4 +111,8 @@
          </VBox.margin>
       </FlowPane>
    </children>
+   <stylesheets>
+      <URL value="@ui/styles/gamescreen.css" />
+      <URL value="@ui/styles/style.css" />
+   </stylesheets>
 </VBox>

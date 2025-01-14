@@ -2,6 +2,13 @@
     -fx-background-color: #dddddd;
     -fx-padding: 10;
 }
+
+.big-screen {
+    -fx-background-color: white;
+    -fx-pref-width: 1100; 
+    -fx-pref-height: 800;
+}
+
 .text {
     -fx-font-size: 20px;
 }

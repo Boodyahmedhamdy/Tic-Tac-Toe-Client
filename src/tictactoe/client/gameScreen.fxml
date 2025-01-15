@@ -14,9 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox id="screen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
-
+<VBox id="gameplayScreen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="655.0" styleClass="big-screen" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenController">
    <children>
       <Button fx:id="back" mnemonicParsing="false" text="&lt;">
          <VBox.margin>
@@ -32,7 +30,7 @@
                         <Image url="@ui/styles/O.png" />
                      </image>
                   </ImageView>
-                  <Label id="player1_name" fx:id="player1_name" text="AI" textFill="#0384fc">
+                  <Label fx:id="player1_name" text="AI" textFill="#0384fc">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -68,7 +66,7 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                   </ImageView>
-                  <Label id="player2_name" fx:id="player2_name" stylesheets="@ui/styles/gamescreen.css" text="YOU" textFill="#ff2a2e">
+                  <Label fx:id="player2_name" text="YOU" textFill="#ff2a2e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

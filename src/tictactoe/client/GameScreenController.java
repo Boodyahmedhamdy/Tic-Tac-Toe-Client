@@ -94,11 +94,6 @@ public class GameScreenController implements Initializable {
             }
         });
         game = new Game();
-        //player1_name=new Label();
-        //player2_name=new Label();
-   
-     
-                    
     }    
 
     Alert alert;
@@ -110,20 +105,17 @@ public class GameScreenController implements Initializable {
             // restartGame();
         } else {
             Button clickedButton = (Button) event.getSource();
-            
+        
             Point clickedPosition = getClickedButtonPosition(
                 clickedButton
             );
             
             clickedButton.setText(String.valueOf(game.currentPlayer));
-            //x >>red & o >>blue
-            if ("X".equals(clickedButton.getText())) {  
-                clickedButton.getStyleClass().add("x-button");
-                //player2_name.setId("player2_name");
-            } else if ("O".equals(clickedButton.getText())) {
+             if ("X".equals(clickedButton.getText())) {
+                    clickedButton.getStyleClass().add("x-button");
+                } else if ("O".equals(clickedButton.getText())) {
                     clickedButton.getStyleClass().add("o-button");
-            }
-            
+                }
             clickedButton.setDisable(true);
             
             game.playAt(clickedPosition.x, clickedPosition.y);
@@ -297,4 +289,3 @@ public class GameScreenController implements Initializable {
         stage.show();
     }
 }
-

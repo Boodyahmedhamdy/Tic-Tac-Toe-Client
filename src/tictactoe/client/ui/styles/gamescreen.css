@@ -22,7 +22,6 @@
 #grid-pane > *:disabled {
     -fx-background-color: white;
     -fx-opacity: 1;
-
 }
 
 /* Screen Background */
@@ -33,7 +32,6 @@
 
 /* Button Styles */
 .x-button {
-
     -fx-text-fill: red;
     -fx-background-color: white;
     -fx-opacity: 1;
@@ -50,23 +48,4 @@
     -fx-background-image: url(3.jpg);
     -fx-background-size: cover;
     -fx-opacity: 1;
-}
-
-#player2_name{
-    _fx-border-color:  #ff2a2e;      /* Border color */
-    -fx-border-width: 2;          /* Border width */
-    -fx-font-weight: bold;        
-    -fx-font-size: 14px;  
-    -fx-font-family: 'System'; 
-    -fx-text-fill: #ff2a2e; 
-}
-
-#player1_name{
-    _fx-border-color: #0384fc;      /* Border color */
-    -fx-border-width: 2;          /* Border width */
-
-    -fx-font-weight: bold;        
-    -fx-font-size: 14px;  
-    -fx-font-family: 'System'; 
-    -fx-text-fill: #0384fc; 
 }

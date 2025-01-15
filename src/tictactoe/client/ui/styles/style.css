@@ -5,21 +5,22 @@
 
 .big-screen {
     -fx-background-color: white;
-    -fx-pref-width: 1100; 
+    -fx-pref-width: 1100;
     -fx-pref-height: 800;
 }
 
 .text {
     -fx-font-size: 20px;
 }
+
 .label {
     -fx-text-fill: #333333;
     -fx-font-size: 40px;
     -fx-font-weight: bold;
     -fx-alignment: center;
     -fx-padding: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 3);
 }
+
 .button {
     -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6);
     -fx-text-fill: #333333;
@@ -29,17 +30,18 @@
     -fx-border-width: 2px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0.3, 0, 2);
     -fx-cursor: hand;
-    -fx-transition: 0.3s ease-in-out;
 }
+
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff);
-    -fx-border-color: #cccccc;
-    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.3, 0, 3);*/
 }
+
 .centerButton {
     -fx-translate-x: 50%;
     -fx-translate-y: 50%;
-    -fx-position: absolute;
+}
+
+#big-screen{
+    -fx-background-image: url(3.jpg);
 }

@@ -86,6 +86,13 @@ public class GameScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        back.setOnAction((event) -> {
+            try {
+                navigateToScreen("StartOptionsScreen.fxml");
+            } catch (IOException ex) {
+                Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         game = new Game();
         //player1_name=new Label();
         //player2_name=new Label();

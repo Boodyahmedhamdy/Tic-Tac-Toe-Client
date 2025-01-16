@@ -7,6 +7,7 @@ package tictactoe.client;
 
 import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,10 +27,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import static javafx.scene.media.MediaPlayer.Status.PLAYING;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import tictactoe.client.game.Game;
 import tictactoe.client.ui.UiUtils;
@@ -76,9 +84,12 @@ public class GameScreenController implements Initializable {
     private Button btn21;
     @FXML
     private Button btn22;
-
+   
+    
     
     Game game;
+    
+    
     
     
     /**
@@ -94,12 +105,14 @@ public class GameScreenController implements Initializable {
             }
         });
         game = new Game();
+
     }    
 
     Alert alert;
     
     @FXML
-    void handleOnClick(ActionEvent event) {
+    void handleOnClick(ActionEvent event) throws IOException {
+        //this.event=event;
         if(game.isDone) {
             System.out.println("game is done");
             // restartGame();
@@ -160,6 +173,9 @@ public class GameScreenController implements Initializable {
                     highlightWiningPoints();
                     game.playerOScore++;
                     System.out.println("O wins");
+                    
+                    //openVideoDialog();
+                   
                     player1_score.setText(String.valueOf(game.playerOScore));
                     UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won , Do you want to Replay??",
                             () -> { restartGame(); } ,
@@ -229,6 +245,8 @@ public class GameScreenController implements Initializable {
             Button button = getButtonAtPosition(point);
             button.setStyle("-fx-background-color:yellow;");
         }
+        //vedio win or lose
+        openVideoDialog();
     }
     
     Button getButtonAtPosition(Point position) {
@@ -288,4 +306,50 @@ public class GameScreenController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+   
+  
+   
+    private void openVideoDialog() {
+     
+        URL resource = getClass().getResource("/tictactoe/client/win-video.mp4");
+        if (resource == null) {
+            System.err.println("Video file not found!");
+            return;
+        }
+         Media media = new Media(resource.toString());
+       
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        MediaView mediaView = new MediaView(mediaPlayer);
+      
+       
+        mediaView.setFitWidth(500); 
+        mediaView.setFitHeight(400); 
+        mediaView.setPreserveRatio(true);
+
+    
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Video Dialog");
+        
+        
+        ButtonType closeButton = new ButtonType("Close", ButtonType.CLOSE.getButtonData());
+        dialog.getDialogPane().getButtonTypes().add(closeButton);
+
+       
+        StackPane mediaPane = new StackPane(mediaView);
+        dialog.getDialogPane().setContent(mediaPane);
+
+       
+        mediaPlayer.play();
+        
+        /*dialog.setOnCloseRequest(event -> {
+            mediaPlayer.stop();  // Stop the media player
+            mediaPlayer.dispose();  // Dispose of the media player resources
+        });*/
+
+        // Show the dialog
+        dialog.showAndWait();
+
+       
+    }
+
 }

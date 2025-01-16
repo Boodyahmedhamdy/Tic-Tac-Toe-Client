@@ -1,5 +1,8 @@
 package tictactoe.client;
 import java.io.File;
+
+
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -9,27 +12,27 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.scene.media.AudioClip;
 
-/**
- * @author HP
- */
 public class TicTacToeClient extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
 
-
         //Parent root = FXMLLoader.load(getClass().getResource("StartOptionsScreen.fxml"));
-
 //        Parent root = FXMLLoader.load(getClass().getResource("StartOptionsScreen.fxml"));
+
 
 
 
        // Parent root = FXMLLoader.load(getClass().getResource("StartOptionsScreen.fxml"));
 
+        Parent root = FXMLLoader.load(getClass().getResource("StartOptionsScreen.fxml"));
+
 
 //        Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
-         Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
+
+        // Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
 
 
 
@@ -58,10 +61,13 @@ public class TicTacToeClient extends Application {
         stage.setTitle("Playing video");  
         stage.show();  */
 
+
+//         Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
+        // Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
+
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
     }
 

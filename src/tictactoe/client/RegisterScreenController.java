@@ -54,15 +54,18 @@ public class RegisterScreenController implements Initializable {
         registerbtn.setOnAction((event)->{
             if (emailField.getText().isEmpty()||nameField.getText().isEmpty() || passwordField.getText().isEmpty()||confirmPasswordField.getText().isEmpty()) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
         a.setContentText("Requiered field is empty!");
         a.showAndWait();
            }else if(!isValid(emailField.getText())){
                Alert a = new Alert(Alert.AlertType.INFORMATION);
+               a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
         a.setContentText("Invalid Email!");
         a.showAndWait();
            }
             else if(!passwordField.getText().equals(confirmPasswordField.getText())){
             Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
         a.setContentText("Please confirm your password!");
         a.showAndWait();
            }

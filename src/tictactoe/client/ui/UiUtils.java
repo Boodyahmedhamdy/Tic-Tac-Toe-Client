@@ -17,46 +17,47 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogEvent;
 import javafx.stage.Stage;
+import tictactoe.client.TicTacToeClient;
 
 /**
  *
  * @author HP
  */
 public class UiUtils {
-    
-    
-    /***
+
+    /**
+     * *
      * changes the current scene to the path you send to it
+     *
      * @param stage
      * @param pathToFxmlFile
      * @throws java.io.IOException
      */
     public static void switchTo(Stage stage, URL pathToFxmlFile) throws IOException {
-        Parent root  = FXMLLoader.load(pathToFxmlFile);
+        Parent root = FXMLLoader.load(pathToFxmlFile);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-    
+
     private static Alert alert;
+
     public static void showReplayAlert(
             String message, Runnable callbackOnYes,
             Runnable callbackOnNo, Runnable callbackOnClose) {
         alert = new Alert(Alert.AlertType.INFORMATION, message,
-                            ButtonType.YES, ButtonType.NO);
+                ButtonType.YES, ButtonType.NO);
+        alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
         alert.showAndWait();
-        if(alert.getResult() == ButtonType.YES) {
+        if (alert.getResult() == ButtonType.YES) {
             callbackOnYes.run();
-        } else if(alert.getResult() == ButtonType.NO) {
+        } else if (alert.getResult() == ButtonType.NO) {
             callbackOnNo.run();
         } else {
             alert.setOnCloseRequest((DialogEvent event) -> {
-            callbackOnClose.run();
+                callbackOnClose.run();
             });
         }
-        
-        
-        
-        
+
     }
 }

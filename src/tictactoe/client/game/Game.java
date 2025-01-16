@@ -22,15 +22,10 @@ public class Game {
     public Integer playerOScore = 0;
     public Integer status = UNKNOWN;
     
-    /*public static final int UNKNOWN = 0;
+    public static final int UNKNOWN = 0;
     public static final int PLAYER_X_WINS = 1;
     public static final int PLAYER_O_WINS = 2;
-    public static final int DRAW = 3;*/
-    
-    public static final int UNKNOWN = 1;
-    public static final int PLAYER_X_WINS = 2;
-    public static final int PLAYER_O_WINS = -2;
-    public static final int DRAW = 0;
+    public static final int DRAW = 3;
     
     private final String TOP_LEFT = board[0][0];
     private final String TOP_CENTER = board[0][1];

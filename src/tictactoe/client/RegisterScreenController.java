@@ -46,6 +46,7 @@ public class RegisterScreenController implements Initializable {
         registerbtn.setOnAction((event)->{
             
             if (emailField.getText().isEmpty()||nameField.getText().isEmpty() || passwordField.getText().isEmpty()||confirmPasswordField.getText().isEmpty()) {
+
          UiUtils.showValidationAlert("Requiered field is empty!");
            }
             else if(!isValid(emailField.getText())){
@@ -53,6 +54,7 @@ public class RegisterScreenController implements Initializable {
            }
             else if(!passwordField.getText().equals(confirmPasswordField.getText())){
                 UiUtils.showValidationAlert("Please confirm your password!");
+
            }
             else{
                 navigatePage("AvailablePlayersScreen.fxml",registerbtn);

@@ -32,6 +32,11 @@ public class NetworkAcessLayer {
         System.out.println("Connecting...");
     }
     
+    /**
+     * used to send a login Request to the server
+     * @param loginRequest
+     * @return 
+    */
     public static boolean sendLoginRequest(LoginRequest loginRequest) {
         try {
             outputStream.writeObject(loginRequest);
@@ -42,6 +47,10 @@ public class NetworkAcessLayer {
         }
     }
     
+    /**
+     * returns a response from the server
+     * @return LoginResponse
+     */
     public static LoginResponse reciveLoginResponse() {
         try {
             LoginResponse response = (LoginResponse) inputStream.readObject();

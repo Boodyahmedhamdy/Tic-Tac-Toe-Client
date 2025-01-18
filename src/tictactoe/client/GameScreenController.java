@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,8 +32,10 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import tictactoe.client.game.Game;
 import tictactoe.client.game.HumanPlayer;
+import tictactoe.client.game.LocalGameWithFriend;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -78,7 +81,7 @@ public class GameScreenController implements Initializable {
         player2_name.setText(playerO.getUsername());
         player1_score.setText(playerX.getScore().toString());
         player2_score.setText(playerO.getScore().toString());
-        game = new Game(
+        game = new LocalGameWithFriend(
                 playerX, playerO
         );
     }    
@@ -89,7 +92,6 @@ public class GameScreenController implements Initializable {
     void handleOnClick(ActionEvent event) throws IOException {
         if(game.isDone) {
             System.out.println("game is done");
-            // restartGame();
         } else {
             Button clickedButton = (Button) event.getSource();
         
@@ -105,17 +107,14 @@ public class GameScreenController implements Initializable {
                 }
             clickedButton.setDisable(true);
             
-//            game.playAt(clickedPosition.x, clickedPosition.y);
             game.currentPlayer.playAt(game.board, clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();
             
             switch(game.status) {
                 case Game.PLAYER_X_WINS:
-                    // increase x player score
                     highlightWiningPoints();
                     game.winnerPlayer.setScore(game.winnerPlayer.getScore()+1);
-                    System.out.println("X wins");
                     player2_score.setText(String.valueOf(game.winnerPlayer.getScore()));
                     
                     UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay??",
@@ -238,26 +237,6 @@ public class GameScreenController implements Initializable {
         if (y == null) y = 0;
         return new Point(x, y);
     }
-    
-    String[][] getBoard() {
-        String[][] board = new String[3][3];
-        for(int i = 0 ; i < 3 ; i++) {
-            for (int j = 0 ; j < 3 ; j++) {
-                board[i][j] = getButtonAtPosition(new Point(i, j)).getText();
-            }
-        }
-        
-        return board;
-    }
-    
-    void printBoard(String[][] board) {
-        for(int i = 0 ; i < 3 ; i++) {
-            for (int j = 0 ; j < 3 ; j++) {
-                System.out.print(board[i][j]);
-            }
-            System.out.println();
-        }
-    }
 
     private void restartGame() {
         game.restart();
@@ -275,9 +254,7 @@ public class GameScreenController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
-   
-  
-   
+
     private void openVideoDialog() {
      
         URL resource = getClass().getResource("/tictactoe/client/win-video.mp4");

@@ -6,17 +6,11 @@
 package tictactoe.client;
 
 import java.awt.Point;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,10 +29,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import static javafx.scene.media.MediaPlayer.Status.PLAYING;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import tictactoe.client.game.Game;
+import tictactoe.client.game.HumanPlayer;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -49,48 +43,20 @@ import tictactoe.client.ui.UiUtils;
 public class GameScreenController implements Initializable {
 
     @FXML
-    private ColumnConstraints HCenter;
-    @FXML
     private Button back;
-    @FXML
-    private ImageView player1_symbol;
     @FXML
     private Label player1_name;
     @FXML
     private Label player1_score; // O
     @FXML
     private Label player2_score; // X
-    @FXML
-    private ImageView player2_symbol;
+
     @FXML
     private Label player2_name;
     @FXML
     private GridPane board;
-    @FXML
-    private Button btn00;
-    @FXML
-    private Button btn01;
-    @FXML
-    private Button btn02;
-    @FXML
-    private Button btn10;
-    @FXML
-    private Button btn11;
-    @FXML
-    private Button btn12;
-    @FXML
-    private Button btn20;
-    @FXML
-    private Button btn21;
-    @FXML
-    private Button btn22;
-   
-    
-    
+
     Game game;
-    
-    
-    
     
     /**
      * Initializes the controller class.
@@ -104,15 +70,23 @@ public class GameScreenController implements Initializable {
                 Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        game = new Game();
-
+        
+        HumanPlayer playerX = new HumanPlayer('X', "Boody", 0);
+        HumanPlayer playerO = new HumanPlayer('O', "Ahmed", 0);
+        
+        player1_name.setText(playerX.getUsername());
+        player2_name.setText(playerO.getUsername());
+        player1_score.setText(playerX.getScore().toString());
+        player2_score.setText(playerO.getScore().toString());
+        game = new Game(
+                playerX, playerO
+        );
     }    
 
     Alert alert;
     
     @FXML
     void handleOnClick(ActionEvent event) throws IOException {
-        //this.event=event;
         if(game.isDone) {
             System.out.println("game is done");
             // restartGame();
@@ -123,7 +97,7 @@ public class GameScreenController implements Initializable {
                 clickedButton
             );
             
-            clickedButton.setText(String.valueOf(game.currentPlayer));
+            clickedButton.setText(String.valueOf(game.currentPlayer.getSymbol()));
              if ("X".equals(clickedButton.getText())) {
                     clickedButton.getStyleClass().add("x-button");
                 } else if ("O".equals(clickedButton.getText())) {
@@ -131,7 +105,8 @@ public class GameScreenController implements Initializable {
                 }
             clickedButton.setDisable(true);
             
-            game.playAt(clickedPosition.x, clickedPosition.y);
+//            game.playAt(clickedPosition.x, clickedPosition.y);
+            game.currentPlayer.playAt(game.board, clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();
             
@@ -139,23 +114,19 @@ public class GameScreenController implements Initializable {
                 case Game.PLAYER_X_WINS:
                     // increase x player score
                     highlightWiningPoints();
-                    game.playerXScore++;
+                    game.winnerPlayer.setScore(game.winnerPlayer.getScore()+1);
                     System.out.println("X wins");
-                    player2_score.setText(String.valueOf(game.playerXScore));
+                    player2_score.setText(String.valueOf(game.winnerPlayer.getScore()));
                     
-                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won, Do you want to Replay??",
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay??",
                             () -> { restartGame(); } ,
                             () -> { 
-                                /* Go Home Screen*/ 
-                                System.out.println("I will Go Home"); 
-                                
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
                                 }
-                                
                             },
                             () -> {
                                 System.out.println("Dialog was closed"); 
@@ -171,13 +142,11 @@ public class GameScreenController implements Initializable {
                 case Game.PLAYER_O_WINS:
                     // increase y player score
                     highlightWiningPoints();
-                    game.playerOScore++;
+                    game.winnerPlayer.setScore(game.winnerPlayer.getScore() +1);
                     System.out.println("O wins");
-                    
-                    //openVideoDialog();
-                   
-                    player1_score.setText(String.valueOf(game.playerOScore));
-                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won , Do you want to Replay??",
+            
+                    player1_score.setText(String.valueOf(game.winnerPlayer.getScore()));
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won , Do you want to Replay??",
                             () -> { restartGame(); } ,
                             () -> {
                                 /* Go Home Screen*/

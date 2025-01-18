@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import tictactoe.client.ui.UiUtils;
 
 /**
  * FXML Controller class
@@ -56,25 +57,23 @@ public class LoginScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        registerbtn.setOnAction((event) -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterScreen.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) registerbtn.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        loginbtn.setOnAction((event) -> {
-            if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-                Alert a = new Alert(Alert.AlertType.INFORMATION);
-                a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
-                a.setContentText("Requiered field is empty!");
-                a.showAndWait();
-            } else {
+        
+         registerbtn.setOnAction((event) -> {
+        try {         
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterScreen.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) registerbtn.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    });
+        
+          loginbtn.setOnAction((event) -> {
+    if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+          UiUtils.showValidationAlert("Requiered field is empty!");}
+    else {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("AvailablePlayersScreen.fxml"));
                     Parent root = loader.load();
@@ -84,8 +83,13 @@ public class LoginScreenController implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-        });
+            }});
+       
+
+
+        
+
+        
         backBtn.setOnAction((event) -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("StartOptionsScreen.fxml"));
@@ -98,5 +102,7 @@ public class LoginScreenController implements Initializable {
             }
         });
 
-    }
+
+    
+}
 }

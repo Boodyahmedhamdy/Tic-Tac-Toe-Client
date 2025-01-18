@@ -6,16 +6,13 @@
 package tictactoe.client;
 
 import java.awt.Point;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,12 +22,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import tictactoe.client.game.Game;
+import tictactoe.client.game.HumanPlayer;
+import tictactoe.client.game.LocalGameWithFriend;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -41,45 +46,20 @@ import tictactoe.client.ui.UiUtils;
 public class GameScreenController implements Initializable {
 
     @FXML
-    private ColumnConstraints HCenter;
-    @FXML
     private Button back;
-    @FXML
-    private ImageView player1_symbol;
     @FXML
     private Label player1_name;
     @FXML
     private Label player1_score; // O
     @FXML
     private Label player2_score; // X
-    @FXML
-    private ImageView player2_symbol;
+
     @FXML
     private Label player2_name;
     @FXML
     private GridPane board;
-    @FXML
-    private Button btn00;
-    @FXML
-    private Button btn01;
-    @FXML
-    private Button btn02;
-    @FXML
-    private Button btn10;
-    @FXML
-    private Button btn11;
-    @FXML
-    private Button btn12;
-    @FXML
-    private Button btn20;
-    @FXML
-    private Button btn21;
-    @FXML
-    private Button btn22;
 
-    
     Game game;
-    
     
     /**
      * Initializes the controller class.
@@ -93,16 +73,25 @@ public class GameScreenController implements Initializable {
                 Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        game = new Game();
+        
+        HumanPlayer playerX = new HumanPlayer('X', "Boody", 0);
+        HumanPlayer playerO = new HumanPlayer('O', "Ahmed", 0);
+        
+        player1_name.setText(playerX.getUsername());
+        player2_name.setText(playerO.getUsername());
+        player1_score.setText(playerX.getScore().toString());
+        player2_score.setText(playerO.getScore().toString());
+        game = new LocalGameWithFriend(
+                playerX, playerO
+        );
     }    
 
     Alert alert;
     
     @FXML
-    void handleOnClick(ActionEvent event) {
+    void handleOnClick(ActionEvent event) throws IOException {
         if(game.isDone) {
             System.out.println("game is done");
-            // restartGame();
         } else {
             Button clickedButton = (Button) event.getSource();
         
@@ -110,7 +99,7 @@ public class GameScreenController implements Initializable {
                 clickedButton
             );
             
-            clickedButton.setText(String.valueOf(game.currentPlayer));
+            clickedButton.setText(String.valueOf(game.currentPlayer.getSymbol()));
              if ("X".equals(clickedButton.getText())) {
                     clickedButton.getStyleClass().add("x-button");
                 } else if ("O".equals(clickedButton.getText())) {
@@ -118,31 +107,25 @@ public class GameScreenController implements Initializable {
                 }
             clickedButton.setDisable(true);
             
-            game.playAt(clickedPosition.x, clickedPosition.y);
+            game.currentPlayer.playAt(game.board, clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();
             
             switch(game.status) {
                 case Game.PLAYER_X_WINS:
-                    // increase x player score
                     highlightWiningPoints();
-                    game.playerXScore++;
-                    System.out.println("X wins");
-                    player2_score.setText(String.valueOf(game.playerXScore));
+                    game.winnerPlayer.setScore(game.winnerPlayer.getScore()+1);
+                    player2_score.setText(String.valueOf(game.winnerPlayer.getScore()));
                     
-                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won, Do you want to Replay??",
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay??",
                             () -> { restartGame(); } ,
                             () -> { 
-                                /* Go Home Screen*/ 
-                                System.out.println("I will Go Home"); 
-                                
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
                                 }
-                                
                             },
                             () -> {
                                 System.out.println("Dialog was closed"); 
@@ -158,10 +141,11 @@ public class GameScreenController implements Initializable {
                 case Game.PLAYER_O_WINS:
                     // increase y player score
                     highlightWiningPoints();
-                    game.playerOScore++;
+                    game.winnerPlayer.setScore(game.winnerPlayer.getScore() +1);
                     System.out.println("O wins");
-                    player1_score.setText(String.valueOf(game.playerOScore));
-                    UiUtils.showReplayAlert("Player " + game.winnerPlayer + " Won , Do you want to Replay??",
+            
+                    player1_score.setText(String.valueOf(game.winnerPlayer.getScore()));
+                    UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won , Do you want to Replay??",
                             () -> { restartGame(); } ,
                             () -> {
                                 /* Go Home Screen*/
@@ -229,6 +213,8 @@ public class GameScreenController implements Initializable {
             Button button = getButtonAtPosition(point);
             button.setStyle("-fx-background-color:yellow;");
         }
+        //vedio win or lose
+        openVideoDialog();
     }
     
     Button getButtonAtPosition(Point position) {
@@ -251,26 +237,6 @@ public class GameScreenController implements Initializable {
         if (y == null) y = 0;
         return new Point(x, y);
     }
-    
-    String[][] getBoard() {
-        String[][] board = new String[3][3];
-        for(int i = 0 ; i < 3 ; i++) {
-            for (int j = 0 ; j < 3 ; j++) {
-                board[i][j] = getButtonAtPosition(new Point(i, j)).getText();
-            }
-        }
-        
-        return board;
-    }
-    
-    void printBoard(String[][] board) {
-        for(int i = 0 ; i < 3 ; i++) {
-            for (int j = 0 ; j < 3 ; j++) {
-                System.out.print(board[i][j]);
-            }
-            System.out.println();
-        }
-    }
 
     private void restartGame() {
         game.restart();
@@ -288,4 +254,48 @@ public class GameScreenController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    private void openVideoDialog() {
+     
+        URL resource = getClass().getResource("/tictactoe/client/win-video.mp4");
+        if (resource == null) {
+            System.err.println("Video file not found!");
+            return;
+        }
+         Media media = new Media(resource.toString());
+       
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        MediaView mediaView = new MediaView(mediaPlayer);
+      
+       
+        mediaView.setFitWidth(500); 
+        mediaView.setFitHeight(400); 
+        mediaView.setPreserveRatio(true);
+
+    
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Video Dialog");
+        
+        
+        ButtonType closeButton = new ButtonType("Close", ButtonType.CLOSE.getButtonData());
+        dialog.getDialogPane().getButtonTypes().add(closeButton);
+
+       
+        StackPane mediaPane = new StackPane(mediaView);
+        dialog.getDialogPane().setContent(mediaPane);
+
+       
+        mediaPlayer.play();
+        
+        /*dialog.setOnCloseRequest(event -> {
+            mediaPlayer.stop();  // Stop the media player
+            mediaPlayer.dispose();  // Dispose of the media player resources
+        });*/
+
+        // Show the dialog
+        dialog.showAndWait();
+
+       
+    }
+
 }

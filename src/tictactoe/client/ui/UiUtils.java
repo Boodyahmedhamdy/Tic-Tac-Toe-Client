@@ -62,9 +62,11 @@ public class UiUtils {
 
     }
      public static void  showValidationAlert(String sentence){
-         Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setContentText(sentence);
-        a.showAndWait();
+         alert = new Alert(Alert.AlertType.INFORMATION);
+         alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
+         
+        alert.setContentText(sentence);
+        alert.showAndWait();
 }
        public  void navigatePage(String sentence ,Button button){
            try {

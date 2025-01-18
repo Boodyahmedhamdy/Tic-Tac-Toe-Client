@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import tictactoe.client.ui.UiUtils;
 
 /**
  * FXML Controller class
@@ -70,9 +71,8 @@ public class LoginScreenController implements Initializable {
         
           loginbtn.setOnAction((event) -> {
     if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setContentText("Requiered field is empty!");
-        a.showAndWait();
+          UiUtils.showValidationAlert("Requiered field is empty!");
+       
     }
     else{
         try {

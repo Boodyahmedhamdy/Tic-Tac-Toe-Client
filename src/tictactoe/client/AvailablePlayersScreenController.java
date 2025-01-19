@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.NetworkAcessLayer;
 import network.actions.SignOutAction;
+import network.requests.StartGameRequest;
 import tictactoe.client.ui.states.UserListItemUiState;
 
 /**
@@ -58,6 +59,7 @@ public class AvailablePlayersScreenController implements Initializable {
                 .selectedItemProperty()
                 .addListener((ObservableValue<? extends UserListItemUiState> observable, UserListItemUiState oldValue, UserListItemUiState newValue) -> {
                     System.out.println(lvAvailablePlayers.getSelectionModel().getSelectedItem());
+                    onClickOnPlayer(lvAvailablePlayers.getSelectionModel().getSelectedItem());
                 });
 
     }
@@ -81,7 +83,16 @@ public class AvailablePlayersScreenController implements Initializable {
         }
     }
     
-    
+    @FXML
+    private void onClickOnPlayer(UserListItemUiState playerUiState) {
+        try {
+            StartGameRequest startGameRequest = new StartGameRequest(playerUiState.username);
+            NetworkAcessLayer.sendStartGameRequest(startGameRequest);
+        } catch (IOException ex) {
+            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            textErrorMessage.setText(ex.getMessage());
+        }
+    }
     
     
 

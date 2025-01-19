@@ -14,6 +14,7 @@ public class StartGameRequest extends Request{
     private String username;
 
     public StartGameRequest(String username) {
+         super("Start"); 
         this.username = username;
     }
 

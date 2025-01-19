@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import network.requests.RegisterRequest;
+import network.responses.RegisterResponse;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -34,52 +36,72 @@ public class RegisterScreenController implements Initializable {
     private PasswordField passwordField;
     @FXML
     private PasswordField confirmPasswordField;
+    
+    private PlayerSocket playerSocket;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         backbtn.setOnAction((event) -> {
-                navigatePage("LoginScreen.fxml",backbtn);
-    });        
-        registerbtn.setOnAction((event)->{
-            
-            if (emailField.getText().isEmpty()||nameField.getText().isEmpty() || passwordField.getText().isEmpty()||confirmPasswordField.getText().isEmpty()) {
+        this.playerSocket = new PlayerSocket();
+        //this.playerSocket.connect(new InetSocketAddress("localhost", 12345), 1000);  // Example for connecting
 
-         UiUtils.showValidationAlert("Requiered field is empty!");
-           }
-            else if(!isValid(emailField.getText())){
-                UiUtils.showValidationAlert("Invalid Email!");
-           }
-            else if(!passwordField.getText().equals(confirmPasswordField.getText())){
-                UiUtils.showValidationAlert("Please confirm your password!");
-
-           }
-            else{
-                navigatePage("AvailablePlayersScreen.fxml",registerbtn);
-            }
+        // Back button action to navigate back to Login page
+        backbtn.setOnAction((event) -> {
+            navigatePage("LoginScreen.fxml", backbtn);
         });
-    } 
-    
-     public static boolean isValid(String email) {
+
+        // Register button action to register a new user
+        registerbtn.setOnAction((event) -> {
+            handleRegister();
+        });
+    }
+
+    private void handleRegister() {
+        String username = nameField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            UiUtils.showValidationAlert("Required field is empty!");
+        } else if (!isValid(email)) {
+            UiUtils.showValidationAlert("Invalid Email!");
+        } else if (!password.equals(confirmPassword)) {
+            UiUtils.showValidationAlert("Passwords do not match!");
+        } else {
+            // Send register request to the server
+            RegisterRequest registerRequest = new RegisterRequest(username, email, password);
+            playerSocket.sendRequest(registerRequest);
+
+            // Wait for the response from the server
+            Object response = playerSocket.receiveResponse();
+            if (response instanceof RegisterResponse) {
+                RegisterResponse registerResponse = (RegisterResponse) response;
+                if (registerResponse.isSuccess()) {
+                   
+                    navigatePage("AvailablePlayersScreen.fxml", registerbtn);
+                } else {
+                    UiUtils.showValidationAlert("Registration failed: " + registerResponse.getMessage());
+                }
+            }
+        }
+    }
+
+    private boolean isValid(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +
                             "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern p = Pattern.compile(emailRegex);
         return email != null && p.matcher(email).matches();
     }
-     
-     void navigatePage(String sentence ,Button button){
-           try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(sentence));
-        Parent root = loader.load();
-        Stage stage = (Stage) button.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    } catch (IOException e) {
-        e.printStackTrace();
+
+    private void navigatePage(String fxmlFile, Button button) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            Stage stage = (Stage) button.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-     }
-   
-    
 }

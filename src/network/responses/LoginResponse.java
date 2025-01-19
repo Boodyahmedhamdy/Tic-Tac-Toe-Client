@@ -9,6 +9,16 @@ package network.responses;
  *
  * @author HP
  */
+import java.io.Serializable;
 public class LoginResponse extends Response {
-    
+    private String userId;
+
+    public LoginResponse(boolean success, String message, String userId) {
+        super(success, message);
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
 }

@@ -51,6 +51,7 @@ public class GameScreenController implements Initializable {
 
     Game game;
     Video video;
+    int AI_X,AI_Y;
     
     /**
      * Initializes the controller class.
@@ -65,13 +66,13 @@ public class GameScreenController implements Initializable {
             }
         });
         
-        HumanPlayer playerX = new HumanPlayer('X', "Boody", 0);
-        HumanPlayer playerO = new HumanPlayer('O', "Ahmed", 0);
+        HumanPlayer playerX = new HumanPlayer('X', "AI", 0);
+        HumanPlayer playerO = new HumanPlayer('O', "YOU", 0);
         
-        player1_name.setText(playerX.getUsername());
-        player2_name.setText(playerO.getUsername());
-        player1_score.setText(playerX.getScore().toString());
-        player2_score.setText(playerO.getScore().toString());
+        player2_name.setText(playerX.getUsername());
+        player1_name.setText(playerO.getUsername());
+        player2_score.setText(playerX.getScore().toString());
+        player1_score.setText(playerO.getScore().toString());
         game = new LocalGameWithFriend(
                 playerX, playerO
         );
@@ -81,7 +82,7 @@ public class GameScreenController implements Initializable {
     Alert alert;
     
     @FXML
-    void handleOnClick(ActionEvent event) throws IOException {
+   /* void handleOnClick(ActionEvent event) throws IOException {
         if(game.isDone) {
             System.out.println("game is done");
         } else {
@@ -141,7 +142,7 @@ public class GameScreenController implements Initializable {
                             () -> { restartGame(); } ,
                             () -> {
                                 /* Go Home Screen*/
-                                System.out.println("I will Go Home"); 
+                               /* System.out.println("I will Go Home"); 
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
@@ -168,7 +169,7 @@ public class GameScreenController implements Initializable {
                             () -> { restartGame(); } ,
                             () -> { 
                                 /* Go Home Screen*/
-                                System.out.println("I will Go Home");
+                               /* System.out.println("I will Go Home");
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
@@ -198,16 +199,17 @@ public class GameScreenController implements Initializable {
                     break;
             }
         }
-    }
+    }*/
     
+    
+   
     void highlightWiningPoints() {
         for(Point point: game.winingPoints) {
             Button button = getButtonAtPosition(point);
             button.setStyle("-fx-background-color:yellow;");
         }
         //vedio win or lose
-        video.winVideo();
-        
+         
     }
     
     Button getButtonAtPosition(Point position) {
@@ -249,4 +251,170 @@ public class GameScreenController implements Initializable {
     }
 
    
+    public int miniMax(String[][] board, int depth, boolean isMaximizing) {
+        game.checkBoard();
+        int result = game.status;
+        if (result != Game.UNKNOWN || depth == 0) {
+            return getScore(result);
+        }
+
+        if (isMaximizing) {
+            int bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j].equals("")) {
+                        board[i][j] = "X";
+                        int score = miniMax(board, depth - 1, false);
+                        board[i][j] = "";
+                        if (score > bestScore) {
+                            bestScore = score;
+                            AI_X = i;
+                            AI_Y = j;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j].equals("")) {
+                        board[i][j] = "O";
+                        int score = miniMax(board, depth - 1, true);
+                        board[i][j] = "";
+                        //bestScore = Math.min(score, bestScore);
+                        if (score < bestScore) {
+                            bestScore = score;
+                            AI_X = i;
+                            AI_Y = j;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
+    }
+
+    public Button getButtonAt(int x, int y) {
+        for (Node node : board.getChildren()) {
+            Integer col = GridPane.getColumnIndex(node);
+            Integer row = GridPane.getRowIndex(node);
+            col = (col == null) ? 0 : col;
+            row = (row == null) ? 0 : row;
+            if (col == x && row == y) {
+                return (Button) node;
+            }
+        }
+        throw new IllegalArgumentException("Invalid coordinates: (" + x + ", " + y + "). Button not found.");
+    }
+
+    private int getScore(int result) {
+        switch (result) {
+            case Game.PLAYER_X_WINS:
+                return 10;
+            case Game.PLAYER_O_WINS:
+                return -10;
+            case Game.DRAW:
+                return 0;
+            default:
+                return 0;
+        }
+    }
+
+    //AI
+    @FXML
+    void handleOnClick(ActionEvent event) throws IOException {
+        if (game.isDone) {
+            System.out.println("game is done");
+        } else {
+            Button clickedButton = (Button) event.getSource();
+            Point clickedPosition = getClickedButtonPosition(clickedButton);
+
+            // Handle human player (O) move
+            if (String.valueOf(game.currentPlayer.getSymbol()).equals("O")) {
+                clickedButton.setText("O");
+                clickedButton.getStyleClass().add("o-button");
+                game.currentPlayer.playAt(game.board, clickedPosition.x, clickedPosition.y);
+                clickedButton.setDisable(true);
+
+                // Check game status after human move
+                game.checkBoard();
+                if (game.status != Game.UNKNOWN) {
+                    handleGameEnd();
+                    return;
+                }
+
+                // Switch to AI player
+                game.switchCurrentPlayer();
+
+                // AI (X) makes its move
+                miniMax(game.board, 10, false);
+                Button AIButton = getButtonAt(AI_X, AI_Y);
+                AIButton.setText("X");
+                AIButton.getStyleClass().add("x-button");
+                game.currentPlayer.playAt(game.board, AI_X, AI_Y);
+                AIButton.setDisable(true);
+
+                // Check game status after AI move
+                game.checkBoard();
+                if (game.status != Game.UNKNOWN) {
+                    handleGameEnd();
+                    return;
+                }
+
+                // Switch back to human player
+                game.switchCurrentPlayer();
+            }
+        }
+    }
+
+    private void handleGameEnd() {
+        switch (game.status) {
+            case Game.PLAYER_X_WINS:
+                highlightWiningPoints();
+                video.loseVideo();
+                game.winnerPlayer.setScore(game.winnerPlayer.getScore() + 1);
+                player2_score.setText(String.valueOf(game.winnerPlayer.getScore()));
+                UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay?",
+                        this::restartGame,
+                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"),
+                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"));
+                break;
+
+            case Game.PLAYER_O_WINS:
+                highlightWiningPoints();
+                video.winVideo();
+                game.winnerPlayer.setScore(game.winnerPlayer.getScore() + 1);
+                player1_score.setText(String.valueOf(game.winnerPlayer.getScore()));
+                UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay?",
+                        this::restartGame,
+                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"),
+                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"));
+                break;
+
+            case Game.DRAW:
+                System.out.println("Draw Happend .. No winner");
+                UiUtils.showReplayAlert("DRAW, No Winner, Do you want to Replay?",
+                        this::restartGame,
+                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"),
+                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"));
+                break;
+
+            default:
+                System.out.println("UNKNOWN ERROR Happend");
+                break;
+        }
+    }
+
+    private void navigateToScreenSafely(String fxmlFile) {
+        try {
+            navigateToScreen(fxmlFile);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.out.println("Error happened");
+        }
+    }
+
+
 }

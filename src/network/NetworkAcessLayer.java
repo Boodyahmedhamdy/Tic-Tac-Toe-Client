@@ -88,6 +88,21 @@ public class NetworkAcessLayer {
         outputStream.writeObject(startGameRequest);
     }
     
+    /**
+     * called in listening thread to handle any StartGameRequests 
+     * and it returns it to the caller. returns null if an exception happens
+     * 
+     * @return 
+    */
+    public static StartGameRequest recieveStartGameRequest() {
+        try {
+            return (StartGameRequest) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     
     /**
      * sends a StartGameResponse to the server. the server will forward it to 

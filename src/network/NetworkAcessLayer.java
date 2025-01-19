@@ -15,6 +15,7 @@ import network.requests.LoginRequest;
 import network.requests.StartGameRequest;
 import network.responses.FailLoginResponse;
 import network.responses.LoginResponse;
+import network.responses.StartGameResponse;
 import network.responses.SuccessLoginResponse;
 
 /**
@@ -85,6 +86,18 @@ public class NetworkAcessLayer {
     */
     public static void sendStartGameRequest(StartGameRequest startGameRequest) throws IOException {
         outputStream.writeObject(startGameRequest);
+    }
+    
+    
+    /**
+     * sends a StartGameResponse to the server. the server will forward it to 
+     * the user with passed username inside the StartGameResponse object.
+     * it may return AcceptStartGameResponse or RefuseStartGameResponse
+     * @param startGameResponse
+     * @throws java.io.IOException
+    */
+    public static void sendStartGameResponse(StartGameResponse startGameResponse) throws IOException {
+        outputStream.writeObject(startGameResponse);
     }
     
 }

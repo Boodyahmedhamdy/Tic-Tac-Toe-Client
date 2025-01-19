@@ -19,6 +19,9 @@ import javafx.stage.Stage;
 import network.NetworkAcessLayer;
 import network.actions.SignOutAction;
 import network.requests.StartGameRequest;
+import network.responses.AcceptStartGameResposne;
+import network.responses.RefuseStartGameResponse;
+import tictactoe.client.ui.UiUtils;
 import tictactoe.client.ui.states.UserListItemUiState;
 
 /**
@@ -93,6 +96,50 @@ public class AvailablePlayersScreenController implements Initializable {
             textErrorMessage.setText(ex.getMessage());
         }
     }
+    
+    /**
+     * called when a start game request is sent to the client from another player
+     * via the server
+    */
+    private void onReciveStartGameRequest(StartGameRequest startGameRequest) {
+        UiUtils.showReplayAlert(startGameRequest.getUsername() + " wants to have a game with you, Do you Agree ? ",
+                () -> { 
+                    try {
+                        // on yes
+                        NetworkAcessLayer.sendStartGameResponse(
+                                new AcceptStartGameResposne(startGameRequest.getUsername())
+                        );
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        textErrorMessage.setText(ex.getMessage());
+                    }
+                
+                }, () -> {
+                    try {
+                        // on No
+                        NetworkAcessLayer.sendStartGameResponse(
+                                new RefuseStartGameResponse(startGameRequest.getUsername())
+                        );
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        textErrorMessage.setText(ex.getMessage());
+                    }
+                    
+                }, () -> {
+                    try {
+                        // on close
+                        NetworkAcessLayer.sendStartGameResponse(
+                                new RefuseStartGameResponse(startGameRequest.getUsername())
+                        );
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        textErrorMessage.setText(ex.getMessage());
+                    }
+                    
+                });
+    }
+    
+    
     
     
 

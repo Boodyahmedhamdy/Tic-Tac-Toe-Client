@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.actions.SignOutAction;
 import network.requests.LoginRequest;
+import network.requests.StartGameRequest;
 import network.responses.FailLoginResponse;
 import network.responses.LoginResponse;
 import network.responses.SuccessLoginResponse;
@@ -59,9 +60,7 @@ public class NetworkAcessLayer {
             if(response instanceof FailLoginResponse) return new FailLoginResponse(" ");
             if(response instanceof SuccessLoginResponse) return new SuccessLoginResponse("", 234);
             return response;
-        } catch (IOException ex) {
-            Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -71,9 +70,21 @@ public class NetworkAcessLayer {
     /**
      * sends the passed SignoutAction object to the server 
      * @param signOutAction
+     * @throws java.io.IOException
      */
     public static void sendSignOutAction(SignOutAction signOutAction) throws IOException {
         outputStream.writeObject(signOutAction);
+    }
+    
+    
+    /**
+     * sends a StartGameRequest to the server. the server will forward it to 
+     * the user with passed username inside the StartGameRequest object
+     * @param startGameRequest
+     * @throws java.io.IOException
+    */
+    public static void sendStartGameRequest(StartGameRequest startGameRequest) throws IOException {
+        outputStream.writeObject(startGameRequest);
     }
     
 }

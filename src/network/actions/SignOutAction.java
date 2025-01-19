@@ -4,7 +4,7 @@ package network.actions;
  *
  * @author HP
  */
-public class SignOutAction {
+public class SignOutAction extends Action {
     
     private String username;
 

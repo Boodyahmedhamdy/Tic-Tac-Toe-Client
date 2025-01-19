@@ -16,12 +16,10 @@ import java.util.logging.Logger;
 
 public final class PlayerSocket {
 
-    private DataOutputStream out;
-    private DataInputStream in;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
     private Scanner scanner;
     private Socket socket;
-    
-    
     private final AtomicBoolean running = new AtomicBoolean(true);
     private final ExecutorService threadPool = Executors.newFixedThreadPool(2); // for read and write 
 
@@ -33,8 +31,8 @@ public final class PlayerSocket {
 
         try {
             socket.connect(ip, timeout);
-            out = new DataOutputStream(socket.getOutputStream());
-            in = new DataInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             this.scanner = new Scanner(System.in);
             System.out.println("Connected to the server.");
             return true;
@@ -56,13 +54,12 @@ public final class PlayerSocket {
     }
 
     public void writeMessages() {
-        String line = " ";
         while (running.get()) {
             try {
                 // Read input from the user
-                line = scanner.nextLine();
+                String line = scanner.nextLine();
                 // Send the message to the server
-                out.writeUTF(line);
+                out.writeObject(line);
             } catch (IOException ex) {
                 Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
                 break;
@@ -74,13 +71,13 @@ public final class PlayerSocket {
     public void readMessages() {
         try {
             while (running.get()) {
-                String message = in.readUTF();
+                String message = (String) in.readObject();
                 System.out.println("Server: " + message);
                 if (message.equals("##")) {
                     break;
                 }
             }
-        } catch (IOException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             close();

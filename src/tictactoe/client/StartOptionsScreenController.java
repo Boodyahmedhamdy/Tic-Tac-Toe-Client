@@ -102,7 +102,7 @@ public class StartOptionsScreenController implements Initializable {
 
         try {
             InetSocketAddress serverAddress = new InetSocketAddress(serverIP, 9800);
-            PlayerSocket socket = PlayerSocket.getInstance();
+            PlayerSocket socket = PlayerSocket.getInstance();       
             if (!socket.isConnected()) {
 
                 boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second

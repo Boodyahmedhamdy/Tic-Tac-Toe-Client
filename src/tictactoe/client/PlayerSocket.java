@@ -59,11 +59,14 @@ public final class PlayerSocket {
     public void startCommunication() {
         // Start threads for reading and writing messages
         threadPool.submit(() -> {
-            readMessages();
+            if(socket.isConnected())
+                readMessages();
         });
 
         threadPool.submit(() -> {
-            writeMessages();
+             if(socket.isConnected())
+                writeMessages();
+            
         });
     }
 

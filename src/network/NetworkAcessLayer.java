@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.actions.SignOutAction;
 import network.requests.LoginRequest;
 import network.responses.FailLoginResponse;
 import network.responses.LoginResponse;
@@ -64,6 +65,15 @@ public class NetworkAcessLayer {
             Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    
+    /**
+     * sends the passed SignoutAction object to the server 
+     * @param signOutAction
+     */
+    public static void sendSignOutAction(SignOutAction signOutAction) throws IOException {
+        outputStream.writeObject(signOutAction);
     }
     
 }

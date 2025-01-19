@@ -251,9 +251,10 @@ public class GameScreenController implements Initializable {
     }
 
    
-    public int miniMax(String[][] board, int depth, boolean isMaximizing) {
-        game.checkBoard();
-        int result = game.status;
+   /* public int miniMax(String[][] board, int depth, boolean isMaximizing) {
+        //game.checkBoard();
+        //int result = game.status;
+        int result = checkGameStatus(board);
         if (result != Game.UNKNOWN || depth == 0) {
             return getScore(result);
         }
@@ -294,7 +295,7 @@ public class GameScreenController implements Initializable {
             }
             return bestScore;
         }
-    }
+    }*/
 
     public Button getButtonAt(int x, int y) {
         for (Node node : board.getChildren()) {
@@ -349,7 +350,7 @@ public class GameScreenController implements Initializable {
                 game.switchCurrentPlayer();
 
                 // AI (X) makes its move
-                miniMax(game.board, 10, false);
+                miniMax(game.board, 100, false);
                 Button AIButton = getButtonAt(AI_X, AI_Y);
                 AIButton.setText("X");
                 AIButton.getStyleClass().add("x-button");
@@ -415,6 +416,92 @@ public class GameScreenController implements Initializable {
             System.out.println("Error happened");
         }
     }
+/////////Try///////////////////
+   public int miniMax(String[][] board, int depth, boolean isMaximizingPlayer) {
+    int result = checkGameStatus(board);
+    
+    // Return score if game is over (win, loss, or draw)
+    if (result != Game.UNKNOWN || depth == 0) {
+        return result;
+    }
 
+    int bestScore = isMaximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+    int bestMoveX = -1, bestMoveY = -1;
 
+    // Loop through all possible moves
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j].equals("")) { // Only consider empty spaces
+                // Make the move
+                board[i][j] = isMaximizingPlayer ? "X" : "O";
+                
+                // Recursively call minimax and evaluate the score
+                int score = miniMax(board, depth - 1, !isMaximizingPlayer);
+                
+                // Undo the move (backtrack)
+                board[i][j] = "";
+                
+                // Update best score and best move based on the current player
+                if (isMaximizingPlayer) {
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMoveX = i;
+                        bestMoveY = j;
+                    }
+                } else {
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestMoveX = i;
+                        bestMoveY = j;
+                    }
+                }
+            }
+        }
+    }
+
+    // Save the best move for the AI
+    AI_X = bestMoveX;
+    AI_Y = bestMoveY;
+    return bestScore;
+}
+
+    private int checkGameStatus(String[][] board) {
+    if (hasWon(board, "X")) {
+        return 10; // AI wins
+    }
+    if (hasWon(board, "O")) {
+        return -10; // Player O wins
+    }
+    if (isBoardFull(board)) {
+        return 0; // Draw
+    }
+    return Game.UNKNOWN; // The game is still ongoing
+}
+    
+    
+private boolean hasWon(String[][] board, String player) {
+    // Check rows, columns, and diagonals for a win
+    for (int i = 0; i < 3; i++) {
+        if ((board[i][0].equals(player) && board[i][1].equals(player) && board[i][2].equals(player)) || 
+            (board[0][i].equals(player) && board[1][i].equals(player) && board[2][i].equals(player))) {
+            return true;
+        }
+    }
+    if ((board[0][0].equals(player) && board[1][1].equals(player) && board[2][2].equals(player)) ||
+        (board[0][2].equals(player) && board[1][1].equals(player) && board[2][0].equals(player))) {
+        return true;
+    }
+    return false;
+}
+
+private boolean isBoardFull(String[][] board) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j].equals("")) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 }

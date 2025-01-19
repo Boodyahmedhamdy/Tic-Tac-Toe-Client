@@ -78,6 +78,7 @@ public class Game {
             checkDraw();
         }
     }
+    
 
     /**
      * iterates over all rows and checks them all

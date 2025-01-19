@@ -19,6 +19,7 @@ import network.responses.Response;
 
 public final class PlayerSocket {
 
+    private static PlayerSocket playerSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Socket socket;
@@ -133,19 +134,32 @@ public final class PlayerSocket {
     private final AtomicBoolean running = new AtomicBoolean(true);
     private final ExecutorService threadPool = Executors.newFixedThreadPool(2); // for read and write 
 
-    public PlayerSocket() {
-        this.socket = new Socket(); // Initialize the socket
+    private PlayerSocket() {
+        this.socket = new Socket();
+    }
+
+    public static PlayerSocket getInstance() {
+        if (playerSocket == null) {
+            playerSocket = new PlayerSocket();
+        }
+        return playerSocket;
     }
 
     public boolean connect(InetSocketAddress ip, int timeout) {
 
         try {
-            socket.connect(ip, timeout);
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
-            this.scanner = new Scanner(System.in);
-            System.out.println("Connected to the server.");
-            return true;
+            if (!socket.isConnected()) {
+                socket.connect(ip, timeout);
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+                this.scanner = new Scanner(System.in);
+                System.out.println("Connected to the server.");
+                return true;
+            }else{
+                System.out.println("Already Connected To Server");
+                return true;
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -155,11 +169,14 @@ public final class PlayerSocket {
     public void startCommunication() {
         // Start threads for reading and writing messages
         threadPool.submit(() -> {
-            readMessages();
+            if(socket.isConnected())
+                readMessages();
         });
 
         threadPool.submit(() -> {
-            writeMessages();
+             if(socket.isConnected())
+                writeMessages();
+            
         });
     }
 
@@ -218,3 +235,9 @@ public final class PlayerSocket {
     }
 
 }*/
+
+    public boolean isConnected() {
+        return socket != null && socket.isConnected() && !socket.isClosed();
+    }
+}
+

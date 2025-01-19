@@ -23,23 +23,24 @@ import network.responses.SuccessLoginResponse;
  * @author HP
  */
 public class NetworkAcessLayer {
-    
+
     private static ObjectOutputStream outputStream;
     private static ObjectInputStream inputStream;
+
     static {
 //        outputStream = new ObjectOutputStream(new OutputStream());
     }
-    
-    
+
     public static void connect() {
         System.out.println("Connecting...");
     }
-    
+
     /**
      * used to send a login Request to the server
+     *
      * @param loginRequest
-     * @return 
-    */
+     * @return
+     */
     public static boolean sendLoginRequest(LoginRequest loginRequest) {
         try {
             outputStream.writeObject(loginRequest);
@@ -49,17 +50,22 @@ public class NetworkAcessLayer {
             return false;
         }
     }
-    
+
     /**
      * returns a response from the server
+     *
      * @return LoginResponse
      */
     public static LoginResponse reciveLoginResponse() {
         try {
             LoginResponse response = (LoginResponse) inputStream.readObject();
             // sample of what the client should do with the returned result
-            if(response instanceof FailLoginResponse) return new FailLoginResponse(" ");
-            if(response instanceof SuccessLoginResponse) return new SuccessLoginResponse("", 234);
+            if (response instanceof FailLoginResponse) {
+                return new FailLoginResponse(" ");
+            }
+            if (response instanceof SuccessLoginResponse) {
+                return new SuccessLoginResponse("", 234);
+            }
             return response;
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,8 +108,7 @@ public class NetworkAcessLayer {
         }
         return null;
     }
-    
-    
+
     /**
      * sends a StartGameResponse to the server. the server will forward it to 
      * the user with passed username inside the StartGameResponse object.
@@ -129,4 +134,5 @@ public class NetworkAcessLayer {
         }
         return null;
     }
+
 }

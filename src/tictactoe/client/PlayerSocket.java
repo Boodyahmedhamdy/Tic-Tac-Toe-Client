@@ -16,10 +16,12 @@ import java.util.logging.Logger;
 
 public final class PlayerSocket {
 
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private DataOutputStream out;
+    private DataInputStream in;
     private Scanner scanner;
     private Socket socket;
+    
+    
     private final AtomicBoolean running = new AtomicBoolean(true);
     private final ExecutorService threadPool = Executors.newFixedThreadPool(2); // for read and write 
 
@@ -31,8 +33,8 @@ public final class PlayerSocket {
 
         try {
             socket.connect(ip, timeout);
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
             this.scanner = new Scanner(System.in);
             System.out.println("Connected to the server.");
             return true;
@@ -54,7 +56,7 @@ public final class PlayerSocket {
     }
 
     public void writeMessages() {
-        String line = "";
+        String line = " ";
         while (running.get()) {
             try {
                 // Read input from the user

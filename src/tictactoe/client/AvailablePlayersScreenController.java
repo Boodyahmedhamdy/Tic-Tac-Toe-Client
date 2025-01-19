@@ -21,6 +21,7 @@ import network.actions.SignOutAction;
 import network.requests.StartGameRequest;
 import network.responses.AcceptStartGameResposne;
 import network.responses.RefuseStartGameResponse;
+import network.responses.StartGameResponse;
 import tictactoe.client.ui.UiUtils;
 import tictactoe.client.ui.states.UserListItemUiState;
 
@@ -140,7 +141,24 @@ public class AvailablePlayersScreenController implements Initializable {
     }
     
     
-    
-    
+    /**
+     * to be called when user gets a response sent by another user
+     * via server
+    */
+    private void onRecieveStartGameResponse(StartGameResponse startGameResponse) {
+        if(startGameResponse instanceof AcceptStartGameResposne) {
+            // do things related to acceptence like going to the game screen
+            
+            return;
+        }  
+        if(startGameResponse instanceof RefuseStartGameResponse) {
+            // show user error dialog t
+            
+            UiUtils.showValidationAlert(
+                    "your invitation to " + startGameResponse.getUsername() + " was refuesed"
+            );
+            return;
+        }
+    }
 
 }

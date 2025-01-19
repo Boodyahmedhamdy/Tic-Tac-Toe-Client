@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import tictactoe.client.ui.UiUtils;
 
 /**
  * FXML Controller class
@@ -40,45 +41,24 @@ public class RegisterScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
          backbtn.setOnAction((event) -> {
-        try {         
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) backbtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    });
-         
+                navigatePage("LoginScreen.fxml",backbtn);
+    });        
         registerbtn.setOnAction((event)->{
+            
             if (emailField.getText().isEmpty()||nameField.getText().isEmpty() || passwordField.getText().isEmpty()||confirmPasswordField.getText().isEmpty()) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
-        a.setContentText("Requiered field is empty!");
-        a.showAndWait();
-           }else if(!isValid(emailField.getText())){
-               Alert a = new Alert(Alert.AlertType.INFORMATION);
-               a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
-        a.setContentText("Invalid Email!");
-        a.showAndWait();
+
+         UiUtils.showValidationAlert("Requiered field is empty!");
+           }
+            else if(!isValid(emailField.getText())){
+                UiUtils.showValidationAlert("Invalid Email!");
            }
             else if(!passwordField.getText().equals(confirmPasswordField.getText())){
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
-        a.setContentText("Please confirm your password!");
-        a.showAndWait();
+                UiUtils.showValidationAlert("Please confirm your password!");
+
            }
             else{
-        try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AvailablePlayersScreen.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) registerbtn.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }}
+                navigatePage("AvailablePlayersScreen.fxml",registerbtn);
+            }
         });
     } 
     
@@ -88,5 +68,18 @@ public class RegisterScreenController implements Initializable {
         Pattern p = Pattern.compile(emailRegex);
         return email != null && p.matcher(email).matches();
     }
+     
+     void navigatePage(String sentence ,Button button){
+           try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(sentence));
+        Parent root = loader.load();
+        Stage stage = (Stage) button.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+     }
+   
     
 }

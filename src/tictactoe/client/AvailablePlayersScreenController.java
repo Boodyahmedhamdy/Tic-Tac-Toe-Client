@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import network.NetworkAcessLayer;
+import network.actions.SignOutAction;
 import tictactoe.client.ui.states.UserListItemUiState;
 
 /**
@@ -32,6 +35,8 @@ public class AvailablePlayersScreenController implements Initializable {
     private Button btnSignOut;
     @FXML
     private ListView<UserListItemUiState> lvAvailablePlayers;
+    @FXML
+    private Text textErrorMessage;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,5 +69,20 @@ public class AvailablePlayersScreenController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    
+    @FXML
+    private void onClickSignOut(ActionEvent event) {
+        try {
+            SignOutAction signOutAction = new SignOutAction(textPlayerUserName.getText());
+            NetworkAcessLayer.sendSignOutAction(signOutAction);
+        } catch (IOException ex) {
+            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            textErrorMessage.setText(ex.getMessage());
+        }
+    }
+    
+    
+    
+    
 
 }

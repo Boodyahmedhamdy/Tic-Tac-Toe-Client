@@ -100,4 +100,18 @@ public class NetworkAcessLayer {
         outputStream.writeObject(startGameResponse);
     }
     
+    /**
+     * called in listening thread to handle any StartGameResponses 
+     * and it returns it to the caller. returns null if an exception happens
+     * 
+     * @return 
+    */
+    public static StartGameResponse recieveStartGameResponse() {
+        try {
+            return (StartGameResponse) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

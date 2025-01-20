@@ -3,6 +3,7 @@ package tictactoe.client;
 import tictactoe.client.ui.states.RecordListItem;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,13 +35,15 @@ public class PreviousRecordsScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        recordsListView.getStylesheets().add(getClass().getResource("ui/styles/listview.css").toExternalForm());
-        
-        recordsListView.getItems().add(new RecordListItem("Game 1", "Alice", "Bob"));
-        recordsListView.getItems().add(new RecordListItem("Game 2", "Charlie", "David"));
-        recordsListView.getItems().add(new RecordListItem("Game 3", "Eve", "Frank"));
 
+        // We Load The Previous Game From the Text File
+        String filePath = "gameRecords.txt";
+        List<RecordListItem> recordedGames = GameRecordParser.parseSavedGames(filePath);
+
+        // Adding the Previous Games after parsing to the list view
+        recordsListView.getItems().addAll(recordedGames);
+
+        // Customize the display of each item in the ListView
         recordsListView.setCellFactory(param -> new ListCell<RecordListItem>() {
             @Override
             protected void updateItem(RecordListItem item, boolean empty) {
@@ -49,11 +52,19 @@ public class PreviousRecordsScreenController implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText("Record: " + item.getRecordName() + "\t" + " - Player 1: " + item.getPlayer1() + "\t" + " - Player 2: " + item.getPlayer2());
+                    // Display only the game name
+                    setText(item.getRecordName());
                 }
             }
         });
 
+        // Handle selection of a game
+        recordsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                List<String> moves = newSelection.getMoves();
+                replayGame(moves);
+            }
+        });
     }
 
     @FXML
@@ -67,5 +78,9 @@ public class PreviousRecordsScreenController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(PreviousRecordsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void replayGame(List<String> moves) {
+        System.out.println("Game Replay Now ");
     }
 }

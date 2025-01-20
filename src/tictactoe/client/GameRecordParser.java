@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import tictactoe.client.ui.states.RecordListItem;
 
-/**
- * Parses saved game records from a file and creates a list of RecordListItem
- * objects.
- */
 public class GameRecordParser {
 
     public static List<RecordListItem> parseSavedGames(String filePath) {
@@ -25,17 +21,14 @@ public class GameRecordParser {
                 // Start of a new game
                 if (line.startsWith("----------------------------")) {
                     if (gameName != null) {
-                        // Save the previous game
                         recordedGames.add(new RecordListItem(gameName, new ArrayList<>(moves)));
                         moves.clear(); // Reset moves for the next game
                     }
                     gameName = "Game (" + gameNumber + ")";
                     gameNumber++;
                 } else if (line.startsWith("Result: ")) {
-                    // Add the result line to the moves list for completeness
                     moves.add(line);
                 } else if (line.matches("[XO]:\\(\\d+, \\d+\\)")) {
-                    // Add valid moves to the moves list
                     moves.add(line);
                 }
             }

@@ -256,6 +256,15 @@ public class GameScreenController implements Initializable {
         return new Point(x, y);
     }
 
+    public void disableAllButtons() {
+        for (Node node : board.getChildren()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                button.setDisable(true); // Disable the button
+            }
+        }
+    }
+
     private void restartGame() {
         game.restart();
         board.getChildren().forEach((node) -> {

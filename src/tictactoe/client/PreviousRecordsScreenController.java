@@ -87,13 +87,11 @@ public class PreviousRecordsScreenController implements Initializable {
             Stage stage = (Stage) recordsListView.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-
-            // Use a single thread to replay all moves
+            gameScreenController.disableAllButtons();
             new Thread(() -> {
                 for (int i = 0; i < moves.size(); i++) {
                     String move = moves.get(i);
 
-                    // Skip lines that are not moves (e.g., "Result: Player X Wins")
                     if (!move.matches("[XO]:\\(\\d+, \\d+\\)")) {
                         System.out.println("Skipping non-move line: " + move);
                         continue;
@@ -101,16 +99,12 @@ public class PreviousRecordsScreenController implements Initializable {
 
                     // Parse the move (e.g., "O:(0, 0)")
                     String[] parts = move.split(":");
-                    if (parts.length < 2) {
-                        System.out.println("Invalid move format: " + move);
-                        continue; // Skip invalid moves
-                    }
 
                     char playerSymbol = parts[0].charAt(0); // 'X' or 'O'
                     String[] coordinates = parts[1].replace("(", "").replace(")", "").split(",");
                     if (coordinates.length < 2) {
                         System.out.println("Invalid coordinates: " + move);
-                        continue; // Skip invalid coordinates
+                        continue;
                     }
 
                     int row = Integer.parseInt(coordinates[0].trim());
@@ -119,22 +113,19 @@ public class PreviousRecordsScreenController implements Initializable {
                     // Debug: Print the parsed move
                     System.out.println("Parsed move: " + playerSymbol + " at (" + row + ", " + col + ")");
 
-                    // Use Platform.runLater to update the UI on the JavaFX Application Thread
                     Platform.runLater(() -> {
                         // Update the button text and disable it
                         Button button = gameScreenController.getButtonAtPosition(new Point(row, col));
                         if (button != null) {
-                            button.setText(String.valueOf(playerSymbol)); // Set the text (X or O)
-                            button.setDisable(true); // Disable the button
+                            button.setText(String.valueOf(playerSymbol));
+                            button.setDisable(true);
                             System.out.println("Updated button at (" + row + ", " + col + ") with " + playerSymbol);
                         } else {
                             System.out.println("Button not found at (" + row + ", " + col + ")");
                         }
                     });
-
-                    // Add a delay between moves (1 second)
                     try {
-                        Thread.sleep(1000); // 1-second delay
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

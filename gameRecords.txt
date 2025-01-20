@@ -19,3 +19,63 @@ Player O placed at (1, 2)
 Player X placed at (2, 1)
 Result: Player X Wins
 ----------------------------
+Player X placed at (1, 0)
+Player O placed at (1, 1)
+Player X placed at (0, 1)
+Player O placed at (0, 0)
+Player X placed at (2, 0)
+Player O placed at (2, 1)
+Player X placed at (1, 2)
+Player O placed at (2, 2)
+Result: Player O Wins
+----------------------------
+Player X placed at (0, 1)
+Player O placed at (0, 2)
+Player X placed at (1, 1)
+Player O placed at (1, 2)
+Player X placed at (2, 1)
+Result: Player X Wins
+----------------------------
+Player X placed at (0, 2)
+Player O placed at (0, 1)
+Player X placed at (1, 2)
+Player O placed at (1, 1)
+Player X placed at (2, 2)
+Result: Player X Wins
+----------------------------
+Player X placed at (0, 1)
+Player O placed at (0, 2)
+Player X placed at (1, 1)
+Player O placed at (1, 2)
+Player X placed at (0, 0)
+Player O placed at (1, 0)
+Player X placed at (2, 1)
+Result: Player X Wins
+----------------------------
+Player X placed at (0, 1)
+Player O placed at (1, 1)
+Player X placed at (2, 1)
+Player O placed at (0, 2)
+Player X placed at (1, 2)
+Player O placed at (2, 2)
+Player X placed at (1, 0)
+Player O placed at (0, 0)
+Result: Player O Wins
+----------------------------
+Player X placed at (0, 1)
+Player O placed at (1, 1)
+Player X placed at (0, 0)
+Player O placed at (0, 2)
+Player X placed at (1, 0)
+Player O placed at (1, 2)
+Player X placed at (2, 1)
+Player O placed at (2, 2)
+Result: Player O Wins
+----------------------------
+Player X placed at (0, 1)
+Player O placed at (0, 2)
+Player X placed at (1, 1)
+Player O placed at (1, 2)
+Player X placed at (2, 1)
+Result: Player X Wins
+----------------------------

@@ -49,7 +49,9 @@ public class GameScreenController implements Initializable {
     @FXML
     private GridPane board;
 
-    RecordedGame game;
+    public static boolean isRecording;
+
+    Game game;
     Video video;
 
     /**
@@ -60,6 +62,7 @@ public class GameScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         back.setOnAction((event) -> {
             try {
                 navigateToScreen("StartOptionsScreen.fxml");
@@ -75,12 +78,15 @@ public class GameScreenController implements Initializable {
         player2_name.setText(playerO.getUsername());
         player1_score.setText(playerX.getScore().toString());
         player2_score.setText(playerO.getScore().toString());
-//        game = new LocalGameWithFriend(
-//                playerX, playerO
-//        );
 
-        game = new RecordedGame(playerX, playerO);
         video = new Video();
+
+        if (!isRecording) {
+            game = new LocalGameWithFriend(playerX, playerO); // No casting needed here
+        } else {
+            game = new RecordedGame(playerX, playerO); // No casting needed here
+        }
+
     }
 
     Alert alert;
@@ -95,7 +101,9 @@ public class GameScreenController implements Initializable {
             Point clickedPosition = getClickedButtonPosition(
                     clickedButton
             );
-            ((RecordedGame) game).saveMove(game.currentPlayer, clickedPosition.x, clickedPosition.y);
+            if (game instanceof RecordedGame) {
+                ((RecordedGame) game).saveMove(game.currentPlayer, clickedPosition.x, clickedPosition.y);
+            }
             clickedButton.setText(String.valueOf(game.currentPlayer.getSymbol()));
             if ("X".equals(clickedButton.getText())) {
                 clickedButton.getStyleClass().add("x-button");

@@ -22,7 +22,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.stage.Stage;
 
-public class PreviousRecordsScreenController implements Initializable {
+public class GameScreenRecordController implements Initializable {
+
+    private static final String GAME_RECORDS_FILE = "gameRecords.txt";
+    private static final int REPLAY_DELAY_MS = 1000; // 1 second delay between moves
 
     @FXML
     private Label recordsLabel;
@@ -33,16 +36,20 @@ public class PreviousRecordsScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        String filePath = "gameRecords.txt";
-        List<RecordListItem> recordedGames;
-        recordedGames = GameRecordParser.parseSavedGames(filePath);
+        loadRecordedGames();
+        setupListView();
+    }
 
+    private void loadRecordedGames() {
+        List<RecordListItem> recordedGames = GameRecordParser.parseSavedGames(GAME_RECORDS_FILE);
         if (recordedGames.isEmpty()) {
             recordsLabel.setText("No recorded games found.");
         } else {
             recordsListView.getItems().addAll(recordedGames);
         }
+    }
 
+    private void setupListView() {
         recordsListView.setCellFactory(param -> new ListCell<RecordListItem>() {
             @Override
             protected void updateItem(RecordListItem item, boolean empty) {
@@ -78,71 +85,59 @@ public class PreviousRecordsScreenController implements Initializable {
         }
 
         try {
-            // Load the GameScreen
             FXMLLoader loader = new FXMLLoader(getClass().getResource("gameScreen.fxml"));
             Parent root = loader.load();
             GameScreenController gameScreenController = loader.getController();
 
-            // Show the GameScreen
             Stage stage = (Stage) recordsListView.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
 
-            // Use a single thread to replay all moves
-            new Thread(() -> {
-                for (int i = 0; i < moves.size(); i++) {
-                    String move = moves.get(i);
-
-                    // Skip lines that are not moves (e.g., "Result: Player X Wins")
-                    if (!move.matches("[XO]:\\(\\d+, \\d+\\)")) {
-                        System.out.println("Skipping non-move line: " + move);
-                        continue;
-                    }
-
-                    // Parse the move (e.g., "O:(0, 0)")
-                    String[] parts = move.split(":");
-                    if (parts.length < 2) {
-                        System.out.println("Invalid move format: " + move);
-                        continue; // Skip invalid moves
-                    }
-
-                    char playerSymbol = parts[0].charAt(0); // 'X' or 'O'
-                    String[] coordinates = parts[1].replace("(", "").replace(")", "").split(",");
-                    if (coordinates.length < 2) {
-                        System.out.println("Invalid coordinates: " + move);
-                        continue; // Skip invalid coordinates
-                    }
-
-                    int row = Integer.parseInt(coordinates[0].trim());
-                    int col = Integer.parseInt(coordinates[1].trim());
-
-                    // Debug: Print the parsed move
-                    System.out.println("Parsed move: " + playerSymbol + " at (" + row + ", " + col + ")");
-
-                    // Use Platform.runLater to update the UI on the JavaFX Application Thread
-                    Platform.runLater(() -> {
-                        // Update the button text and disable it
-                        Button button = gameScreenController.getButtonAtPosition(new Point(row, col));
-                        if (button != null) {
-                            button.setText(String.valueOf(playerSymbol)); // Set the text (X or O)
-                            button.setDisable(true); // Disable the button
-                            System.out.println("Updated button at (" + row + ", " + col + ") with " + playerSymbol);
-                        } else {
-                            System.out.println("Button not found at (" + row + ", " + col + ")");
+            Task<Void> replayTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    for (String move : moves) {
+                        if (isCancelled()) {
+                            break;
                         }
-                    });
 
-                    // Add a delay between moves (1 second)
-                    try {
-                        Thread.sleep(1000); // 1-second delay
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        if (!isValidMove(move)) {
+                            System.out.println("Skipping invalid move: " + move);
+                            continue;
+                        }
+
+                        Point position = parseMove(move);
+                        char playerSymbol = move.charAt(0);
+
+                        Platform.runLater(() -> {
+                            Button button = gameScreenController.getButtonAtPosition(position);
+                            if (button != null) {
+                                button.setText(String.valueOf(playerSymbol));
+                                button.setDisable(true);
+                            }
+                        });
+
+                        Thread.sleep(REPLAY_DELAY_MS);
                     }
+                    return null;
                 }
-            }).start();
+            };
+
+            new Thread(replayTask).start();
         } catch (IOException ex) {
             Logger.getLogger(PreviousRecordsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    private boolean isValidMove(String move) {
+        return move.matches("[XO]:\\(\\d+, \\d+\\)");
+    }
+
+    private Point parseMove(String move) {
+        String[] parts = move.split(":");
+        String[] coordinates = parts[1].replace("(", "").replace(")", "").split(",");
+        int row = Integer.parseInt(coordinates[0].trim());
+        int col = Integer.parseInt(coordinates[1].trim());
+        return new Point(row, col);
+    }
 }

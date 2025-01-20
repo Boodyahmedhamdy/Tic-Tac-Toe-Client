@@ -1,18 +1,15 @@
 package tictactoe.client;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import tictactoe.client.ui.states.RecordListItem;
 
 /**
- *
- * @author Abdelrahman_Elshreif
+ * Parses saved game records from a file and creates a list of RecordListItem
+ * objects.
  */
 public class GameRecordParser {
 
@@ -20,33 +17,35 @@ public class GameRecordParser {
         List<RecordListItem> recordedGames = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            StringBuilder gameData = new StringBuilder();
-            String gameName = "Game (1)";
-            int gameNumber = 1;
             List<String> moves = new ArrayList<>();
+            String gameName = null;
+            int gameNumber = 1;
 
             while ((line = reader.readLine()) != null) {
+                // Start of a new game
                 if (line.startsWith("----------------------------")) {
-                    RecordListItem game = new RecordListItem(gameName, new ArrayList<>(moves));
-                    recordedGames.add(game);
-                    gameData = new StringBuilder();
-                    moves.clear(); // Reset moves for the next game
-                    gameNumber++;
-                    gameName = "Game(" + gameNumber + ")";
-                } else {
-                    gameData.append(line).append("\n");
-                    if (line.startsWith("x:") || line.startsWith("O:")) {
-                        moves.add(line);
+                    if (gameName != null) {
+                        // Save the previous game
+                        recordedGames.add(new RecordListItem(gameName, new ArrayList<>(moves)));
+                        moves.clear(); // Reset moves for the next game
                     }
+                    gameName = "Game (" + gameNumber + ")";
+                    gameNumber++;
+                } else if (line.startsWith("Result: ")) {
+                    // Add the result line to the moves list for completeness
+                    moves.add(line);
+                } else if (line.matches("[XO]:\\(\\d+, \\d+\\)")) {
+                    // Add valid moves to the moves list
+                    moves.add(line);
                 }
             }
 
-            // Parse the last game
-            if (gameData.length() > 0) {
-                RecordListItem game = new RecordListItem(gameName, moves);
-                recordedGames.add(game);
+            // Add the last game if it exists
+            if (gameName != null && !moves.isEmpty()) {
+                recordedGames.add(new RecordListItem(gameName, moves));
             }
         } catch (IOException e) {
+            System.err.println("Error reading game records file: " + e.getMessage());
             e.printStackTrace();
         }
         return recordedGames;

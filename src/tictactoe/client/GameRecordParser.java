@@ -1,6 +1,5 @@
 package tictactoe.client;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,7 +21,7 @@ public class GameRecordParser {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             StringBuilder gameData = new StringBuilder();
-            String gameName = "Game 1";
+            String gameName = "Game (1)";
             int gameNumber = 1;
             List<String> moves = new ArrayList<>();
 
@@ -36,7 +35,7 @@ public class GameRecordParser {
                     gameName = "Game(" + gameNumber + ")";
                 } else {
                     gameData.append(line).append("\n");
-                    if (line.startsWith("Player X placed at") || line.startsWith("Player O placed at")) {
+                    if (line.startsWith("x:") || line.startsWith("O:")) {
                         moves.add(line);
                     }
                 }

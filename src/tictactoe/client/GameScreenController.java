@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tictactoe.client;
 
 import java.awt.Point;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -82,9 +80,9 @@ public class GameScreenController implements Initializable {
         video = new Video();
 
         if (!isRecording) {
-            game = new LocalGameWithFriend(playerX, playerO); // No casting needed here
+            game = new LocalGameWithFriend(playerX, playerO);
         } else {
-            game = new RecordedGame(playerX, playerO); // No casting needed here
+            game = new RecordedGame(playerX, playerO);
         }
 
     }

@@ -22,7 +22,7 @@ public class GameRecorder {
     }
 
     public void recordMove(Character player, int x, int y) {
-        String move = String.format("Player %s placed at (%d, %d)", player, x, y);
+        String move = String.format("%s:(%d, %d)", player, x, y);
         moves.add(move);
 
     }

@@ -29,7 +29,7 @@ public class RecordedGame extends Game {
     @Override
     public void checkBoard() {
         super.checkBoard();
-        if (isDone) {
+        if (super.isDone) {
             System.out.println("Game is done. Saving results..."); // Debugging
             switch (status) {
                 case PLAYER_X_WINS:

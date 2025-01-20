@@ -12,5 +12,11 @@ import java.io.Serializable;
  * @author HP
  */
 public abstract class Response implements Serializable {
+      
+
+    public Response() {
+      
+    }
+
     
 }

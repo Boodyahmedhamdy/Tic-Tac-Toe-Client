@@ -9,7 +9,7 @@ package network.responses;
  *
  * @author HP
  */
-public class SuccessRegisterResponse extends RegisterResponse{
+/*public class SuccessRegisterResponse extends RegisterResponse{
     private String username;
     private Integer score;
 
@@ -35,4 +35,4 @@ public class SuccessRegisterResponse extends RegisterResponse{
     }
     
     
-}
+}*/

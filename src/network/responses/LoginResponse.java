@@ -9,6 +9,13 @@ package network.responses;
  *
  * @author HP
  */
+import java.io.Serializable;
 public class LoginResponse extends Response {
-    
+   
+
+    public LoginResponse() {
+        
+    }
+
+   
 }

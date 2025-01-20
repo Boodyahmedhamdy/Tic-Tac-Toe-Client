@@ -9,6 +9,7 @@ public class StartGameResponse extends Response{
     protected String username;
 
     public StartGameResponse(String username) {
+     
         this.username = username;
     }
 

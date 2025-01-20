@@ -49,11 +49,16 @@ public class StartOptionsScreenController implements Initializable {
 
     private void handlePlayWithAI() {
         System.out.println("Play With AI");
+        try {
+            navigateToScreen("gameScreenWithAI.fxml", playWithAIbtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void handlePlayWithFriend() {
         try {
-            navigateToScreen("gameScreen.fxml", playWithAIbtn);
+            navigateToScreen("gameScreen.fxml", playWithFreindBtn);
         } catch (IOException ex) {
             Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

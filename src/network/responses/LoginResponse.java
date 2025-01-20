@@ -11,14 +11,11 @@ package network.responses;
  */
 import java.io.Serializable;
 public class LoginResponse extends Response {
-    private String userId;
+   
 
-    public LoginResponse(boolean success, String message, String userId) {
-        super(success, message);
-        this.userId = userId;
+    public LoginResponse() {
+        
     }
 
-    public String getUserId() {
-        return userId;
-    }
+   
 }

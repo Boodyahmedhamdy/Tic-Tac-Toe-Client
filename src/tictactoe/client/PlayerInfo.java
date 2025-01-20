@@ -5,12 +5,14 @@
  */
 package tictactoe.client;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Laptop World
  */
 
-public class PlayerInfo  {
+public class PlayerInfo implements Serializable {
 
     private String userName;
     private String password;

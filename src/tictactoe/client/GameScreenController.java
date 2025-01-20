@@ -49,11 +49,14 @@ public class GameScreenController implements Initializable {
     @FXML
     private GridPane board;
 
-    Game game;
+    RecordedGame game;
     Video video;
-    
+
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,54 +67,58 @@ public class GameScreenController implements Initializable {
                 Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
-        HumanPlayer playerX = new HumanPlayer('X', "Boody", 0);
-        HumanPlayer playerO = new HumanPlayer('O', "Ahmed", 0);
-        
+
+        HumanPlayer playerX = new HumanPlayer('X', "Freind", 0);
+        HumanPlayer playerO = new HumanPlayer('O', "You", 0);
+
         player1_name.setText(playerX.getUsername());
         player2_name.setText(playerO.getUsername());
         player1_score.setText(playerX.getScore().toString());
         player2_score.setText(playerO.getScore().toString());
-        game = new LocalGameWithFriend(
-                playerX, playerO
-        );
-        video=new Video();
-    }    
+//        game = new LocalGameWithFriend(
+//                playerX, playerO
+//        );
+
+        game = new RecordedGame(playerX, playerO);
+        video = new Video();
+    }
 
     Alert alert;
-    
+
     @FXML
     void handleOnClick(ActionEvent event) throws IOException {
-        if(game.isDone) {
+        if (game.isDone) {
             System.out.println("game is done");
         } else {
             Button clickedButton = (Button) event.getSource();
-        
+
             Point clickedPosition = getClickedButtonPosition(
-                clickedButton
+                    clickedButton
             );
-            
+            ((RecordedGame) game).saveMove(game.currentPlayer, clickedPosition.x, clickedPosition.y);
             clickedButton.setText(String.valueOf(game.currentPlayer.getSymbol()));
-             if ("X".equals(clickedButton.getText())) {
-                    clickedButton.getStyleClass().add("x-button");
-                } else if ("O".equals(clickedButton.getText())) {
-                    clickedButton.getStyleClass().add("o-button");
-                }
+            if ("X".equals(clickedButton.getText())) {
+                clickedButton.getStyleClass().add("x-button");
+            } else if ("O".equals(clickedButton.getText())) {
+                clickedButton.getStyleClass().add("o-button");
+            }
             clickedButton.setDisable(true);
-            
+
             game.currentPlayer.playAt(game.board, clickedPosition.x, clickedPosition.y);
             game.switchCurrentPlayer();
             game.checkBoard();
-            
-            switch(game.status) {
+
+            switch (game.status) {
                 case Game.PLAYER_X_WINS:
                     highlightWiningPoints();
-                    game.winnerPlayer.setScore(game.winnerPlayer.getScore()+1);
+                    game.winnerPlayer.setScore(game.winnerPlayer.getScore() + 1);
                     player2_score.setText(String.valueOf(game.winnerPlayer.getScore()));
-                    
+
                     UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay??",
-                            () -> { restartGame(); } ,
-                            () -> { 
+                            () -> {
+                                restartGame();
+                            },
+                            () -> {
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
@@ -120,53 +127,28 @@ public class GameScreenController implements Initializable {
                                 }
                             },
                             () -> {
-                                System.out.println("Dialog was closed"); 
-                                    try {
-                                        navigateToScreen("StartOptionsScreen.fxml");
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                        System.out.println("error happend");
-                                    }
-                            }  );
+                                System.out.println("Dialog was closed");
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            });
                     break;
-                    
+
                 case Game.PLAYER_O_WINS:
                     // increase y player score
                     highlightWiningPoints();
-                    game.winnerPlayer.setScore(game.winnerPlayer.getScore() +1);
+                    game.winnerPlayer.setScore(game.winnerPlayer.getScore() + 1);
                     System.out.println("O wins");
-            
+
                     player1_score.setText(String.valueOf(game.winnerPlayer.getScore()));
                     UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won , Do you want to Replay??",
-                            () -> { restartGame(); } ,
                             () -> {
-                                /* Go Home Screen*/
-                                System.out.println("I will Go Home"); 
-                                try {
-                                    navigateToScreen("StartOptionsScreen.fxml");
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                    System.out.println("error happend");
-                                }
+                                restartGame();
                             },
-                            () -> { 
-                                System.out.println("Dialog was closed"); 
-                                try {
-                                    navigateToScreen("StartOptionsScreen.fxml");
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                    System.out.println("error happend");
-                                }
-                            } );
-                    break;
-                    
-                case Game.DRAW:
-                    // don't do anything 
-                    // open a dialog
-                    System.out.println("Draw Happend .. No winner");
-                    UiUtils.showReplayAlert("DRAW, No Winner, Do you want to Replay??",
-                            () -> { restartGame(); } ,
-                            () -> { 
+                            () -> {
                                 /* Go Home Screen*/
                                 System.out.println("I will Go Home");
                                 try {
@@ -177,21 +159,50 @@ public class GameScreenController implements Initializable {
                                 }
                             },
                             () -> {
-                                System.out.println("Dialog was closed"); 
+                                System.out.println("Dialog was closed");
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     System.out.println("error happend");
                                 }
-                            } );
+                            });
                     break;
-                    
+
+                case Game.DRAW:
+                    // don't do anything 
+                    // open a dialog
+                    System.out.println("Draw Happend .. No winner");
+                    UiUtils.showReplayAlert("DRAW, No Winner, Do you want to Replay??",
+                            () -> {
+                                restartGame();
+                            },
+                            () -> {
+                                /* Go Home Screen*/
+                                System.out.println("I will Go Home");
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            },
+                            () -> {
+                                System.out.println("Dialog was closed");
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            });
+                    break;
+
                 case Game.UNKNOWN:
                     // continue playing
                     System.out.println("game is still on");
                     break;
-                    
+
                 default:
                     // show error message
                     System.out.println("UNKNOWN ERROR Happend");
@@ -199,35 +210,43 @@ public class GameScreenController implements Initializable {
             }
         }
     }
-    
+
     void highlightWiningPoints() {
-        for(Point point: game.winingPoints) {
+        for (Point point : game.winingPoints) {
             Button button = getButtonAtPosition(point);
             button.setStyle("-fx-background-color:yellow;");
         }
         //vedio win or lose
         video.winVideo();
-        
+
     }
-    
+
     Button getButtonAtPosition(Point position) {
-        for(Node node : board.getChildren()) {
+        for (Node node : board.getChildren()) {
             Integer x = GridPane.getRowIndex(node);
-            if(x == null) x  = 0;
+            if (x == null) {
+                x = 0;
+            }
             Integer y = GridPane.getColumnIndex(node);
-            if(y == null) y = 0;
-            if(x == position.x && y == position.y) {
+            if (y == null) {
+                y = 0;
+            }
+            if (x == position.x && y == position.y) {
                 return (Button) node;
             }
         }
         return null;
     }
-    
+
     Point getClickedButtonPosition(Button button) {
         Integer x = GridPane.getRowIndex(button);
         Integer y = GridPane.getColumnIndex(button);
-        if(x == null) x = 0;
-        if (y == null) y = 0;
+        if (x == null) {
+            x = 0;
+        }
+        if (y == null) {
+            y = 0;
+        }
         return new Point(x, y);
     }
 
@@ -239,8 +258,8 @@ public class GameScreenController implements Initializable {
             ((Button) node).setDisable(false);
         });
     }
-    
-   private void navigateToScreen(String fxmlFile) throws IOException {
+
+    private void navigateToScreen(String fxmlFile) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();
         Stage stage = (Stage) board.getScene().getWindow();
@@ -248,5 +267,4 @@ public class GameScreenController implements Initializable {
         stage.show();
     }
 
-   
 }

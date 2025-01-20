@@ -105,9 +105,9 @@ public class StartOptionsScreenController implements Initializable {
             PlayerSocket socket = new PlayerSocket();
             boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second
             connecting.close();
-            if (connected) {
-                socket.startCommunication();
-            }
+//            if (connected) {
+//                socket.startCommunication();
+//            }
             return connected;
         } catch (Exception e) {
             connecting.close();

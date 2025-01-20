@@ -42,16 +42,16 @@ public final class PlayerSocket {
         }
     }
 
-    public void startCommunication() {
-        // Start threads for reading and writing messages
-        threadPool.submit(() -> {
-            readMessages();
-        });
-
-        threadPool.submit(() -> {
-            writeMessages();
-        });
-    }
+//    public void startCommunication() {
+//        // Start threads for reading and writing messages
+//        threadPool.submit(() -> {
+//            readMessages();
+//        });
+//
+//        threadPool.submit(() -> {
+//            writeMessages();
+//        });
+//    }
     public void sendRequest(Request request) {
         try {
             out.writeObject(request);

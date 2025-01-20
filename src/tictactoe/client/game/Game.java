@@ -239,5 +239,4 @@ public class Game {
             return playerX;
         } else return playerO;
     }
-    
 }

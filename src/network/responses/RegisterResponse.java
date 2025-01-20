@@ -9,6 +9,10 @@ package network.responses;
  *
  * @author HP
  */
-public class RegisterResponse extends Response{
-    
+import java.io.Serializable;
+
+public class RegisterResponse extends Response {
+    public RegisterResponse() {
+       
+    }
 }

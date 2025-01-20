@@ -88,18 +88,17 @@ public class PreviousRecordsScreenController implements Initializable {
             stage.setScene(new Scene(root));
             stage.show();
             gameScreenController.disableAllButtons();
+
             new Thread(() -> {
                 for (int i = 0; i < moves.size(); i++) {
                     String move = moves.get(i);
 
                     if (!move.matches("[XO]:\\(\\d+, \\d+\\)")) {
-                        System.out.println("Skipping non-move line: " + move);
+                        System.out.println("Skipping Winner Line " + move);
                         continue;
                     }
 
-                    // Parse the move (e.g., "O:(0, 0)")
                     String[] parts = move.split(":");
-
                     char playerSymbol = parts[0].charAt(0); // 'X' or 'O'
                     String[] coordinates = parts[1].replace("(", "").replace(")", "").split(",");
                     if (coordinates.length < 2) {
@@ -110,19 +109,20 @@ public class PreviousRecordsScreenController implements Initializable {
                     int row = Integer.parseInt(coordinates[0].trim());
                     int col = Integer.parseInt(coordinates[1].trim());
 
-                    // Debug: Print the parsed move
                     System.out.println("Parsed move: " + playerSymbol + " at (" + row + ", " + col + ")");
 
                     Platform.runLater(() -> {
                         // Update the button text and disable it
                         Button button = gameScreenController.getButtonAtPosition(new Point(row, col));
-                        if (button != null) {
-                            button.setText(String.valueOf(playerSymbol));
-                            button.setDisable(true);
-                            System.out.println("Updated button at (" + row + ", " + col + ") with " + playerSymbol);
-                        } else {
-                            System.out.println("Button not found at (" + row + ", " + col + ")");
+
+                        if ("X".equals(String.valueOf(playerSymbol))) {
+                            button.getStyleClass().add("x-button");
+                        } else if ("O".equals(String.valueOf(playerSymbol))) {
+                            button.getStyleClass().add("o-button");
                         }
+                        button.setText(String.valueOf(playerSymbol));
+                        button.setDisable(true);
+
                     });
                     try {
                         Thread.sleep(1000);

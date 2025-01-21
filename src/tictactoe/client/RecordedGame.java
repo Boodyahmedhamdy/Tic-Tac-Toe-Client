@@ -42,7 +42,7 @@ public class RecordedGame extends Game {
                     gameRecorder.recordResult("Draw");
             }
             System.out.println("Code will save file now");
-            String filename = "H://ITI_NATIVE//ITI_JAVA_SE//FINAL_PROJECT//Tic-Tac-Toe-Client/gameRecords.txt";
+            String filename = "gameRecords.txt";
             gameRecorder.saveToFile(filename);
         }
     }

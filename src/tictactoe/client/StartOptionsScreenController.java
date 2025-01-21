@@ -125,7 +125,7 @@ public class StartOptionsScreenController implements Initializable {
                 boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second
                 connecting.close();
                 if (connected) {
-                    socket.startCommunication();
+//                    socket.startCommunication();  
                 }
                 return connected;
             } else {
@@ -133,16 +133,6 @@ public class StartOptionsScreenController implements Initializable {
                 System.out.println("Already connected to the server.");
                 return true;
             }
-/*
-    // came from serverSideFromClientSide branch -- old work .. we need a singleton
-            PlayerSocket socket = new PlayerSocket();
-            boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second
-            connecting.close();
-//            if (connected) {
-//                socket.startCommunication();
-//            }
-            return connected;
-            */
 
         } catch (Exception e) {
             connecting.close();

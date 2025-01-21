@@ -16,6 +16,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import network.requests.LoginRequest;
+import network.responses.LoginResponse;
+import network.requests.RegisterRequest;
+import network.responses.RegisterResponse;
+import network.responses.SuccessLoginResponse;
+import network.responses.FailLoginResponse;
+import network.responses.Response;
+import tictactoe.client.ui.UiUtils;
 
 /**
  * FXML Controller class
@@ -34,6 +42,7 @@ public class LoginScreenController implements Initializable {
     private Button registerbtn;
     @FXML
     private Button backBtn;
+    private PlayerSocket playerSocket;
 
     /**
      * Initializes the controller class.
@@ -55,48 +64,63 @@ public class LoginScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        registerbtn.setOnAction((event) -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterScreen.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) registerbtn.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+        
+        
+         registerbtn.setOnAction((event) -> {
+                navigatePage("RegisterScreen.fxml", registerbtn);
+             
+       
+    });
+        
+          loginbtn.setOnAction((event) -> {
+    if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+          UiUtils.showValidationAlert("Requiered field is empty!");}
+    else {
+        LoginRequest loginRequest = new LoginRequest(nameField.getText(), passwordField.getText());
+        playerSocket.sendRequest(loginRequest);
+        Response response = playerSocket.receiveResponse();
+        if (response instanceof LoginResponse) {
+    LoginResponse loginResponse = (LoginResponse) response;
+    if (loginResponse instanceof SuccessLoginResponse) {
+        SuccessLoginResponse successLoginResponse = (SuccessLoginResponse) loginResponse;
+        successLoginResponse.getUsername();
+        successLoginResponse.getScore();
+        
+         navigatePage("AvailablePlayersScreen.fxml", loginbtn);
+        
+    }else if(loginResponse instanceof FailLoginResponse) {
+        FailLoginResponse failLoginResponse = (FailLoginResponse) loginResponse;
+        failLoginResponse.getMessage();
+                  
             }
-        });
+}
+               
+            }});
+       
 
-        loginbtn.setOnAction((event) -> {
-            if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-                Alert a = new Alert(Alert.AlertType.INFORMATION);
-                a.getDialogPane().getStylesheets().add(getClass().getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
-                a.setContentText("Requiered field is empty!");
-                a.showAndWait();
-            } else {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("AvailablePlayersScreen.fxml"));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) loginbtn.getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+        
+
+        
         backBtn.setOnAction((event) -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("StartOptionsScreen.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) backBtn.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            navigatePage("StartOptionsScreen.fxml", backBtn);
+           
         });
+        
+
 
     }
+    private void navigatePage(String fxmlFile, Button button) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            Stage stage = (Stage) button.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogEvent;
 import javafx.stage.Stage;
@@ -60,4 +61,22 @@ public class UiUtils {
         }
 
     }
+     public static void  showValidationAlert(String sentence){
+         alert = new Alert(Alert.AlertType.INFORMATION);
+         alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
+         
+        alert.setContentText(sentence);
+        alert.showAndWait();
+}
+       public  void navigatePage(String sentence ,Button button){
+           try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(sentence));
+        Parent root = loader.load();
+        Stage stage = (Stage) button.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+     }
 }

@@ -125,7 +125,7 @@ public class StartOptionsScreenController implements Initializable {
                 boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second
                 connecting.close();
                 if (connected) {
-                    socket.startCommunication();
+//                    socket.startCommunication();  
                 }
                 return connected;
             } else {

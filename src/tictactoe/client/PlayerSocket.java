@@ -30,7 +30,7 @@ public final class PlayerSocket {
         this.socket = new Socket();
     }
 
-    public static PlayerSocket getInstance() {
+    public static synchronized PlayerSocket getInstance() {
         if (instance == null) {
             instance = new PlayerSocket();
         }

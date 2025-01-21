@@ -16,6 +16,7 @@ import network.requests.StartGameRequest;
 //import network.responses.FailLoginResponse;
 //import network.responses.LoginResponse;
 import network.responses.StartGameResponse;
+import tictactoe.client.PlayerSocket;
 //import network.responses.SuccessLoginResponse;
 
 /**
@@ -29,6 +30,9 @@ public class NetworkAcessLayer {
 
     static {
 //        outputStream = new ObjectOutputStream(new OutputStream());
+        PlayerSocket playerSocket = PlayerSocket.getInstance();
+        outputStream = playerSocket.getOut();
+        inputStream = playerSocket.getIn();
     }
 
     public static void connect() {

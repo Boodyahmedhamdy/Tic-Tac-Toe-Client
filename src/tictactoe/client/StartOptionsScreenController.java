@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import tictactoe.client.PlayerSocket;
+import tictactoe.client.ui.UiUtils;
 
 public class StartOptionsScreenController implements Initializable {
 
@@ -54,11 +55,26 @@ public class StartOptionsScreenController implements Initializable {
     }
 
     private void handlePlayWithFriend() {
-        try {
-            navigateToScreen("gameScreen.fxml", playWithAIbtn);
-        } catch (IOException ex) {
-            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        UiUtils.showReplayAlert("Do you want to record the game ?", () -> {
+            GameScreenController.isRecording = true;
+            try {
+                navigateToScreen("gameScreen.fxml", playWithFreindBtn);
+            } catch (IOException ex) {
+                Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }, () -> {
+            GameScreenController.isRecording = false;
+            System.out.println("Game Will Not Be Recorded");
+            try {
+                navigateToScreen("gameScreen.fxml", playWithFreindBtn);
+            } catch (IOException ex) {
+                Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }, () -> {
+            System.out.println("Dialog Closed");
+        });
+
     }
 
     private void handlePlayOnline() {
@@ -102,6 +118,7 @@ public class StartOptionsScreenController implements Initializable {
 
         try {
             InetSocketAddress serverAddress = new InetSocketAddress(serverIP, 9800);
+
             PlayerSocket socket = PlayerSocket.getInstance();
             if (!socket.isConnected()) {
 

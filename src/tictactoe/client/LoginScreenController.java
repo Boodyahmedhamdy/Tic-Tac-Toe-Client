@@ -83,8 +83,9 @@ public class LoginScreenController implements Initializable {
     LoginResponse loginResponse = (LoginResponse) response;
     if (loginResponse instanceof SuccessLoginResponse) {
         SuccessLoginResponse successLoginResponse = (SuccessLoginResponse) loginResponse;
-        successLoginResponse.getUsername();
-        successLoginResponse.getScore();
+        String username =successLoginResponse.getUsername();
+        int score =successLoginResponse.getScore();
+       
         
          navigatePage("AvailablePlayersScreen.fxml", loginbtn);
         

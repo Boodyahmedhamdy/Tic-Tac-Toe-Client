@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ public final class PlayerSocket {
     private final ExecutorService threadPool = Executors.newFixedThreadPool(2);
 
     private PlayerSocket() {
+        // Initialize the socket but do not connect it yet
         this.socket = new Socket();
     }
 
@@ -39,64 +41,63 @@ public final class PlayerSocket {
 
     public boolean connect(InetSocketAddress ip, int timeout) {
         try {
-            System.out.println("Player Try To Connect: " + ip);
+            System.out.println("Connecting to server: " + ip);
             socket.connect(ip, timeout);
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connected to the server.");
+
+            // Initialize the streams after the socket is connected
+            out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
+            in = new ObjectInputStream(socket.getInputStream());
+
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server", ex);
-            System.out.println("Connection failed: " + ex.getMessage());
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server: " + ex.getMessage(), ex);
             return false;
         }
+    }
+
+    public void startCommunication() {
+        threadPool.submit(this::readMessages);
     }
 
     public void sendRequest(Request request) {
         try {
             out.writeObject(request);
             out.flush();
+            System.out.println("Request sent: " + request.getClass().getSimpleName());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
         }
     }
 
     public Response receiveResponse() {
         try {
-            return (Response) in.readObject();
+            Response response = (Response) in.readObject();
+            System.out.println("Response received: " + response.getClass().getSimpleName());
+            return response;
         } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error receiving response: " + ex.getMessage(), ex);
             return null;
-        }
-    }
-
-    public void writeMessages() {
-        // Assume you have a way to send a message when the user clicks the login/register button
-        try {
-            // Create LoginRequest or RegisterRequest based on user input
-            LoginRequest loginRequest = new LoginRequest("username", "password");
-            out.writeObject(loginRequest); // Send the object to the server
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void readMessages() {
         try {
             while (running.get()) {
-                Object response = in.readObject(); // Receive object response from the server
+                Object response = in.readObject();
                 if (response instanceof LoginResponse) {
                     LoginResponse loginResponse = (LoginResponse) response;
-                    // System.out.println("Login " + (loginResponse.isSuccess() ? "successful" : "failed") + ": " + loginResponse.getMessage());
+                    System.out.println("Login " + (loginResponse.isSuccess() ? "successful" : "failed") + ": " + loginResponse.getMessage());
                 } else if (response instanceof RegisterResponse) {
                     RegisterResponse registerResponse = (RegisterResponse) response;
-                    //  System.out.println("Register " + (registerResponse.isSuccess() ? "successful" : "failed") + ": " + registerResponse.getMessage());
+                    System.out.println("Register " + (registerResponse.isSuccess() ? "successful" : "failed") + ": " + registerResponse.getMessage());
                 } else {
                     System.out.println("Unknown response received from the server.");
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error reading messages: " + ex.getMessage(), ex);
         } finally {
             close();
         }
@@ -114,125 +115,22 @@ public final class PlayerSocket {
             if (in != null) {
                 in.close();
             }
-            System.out.println("Disconnected from the server.");
         } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error closing resources", ex);
         } finally {
             threadPool.shutdown();
+            try {
+                if (!threadPool.awaitTermination(1, TimeUnit.SECONDS)) {
+                    threadPool.shutdownNow();
+                }
+            } catch (InterruptedException ex) {
+                threadPool.shutdownNow();
+                Thread.currentThread().interrupt(); // Restore the interrupt status
+            }
         }
     }
 
     public boolean isConnected() {
-        return socket != null && socket.isConnected() && !socket.isClosed();
+        return socket != null && socket.isConnected() && !socket.isClosed() && out != null && in != null;
     }
-
 }
-
-/*public final class PlayerSocket {
-
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
-    private Scanner scanner;
-    private Socket socket;
-    private final AtomicBoolean running = new AtomicBoolean(true);
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(2); // for read and write 
-
-    private PlayerSocket() {
-        this.socket = new Socket();
-    }
-
-    public static PlayerSocket getInstance() {
-        if (playerSocket == null) {
-            playerSocket = new PlayerSocket();
-        }
-        return playerSocket;
-    }
-
-    public boolean connect(InetSocketAddress ip, int timeout) {
-
-        try {
-            if (!socket.isConnected()) {
-                socket.connect(ip, timeout);
-                out = new ObjectOutputStream(socket.getOutputStream());
-                in = new ObjectInputStream(socket.getInputStream());
-                this.scanner = new Scanner(System.in);
-                System.out.println("Connected to the server.");
-                return true;
-            }else{
-                System.out.println("Already Connected To Server");
-                return true;
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-
-    public void startCommunication() {
-        // Start threads for reading and writing messages
-        threadPool.submit(() -> {
-            readMessages();
-        });
-
-        threadPool.submit(() -> {
-            writeMessages();
-        });
-    }
-
-    public void writeMessages() {
-        while (running.get()) {
-            try {
-                // Read input from the user
-                String line = scanner.nextLine();
-                // Send the message to the server
-                out.writeObject(line);
-            } catch (IOException ex) {
-                Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-                break;
-            }
-        }
-        close();
-    }
-
-    public void readMessages() {
-        try {
-            while (running.get()) {
-                String message = (String) in.readObject();
-                System.out.println("Server: " + message);
-                if (message.equals("##")) {
-                    break;
-                }
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            close();
-        }
-    }
-
-    public void close() {
-        running.set(false);
-        try {
-            if (socket != null) {
-                socket.close();
-            }
-            if (out != null) {
-                out.close();
-            }
-            if (in != null) {
-                in.close();
-            }
-            if (scanner != null) {
-                scanner.close();
-            }
-            System.out.println("Disconnected from the server.");
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            threadPool.shutdown();
-        }
-    }
-
-
-}*/

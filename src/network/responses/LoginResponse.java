@@ -11,10 +11,18 @@ package network.responses;
  */
 import java.io.Serializable;
 public class LoginResponse extends Response {
-   
+    boolean status;
 
     public LoginResponse() {
         
+    }
+    
+    public boolean isSuccess(){
+        return status;
+    }
+
+    public String getMessage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
    

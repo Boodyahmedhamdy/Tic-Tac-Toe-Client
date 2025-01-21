@@ -20,6 +20,8 @@ import network.requests.LoginRequest;
 import network.responses.LoginResponse;
 import network.requests.RegisterRequest;
 import network.responses.RegisterResponse;
+import network.responses.SuccessLoginResponse;
+import network.responses.FailLoginResponse;
 import network.responses.Response;
 import tictactoe.client.ui.UiUtils;
 
@@ -79,11 +81,17 @@ public class LoginScreenController implements Initializable {
         Response response = playerSocket.receiveResponse();
         if (response instanceof LoginResponse) {
     LoginResponse loginResponse = (LoginResponse) response;
-    if (loginResponse.isSuccess()) {
+    if (loginResponse instanceof SuccessLoginResponse) {
+        SuccessLoginResponse successLoginResponse = (SuccessLoginResponse) loginResponse;
+        successLoginResponse.getUsername();
+        successLoginResponse.getScore();
+        
          navigatePage("AvailablePlayersScreen.fxml", loginbtn);
         
-    }else {
-                UiUtils.showValidationAlert("Login failed! " + loginResponse.getMessage());
+    }else if(loginResponse instanceof FailLoginResponse) {
+        FailLoginResponse failLoginResponse = (FailLoginResponse) loginResponse;
+        failLoginResponse.getMessage();
+                  
             }
 }
                

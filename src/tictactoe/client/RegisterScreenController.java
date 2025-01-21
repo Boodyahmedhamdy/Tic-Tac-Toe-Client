@@ -15,6 +15,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import network.requests.RegisterRequest;
 import network.responses.RegisterResponse;
+import network.responses.FailRegisterResponse;
+import network.responses.Response;
+import network.responses.SuccessRegisterResponse;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -41,7 +44,7 @@ public class RegisterScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.playerSocket = new PlayerSocket();
+        this.playerSocket =  PlayerSocket.getInstance();
         //this.playerSocket.connect(new InetSocketAddress("localhost", 12345), 1000);  // Example for connecting
 
         // Back button action to navigate back to Login page
@@ -71,18 +74,21 @@ public class RegisterScreenController implements Initializable {
             // Send register request to the server
             RegisterRequest registerRequest = new RegisterRequest(username, email, password);
             playerSocket.sendRequest(registerRequest);
-
-            // Wait for the response from the server
-            Object response = playerSocket.receiveResponse();
-            if (response instanceof RegisterResponse) {
+            Response response = playerSocket.receiveResponse();
+            if(response instanceof RegisterResponse){
                 RegisterResponse registerResponse = (RegisterResponse) response;
-                if (registerResponse.isSuccess()) {
-                   
-                    navigatePage("AvailablePlayersScreen.fxml", registerbtn);
-                } else {
-                    UiUtils.showValidationAlert("Registration failed: " + registerResponse.getMessage());
+           if (registerResponse instanceof SuccessRegisterResponse ) {
+                SuccessRegisterResponse successRegisterResponse = (SuccessRegisterResponse) registerResponse;
+                successRegisterResponse.getUsername();
+                successRegisterResponse.getScore();
+                   navigatePage("AvailablePlayersScreen.fxml", registerbtn);
+                    
+            }else if (registerResponse instanceof  FailRegisterResponse) {
+                FailRegisterResponse failRegisterResponse =(FailRegisterResponse) registerResponse;   
+                failRegisterResponse.getMessage();
                 }
             }
+            
         }
     }
 

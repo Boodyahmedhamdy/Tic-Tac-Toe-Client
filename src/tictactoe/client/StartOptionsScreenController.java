@@ -118,16 +118,19 @@ public class StartOptionsScreenController implements Initializable {
 
         try {
             InetSocketAddress serverAddress = new InetSocketAddress(serverIP, 9800);
+            System.out.println("Attempting to connect to server at: " + serverAddress);
 
             PlayerSocket socket = PlayerSocket.getInstance();
             if (!socket.isConnected()) {
-
                 boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second
                 connecting.close();
                 if (connected) {
-//                    socket.startCommunication();  
+                    System.out.println("Successfully connected to the server.");
+                } else {
+                    System.out.println("Failed to connect to the server.");
                 }
                 return connected;
+
             } else {
                 connecting.close();
                 System.out.println("Already connected to the server.");

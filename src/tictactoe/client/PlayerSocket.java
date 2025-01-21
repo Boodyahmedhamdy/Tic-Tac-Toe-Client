@@ -24,15 +24,13 @@ public final class PlayerSocket {
     private ObjectInputStream in;
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(2); 
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(2);
 
-   
     private PlayerSocket() {
-        this.socket = new Socket(); 
+        this.socket = new Socket();
     }
 
-    
-    public static synchronized PlayerSocket getInstance() {
+    public static PlayerSocket getInstance() {
         if (instance == null) {
             instance = new PlayerSocket();
         }
@@ -41,27 +39,19 @@ public final class PlayerSocket {
 
     public boolean connect(InetSocketAddress ip, int timeout) {
         try {
+            System.out.println("Player Try To Connect: " + ip);
             socket.connect(ip, timeout);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connected to the server.");
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server", ex);
+            System.out.println("Connection failed: " + ex.getMessage());
             return false;
         }
     }
 
-//    public void startCommunication() {
-//        // Start threads for reading and writing messages
-//        threadPool.submit(() -> {
-//            readMessages();
-//        });
-//
-//        threadPool.submit(() -> {
-//            writeMessages();
-//        });
-//    }
     public void sendRequest(Request request) {
         try {
             out.writeObject(request);
@@ -70,6 +60,7 @@ public final class PlayerSocket {
             ex.printStackTrace();
         }
     }
+
     public Response receiveResponse() {
         try {
             return (Response) in.readObject();
@@ -96,10 +87,10 @@ public final class PlayerSocket {
                 Object response = in.readObject(); // Receive object response from the server
                 if (response instanceof LoginResponse) {
                     LoginResponse loginResponse = (LoginResponse) response;
-                   // System.out.println("Login " + (loginResponse.isSuccess() ? "successful" : "failed") + ": " + loginResponse.getMessage());
+                    // System.out.println("Login " + (loginResponse.isSuccess() ? "successful" : "failed") + ": " + loginResponse.getMessage());
                 } else if (response instanceof RegisterResponse) {
                     RegisterResponse registerResponse = (RegisterResponse) response;
-                  //  System.out.println("Register " + (registerResponse.isSuccess() ? "successful" : "failed") + ": " + registerResponse.getMessage());
+                    //  System.out.println("Register " + (registerResponse.isSuccess() ? "successful" : "failed") + ": " + registerResponse.getMessage());
                 } else {
                     System.out.println("Unknown response received from the server.");
                 }
@@ -130,13 +121,12 @@ public final class PlayerSocket {
             threadPool.shutdown();
         }
     }
+
     public boolean isConnected() {
         return socket != null && socket.isConnected() && !socket.isClosed();
     }
 
 }
-
-
 
 /*public final class PlayerSocket {
 
@@ -246,5 +236,3 @@ public final class PlayerSocket {
 
 
 }*/
-
-

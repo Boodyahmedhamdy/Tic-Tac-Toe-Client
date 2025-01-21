@@ -249,3 +249,11 @@ public final class PlayerSocket {
 
    
 
+    public boolean isConnected() {
+        return socket != null && socket.isConnected() && !socket.isClosed();
+    }
+
+}
+
+
+

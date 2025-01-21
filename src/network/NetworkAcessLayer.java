@@ -13,10 +13,10 @@ import java.util.logging.Logger;
 import network.actions.SignOutAction;
 import network.requests.LoginRequest;
 import network.requests.StartGameRequest;
-import network.responses.FailLoginResponse;
-import network.responses.LoginResponse;
+//import network.responses.FailLoginResponse;
+//import network.responses.LoginResponse;
 import network.responses.StartGameResponse;
-import network.responses.SuccessLoginResponse;
+//import network.responses.SuccessLoginResponse;
 
 /**
  *
@@ -56,22 +56,22 @@ public class NetworkAcessLayer {
      *
      * @return LoginResponse
      */
-    public static LoginResponse reciveLoginResponse() {
-        try {
-            LoginResponse response = (LoginResponse) inputStream.readObject();
-            // sample of what the client should do with the returned result
-            if (response instanceof FailLoginResponse) {
-                return new FailLoginResponse(" ");
-            }
-            if (response instanceof SuccessLoginResponse) {
-                return new SuccessLoginResponse("", 234);
-            }
-            return response;
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+//    public static LoginResponse reciveLoginResponse() {
+//        try {
+//            LoginResponse response = (LoginResponse) inputStream.readObject();
+//            // sample of what the client should do with the returned result
+//            if (response instanceof FailLoginResponse) {
+//                return new FailLoginResponse(" ");
+//            }
+//            if (response instanceof SuccessLoginResponse) {
+//                return new SuccessLoginResponse("", 234);
+//            }
+//            return response;
+//        } catch (IOException | ClassNotFoundException ex) {
+//            Logger.getLogger(NetworkAcessLayer.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
     
     
     /**

@@ -21,6 +21,14 @@ public final class PlayerSocket {
 
     private static PlayerSocket instance; // Singleton instance
     private ObjectOutputStream out;
+
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public ObjectInputStream getIn() {
+        return in;
+    }
     private ObjectInputStream in;
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);

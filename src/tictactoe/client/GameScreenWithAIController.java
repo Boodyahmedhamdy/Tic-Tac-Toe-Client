@@ -8,6 +8,9 @@ package tictactoe.client;
 import java.awt.Point;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,10 +38,9 @@ public class GameScreenWithAIController implements Initializable {
 
     @FXML
     private Button back;
-    GameWithAI gameWithAi;
+    //GameWithAI gameWithAi;
    
-    String CurrentPlayer;
-    public static String [][] board;
+    
     int status;
      @FXML
     private GridPane gridPane;
@@ -70,10 +72,19 @@ public class GameScreenWithAIController implements Initializable {
     private Label Player_human;
     @FXML
     private Label player_AI;
+    
+    Game_AI game_AI;
+    Game_AI.Move bestMove;
+   
+    ////////////////
+    Button [][] board;
+    boolean isGameOver;
+    Button[] winningButtons;
+    String difficulty="Hard";
+    String CurrentPlayer;
     String Player;
     String AI;
-    //Game_AI game_AI;
-    Game_AI.Move bestMove;
+    
     
     /**
      * Initializes the controller class.
@@ -89,143 +100,254 @@ public class GameScreenWithAIController implements Initializable {
                 Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-       // game_AI=new Game_AI();
-        gameWithAi=new GameWithAI();
+        game_AI=new Game_AI();
+       // gameWithAi=new GameWithAI();
         Player="O";
         AI="X";
         CurrentPlayer=Player;
-        board=new String[3][3];
-        initBoard(board);
+        //////////////
+        board=new Button[][]{
+            {AI_btn00,AI_btn01,AI_btn02},
+            {AI_btn10,AI_btn11,AI_btn12},
+            {AI_btn20,AI_btn21,AI_btn22}
+        };
+        isGameOver=false;
+        
     }    
     
     
-     //AI
-   /* @FXML
-    void handleOnClick(ActionEvent event) throws IOException {
-        
-            Button clickedButton = (Button) event.getSource();
-            Point clickedPosition = getClickedButtonPosition(clickedButton);
-
-            // Handle human player (O) move
-            if (CurrentPlayer.equals("O")) {
-                clickedButton.setText("O");
-                clickedButton.getStyleClass().add("o-button");
-                board[clickedPosition.x][clickedPosition.y]="O";
-                clickedButton.setDisable(true);
-
-                // Check game status after human move
-                status= gameWithAi.checkGameStatus(board);
-                if (status != gameWithAi.UNKNOWN) {
-                    //handleGameEnd();
-                    return;
-                }
-
-                // Switch to AI player
-                CurrentPlayer=AI;
-
-                // AI (X) makes its move
-                gameWithAi.miniMax(board, 9, false);
-                Button AIButton = getButtonAt(GameWithAI.AI_X,GameWithAI.AI_Y);
-                AIButton.setText("X");
-                AIButton.getStyleClass().add("x-button");
-                board[GameWithAI.AI_X][GameWithAI.AI_X]="X";
-                AIButton.setDisable(true);
-
-                // Check game status after AI move
-                status= gameWithAi.checkGameStatus(board);
-                if (status != gameWithAi.UNKNOWN) {
-                    //handleGameEnd();
-                    return;
-                }
-
-                // Switch back to human player
-                CurrentPlayer=Player;
-            
-        }
-    }*/
-
+ 
     
     @FXML
     void handleOnClick(ActionEvent event) throws IOException {
         
+            if (isGameOver)
+                return;
             Button clickedButton = (Button) event.getSource();
-            Point clickedPosition = getClickedButtonPosition(clickedButton);
-
-            // Handle human player (O) move
+            if(!clickedButton.getText().isEmpty()) 
+                return;
             if (CurrentPlayer.equals("O")) {
                 clickedButton.setText("O");
                 clickedButton.getStyleClass().add("o-button");
-                board[clickedPosition.x][clickedPosition.y]="O";
-                clickedButton.setDisable(true);
-
-                // Check game status after human move
-                status= gameWithAi.checkGameStatus(board);
-                if (status != gameWithAi.UNKNOWN) {
-                    //handleGameEnd();
-                    return;
-                }
 
                 // Switch to AI player
                 CurrentPlayer=AI;
                 
                
-                // AI (X) makes its move
-                bestMove = Game_AI.findBestMove(board); 
-                Button AIButton = getButtonAt(bestMove.row,bestMove.col);
-                AIButton.setText("X");
-                AIButton.getStyleClass().add("x-button");
-                board[bestMove.row][bestMove.col]="X";
-                AIButton.setDisable(true);
-
-                // Check game status after AI move
-                status= gameWithAi.checkGameStatus(board);
-                if (status != gameWithAi.UNKNOWN) {
-                    //handleGameEnd();
-                    return;
-                }
-
-                // Switch back to human player
-                CurrentPlayer=Player;
+                checkWhoIsTheWinner();
+                
+                if(!isGameOver)
+                    computerMove();
             
         }
+        clickedButton.setDisable(true);
+
     }
-    /*private void handleGameEnd() {
-        switch (game.status) {
-            case Game.PLAYER_X_WINS:
-                highlightWiningPoints();
-                video.loseVideo();
-                game.winnerPlayer.setScore(game.winnerPlayer.getScore() + 1);
-                player2_score.setText(String.valueOf(game.winnerPlayer.getScore()));
-                UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay?",
-                        this::restartGame,
-                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"),
-                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"));
+   
+    boolean checkWin(String symbol){
+    
+         // Check rows, columns, and diagonals for a win
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0].getText().equals(symbol) && board[i][1].getText().equals(symbol) && board[i][2].getText().equals(symbol)) {
+                winningButtons=new Button[]{board[i][0],board[i][1],board[i][2]};
+                return true;
+            }
+            if(board[0][i].getText().equals(symbol) && board[1][i].getText().equals(symbol) && board[2][i].getText().equals(symbol)) {
+                winningButtons=new Button[]{board[0][i],board[1][i],board[2][i]};
+                return true;
+            }
+        }
+        
+        if (board[0][0].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[2][2].getText().equals(symbol)){
+            winningButtons=new Button[]{board[0][0],board[1][1],board[2][2]};
+            return true;
+        }
+        if(board[0][2].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[2][0].getText().equals(symbol)) {
+            winningButtons=new Button[]{board[0][2],board[1][1],board[2][0]};
+            return true;
+        }
+        return false;
+    }
+    void checkWhoIsTheWinner(){
+        if(checkWin("X")){
+            isGameOver=true;
+            highlightWiningPoints();
+        }
+        else if(checkWin("O")){
+            isGameOver=true;
+            highlightWiningPoints();
+        }
+        else if(isBoardFull()){
+            isGameOver=true;
+        }
+    }
+    private boolean isBoardFull() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j].getText().isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    void highlightWiningPoints() {
+        for(Button button :winningButtons) {
+            button.setStyle("-fx-background-color:yellow;");
+        }
+        //vedio win or lose
+        //video.winVideo();   
+    }
+    void computerMove(){
+        int[] bestMove=null;
+        switch(difficulty){
+            case "Easy":
+                bestMove=getRandomMove();
                 break;
-
-            case Game.PLAYER_O_WINS:
-                highlightWiningPoints();
-                video.winVideo();
-                game.winnerPlayer.setScore(game.winnerPlayer.getScore() + 1);
-                player1_score.setText(String.valueOf(game.winnerPlayer.getScore()));
-                UiUtils.showReplayAlert("Player " + game.winnerPlayer.getUsername() + " Won, Do you want to Replay?",
-                        this::restartGame,
-                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"),
-                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"));
+            case "Medium":
+                bestMove=findBestMove(7);
                 break;
-
-            case Game.DRAW:
-                System.out.println("Draw Happend .. No winner");
-                UiUtils.showReplayAlert("DRAW, No Winner, Do you want to Replay?",
-                        this::restartGame,
-                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"),
-                        () -> navigateToScreenSafely("StartOptionsScreen.fxml"));
-                break;
-
-            default:
-                System.out.println("UNKNOWN ERROR Happend");
+            case "Hard":
+                bestMove=findBestMove(Integer.MAX_VALUE);
                 break;
         }
-    }*/
+        
+        if(bestMove!=null){
+            int row=bestMove[0];
+            int col=bestMove[1];
+            board[row][col].setText(AI);
+            CurrentPlayer=Player;
+            checkWhoIsTheWinner();
+        }
+    }
+    int[] getRandomMove(){
+        List<int[]> emptyCells=new ArrayList<>();
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(board[i][j].getText().isEmpty()){
+                    emptyCells.add(new int[]{i,j});
+                }
+            }
+        }
+        
+        if(!emptyCells.isEmpty()){
+            return emptyCells.get(new Random().nextInt(emptyCells.size()));
+        }
+        return null;
+    }
+    int[] findBestMove(int depthLimit){
+        int bestScore = Integer.MIN_VALUE; 
+        int[] bestMove = null; 
+        
+
+        // Traverse all cells, evaluate minimax function  
+        // for all empty cells. And return the cell  
+        // with optimal value. 
+        for (int i = 0; i < 3; i++) 
+        { 
+            for (int j = 0; j < 3; j++) 
+            { 
+                // Check if cell is empty 
+                if (board[i][j].getText().isEmpty()) 
+                { 
+                    // Make the move 
+                    board[i][j].setText(AI); 
+
+                    // compute evaluation function for this 
+                    // move. 
+                    int score = minimax(false, 0, depthLimit); 
+
+                    // Undo the move 
+                    board[i][j].setText(""); 
+
+                    // If the value of the current move is 
+                    // more than the best value, then update 
+                    // best/ 
+                    if (score > bestScore) 
+                    {  
+                        bestScore = score;
+                        bestMove=new int[]{i,j};
+                    } 
+                } 
+            } 
+        } 
+
+        return bestMove; 
+    }
+   
+    int minimax(boolean isMax,int depth,int depthLimit ) 
+    { 
+        
+        if (checkWin(AI)) 
+            return 10-depth; 
+
+       
+        if (checkWin(Player)) 
+            return depth-10; 
+
+        
+        if (isBoardFull()|| depth>=depthLimit) 
+            return 0; 
+
+        // If this maximizer's move 
+        if (isMax) 
+        { 
+            int bestScore = Integer.MIN_VALUE; 
+
+            // Traverse all cells 
+            for (int i = 0; i < 3; i++) 
+            { 
+                for (int j = 0; j < 3; j++) 
+                { 
+                    // Check if cell is empty 
+                    if (board[i][j].getText().isEmpty()) 
+                    { 
+                        // Make the move 
+                        board[i][j].setText(AI); 
+
+                        // Call minimax recursively and choose 
+                        // the maximum value 
+                        int score =  minimax(false,depth + 1, depthLimit); 
+                        // Undo the move 
+                        board[i][j].setText(""); 
+                        bestScore=Math.max(bestScore,score);
+                    } 
+                } 
+            } 
+            return bestScore; 
+        } 
+
+        // If this minimizer's move 
+        else
+        { 
+            int bestScore = Integer.MAX_VALUE; 
+
+            // Traverse all cells 
+            for (int i = 0; i < 3; i++) 
+            { 
+                for (int j = 0; j < 3; j++) 
+                { 
+                    // Check if cell is empty 
+                   if (board[i][j].getText().isEmpty())  
+                    { 
+                        // Make the move 
+                        board[i][j].setText(Player); 
+
+                        // Call minimax recursively and choose 
+                        // the minimum value 
+                        int score =  minimax(true,depth + 1, depthLimit); 
+
+                        // Undo the move 
+                       board[i][j].setText(""); 
+                       bestScore=Math.min(bestScore,score); 
+                    } 
+                } 
+            } 
+            return bestScore; 
+        } 
+    } 
+    
     Point getClickedButtonPosition(Button button) {
         Integer x = GridPane.getRowIndex(button);
         Integer y = GridPane.getColumnIndex(button);
@@ -234,13 +356,7 @@ public class GameScreenWithAIController implements Initializable {
         return new Point(x, y);
     }
     
-    void initBoard(String[][] board){
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                board[i][j]="";
-            }
-        }
-    }
+   
     
      public Button getButtonAt(int x, int y) {
         for (Node node : gridPane.getChildren()) {

@@ -16,20 +16,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import network.NetworkAcessLayer;
+import network.NetworkAccessLayer;
 import network.actions.SignOutAction;
 import network.requests.StartGameRequest;
-import network.responses.AcceptStartGameResposne;
+import network.responses.AcceptStartGameResponse;
 import network.responses.RefuseStartGameResponse;
 import network.responses.StartGameResponse;
 import tictactoe.client.ui.UiUtils;
 import tictactoe.client.ui.states.UserListItemUiState;
 
-/**
- * FXML Controller class
- *
- * @author HP
- */
 public class AvailablePlayersScreenController implements Initializable {
 
     @FXML
@@ -50,22 +45,23 @@ public class AvailablePlayersScreenController implements Initializable {
                 navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
             } catch (IOException ex) {
                 Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                textErrorMessage.setText("Error navigating to StartOptionsScreen: " + ex.getMessage());
             }
-
         });
+
+        // Add dummy players for testing
         lvAvailablePlayers.getItems().addAll(
                 new UserListItemUiState("boody", 33),
                 new UserListItemUiState("Ahmed", 323)
         );
 
-        lvAvailablePlayers
-                .getSelectionModel()
-                .selectedItemProperty()
-                .addListener((ObservableValue<? extends UserListItemUiState> observable, UserListItemUiState oldValue, UserListItemUiState newValue) -> {
-                    System.out.println(lvAvailablePlayers.getSelectionModel().getSelectedItem());
-                    onClickOnPlayer(lvAvailablePlayers.getSelectionModel().getSelectedItem());
+        // Add listener for player selection
+        lvAvailablePlayers.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends UserListItemUiState> observable, UserListItemUiState oldValue, UserListItemUiState newValue) -> {
+                    if (newValue != null) {
+                        onClickOnPlayer(newValue);
+                    }
                 });
-
     }
 
     private void navigateToScreen(String fxmlFile, Button b) throws IOException {
@@ -75,90 +71,83 @@ public class AvailablePlayersScreenController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
-    
+
     @FXML
     private void onClickSignOut(ActionEvent event) {
         try {
             SignOutAction signOutAction = new SignOutAction(textPlayerUserName.getText());
-            NetworkAcessLayer.sendSignOutAction(signOutAction);
+            NetworkAccessLayer.sendSignOutAction(signOutAction);
+            navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
         } catch (IOException ex) {
             Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-            textErrorMessage.setText(ex.getMessage());
-        }
-    }
-    
-    @FXML
-    private void onClickOnPlayer(UserListItemUiState playerUiState) {
-        try {
-            StartGameRequest startGameRequest = new StartGameRequest(playerUiState.username);
-            NetworkAcessLayer.sendStartGameRequest(startGameRequest);
-        } catch (IOException ex) {
-            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-            textErrorMessage.setText(ex.getMessage());
-        }
-    }
-    
-    /**
-     * called when a start game request is sent to the client from another player
-     * via the server
-    */
-    private void onReciveStartGameRequest(StartGameRequest startGameRequest) {
-        UiUtils.showReplayAlert(startGameRequest.getUsername() + " wants to have a game with you, Do you Agree ? ",
-                () -> { 
-                    try {
-                        // on yes
-                        NetworkAcessLayer.sendStartGameResponse(
-                                new AcceptStartGameResposne(startGameRequest.getUsername())
-                        );
-                    } catch (IOException ex) {
-                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                        textErrorMessage.setText(ex.getMessage());
-                    }
-                
-                }, () -> {
-                    try {
-                        // on No
-                        NetworkAcessLayer.sendStartGameResponse(
-                                new RefuseStartGameResponse(startGameRequest.getUsername())
-                        );
-                    } catch (IOException ex) {
-                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                        textErrorMessage.setText(ex.getMessage());
-                    }
-                    
-                }, () -> {
-                    try {
-                        // on close
-                        NetworkAcessLayer.sendStartGameResponse(
-                                new RefuseStartGameResponse(startGameRequest.getUsername())
-                        );
-                    } catch (IOException ex) {
-                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                        textErrorMessage.setText(ex.getMessage());
-                    }
-                    
-                });
-    }
-    
-    
-    /**
-     * to be called when user gets a response sent by another user
-     * via server
-    */
-    private void onRecieveStartGameResponse(StartGameResponse startGameResponse) {
-        if(startGameResponse instanceof AcceptStartGameResposne) {
-            // do things related to acceptence like going to the game screen
-            
-            return;
-        }  
-        if(startGameResponse instanceof RefuseStartGameResponse) {
-            // show user error dialog t
-            
-            UiUtils.showValidationAlert(
-                    "your invitation to " + startGameResponse.getUsername() + " was refuesed"
-            );
-            return;
+            textErrorMessage.setText("Error signing out: " + ex.getMessage());
         }
     }
 
+    @FXML
+    private void onClickOnPlayer(UserListItemUiState playerUiState) {
+        try {
+            StartGameRequest startGameRequest = new StartGameRequest(playerUiState.getUsername());
+            NetworkAccessLayer.sendStartGameRequest(startGameRequest);
+            System.out.println("Start game request sent to: " + playerUiState.getUsername());
+        } catch (IOException ex) {
+            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            textErrorMessage.setText("Error sending game request: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Called when a start game request is received from another player via the server.
+     */
+    private void onReceiveStartGameRequest(StartGameRequest startGameRequest) {
+        UiUtils.showReplayAlert(
+                startGameRequest.getUsername() + " wants to have a game with you. Do you agree?",
+                () -> {
+                    try {
+                        // On "Yes"
+                        NetworkAccessLayer.sendStartGameResponse(new AcceptStartGameResponse(startGameRequest.getUsername()));
+                        navigateToScreen("gameScreen.fxml", btnSignOut); // Navigate to the game screen
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        textErrorMessage.setText("Error accepting game request: " + ex.getMessage());
+                    }
+                },
+                () -> {
+                    try {
+                        // On "No"
+                        NetworkAccessLayer.sendStartGameResponse(new RefuseStartGameResponse(startGameRequest.getUsername()));
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        textErrorMessage.setText("Error refusing game request: " + ex.getMessage());
+                    }
+                },
+                () -> {
+                    try {
+                        // On "Close"
+                        NetworkAccessLayer.sendStartGameResponse(new RefuseStartGameResponse(startGameRequest.getUsername()));
+                    } catch (IOException ex) {
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        textErrorMessage.setText("Error handling game request: " + ex.getMessage());
+                    }
+                }
+        );
+    }
+
+    /**
+     * Called when a start game response is received from another player via the server.
+     */
+    private void onReceiveStartGameResponse(StartGameResponse startGameResponse) {
+        if (startGameResponse instanceof AcceptStartGameResponse) {
+            // Handle acceptance (e.g., navigate to the game screen)
+            try {
+                navigateToScreen("gameScreen.fxml", btnSignOut);
+            } catch (IOException ex) {
+                Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                textErrorMessage.setText("Error navigating to game screen: " + ex.getMessage());
+            }
+        } else if (startGameResponse instanceof RefuseStartGameResponse) {
+            // Handle refusal
+            UiUtils.showValidationAlert("Your invitation to " + startGameResponse.getUsername() + " was refused.");
+        }
+    }
 }

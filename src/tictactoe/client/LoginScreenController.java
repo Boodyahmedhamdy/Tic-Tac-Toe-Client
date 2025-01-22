@@ -64,53 +64,80 @@ public class LoginScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
-         registerbtn.setOnAction((event) -> {
-                navigatePage("RegisterScreen.fxml", registerbtn);
-             
-       
-    });
-        
-          loginbtn.setOnAction((event) -> {
-    if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-          UiUtils.showValidationAlert("Requiered field is empty!");}
-    else {
-        LoginRequest loginRequest = new LoginRequest(nameField.getText(), passwordField.getText());
-        playerSocket.sendRequest(loginRequest);
-        Response response = playerSocket.receiveResponse();
-        if (response instanceof LoginResponse) {
-    LoginResponse loginResponse = (LoginResponse) response;
-    if (loginResponse instanceof SuccessLoginResponse) {
-        SuccessLoginResponse successLoginResponse = (SuccessLoginResponse) loginResponse;
-        String username =successLoginResponse.getUsername();
-        int score =successLoginResponse.getScore();
-       
-        
-         navigatePage("AvailablePlayersScreen.fxml", loginbtn);
-        
-    }else if(loginResponse instanceof FailLoginResponse) {
-        FailLoginResponse failLoginResponse = (FailLoginResponse) loginResponse;
-        failLoginResponse.getMessage();
-                  
+
+        playerSocket = playerSocket.getInstance();
+        registerbtn.setOnAction((event) -> {
+            navigatePage("RegisterScreen.fxml", registerbtn);
+
+        });
+
+////        loginbtn.setOnAction((event) -> {
+////            if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+////                UiUtils.showValidationAlert("Requiered field is empty!");
+////            } else {
+////                LoginRequest loginRequest = new LoginRequest(nameField.getText(), passwordField.getText());
+////                playerSocket.sendRequest(loginRequest);
+////                Response response = playerSocket.receiveResponse();
+////                if (response instanceof LoginResponse) {
+////                    LoginResponse loginResponse = (LoginResponse) response;
+////                    if (loginResponse instanceof SuccessLoginResponse) {
+////                        SuccessLoginResponse successLoginResponse = (SuccessLoginResponse) loginResponse;
+////                        String username = successLoginResponse.getUsername();
+////                        int score = successLoginResponse.getScore();
+////
+////                        navigatePage("AvailablePlayersScreen.fxml", loginbtn);
+////
+////                    } else if (loginResponse instanceof FailLoginResponse) {
+////                        FailLoginResponse failLoginResponse = (FailLoginResponse) loginResponse;
+////                        failLoginResponse.getMessage();
+////
+////                    }
+////                }
+////
+////            }
+//        });
+        loginbtn.setOnAction((event) -> {
+            if (nameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+                UiUtils.showValidationAlert("Required field is empty!");
+            } else {
+                try {
+                    LoginRequest loginRequest = new LoginRequest(nameField.getText(), passwordField.getText());
+                    playerSocket.sendRequest(loginRequest);
+                    Response response = playerSocket.receiveResponse();
+
+                    if (response == null) {
+                        UiUtils.showValidationAlert("Failed to receive a response from the server.");
+                        return;
+                    }
+
+                    if (response instanceof LoginResponse) {
+                        LoginResponse loginResponse = (LoginResponse) response;
+                        if (loginResponse instanceof SuccessLoginResponse) {
+                            SuccessLoginResponse successLoginResponse = (SuccessLoginResponse) loginResponse;
+                            String username = successLoginResponse.getUsername();
+                            int score = successLoginResponse.getScore();
+                            navigatePage("AvailablePlayersScreen.fxml", loginbtn);
+                        } else if (loginResponse instanceof FailLoginResponse) {
+                            FailLoginResponse failLoginResponse = (FailLoginResponse) loginResponse;
+                            UiUtils.showValidationAlert(failLoginResponse.getMessage());
+                        }
+                    } else {
+                        UiUtils.showValidationAlert("Unexpected response type received.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace(); // Print the stack trace for debugging
+                    UiUtils.showValidationAlert("An error occurred while processing the login response.");
+                }
             }
-}
-               
-            }});
-       
+        });
 
-
-        
-
-        
         backBtn.setOnAction((event) -> {
             navigatePage("StartOptionsScreen.fxml", backBtn);
-           
-        });
-        
 
+        });
 
     }
+
     private void navigatePage(String fxmlFile, Button button) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -123,5 +150,5 @@ public class LoginScreenController implements Initializable {
         }
     }
 
-
 }
+

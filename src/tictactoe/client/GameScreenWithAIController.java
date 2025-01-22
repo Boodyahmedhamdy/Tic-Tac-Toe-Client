@@ -24,6 +24,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import tictactoe.client.game.GameWithAI;
+import tictactoe.client.game.Game_AI;
 
 /**
  * FXML Controller class
@@ -37,7 +38,7 @@ public class GameScreenWithAIController implements Initializable {
     GameWithAI gameWithAi;
    
     String CurrentPlayer;
-    String [][] board;
+    public static String [][] board;
     int status;
      @FXML
     private GridPane gridPane;
@@ -71,6 +72,8 @@ public class GameScreenWithAIController implements Initializable {
     private Label player_AI;
     String Player;
     String AI;
+    //Game_AI game_AI;
+    Game_AI.Move bestMove;
     
     /**
      * Initializes the controller class.
@@ -86,6 +89,7 @@ public class GameScreenWithAIController implements Initializable {
                 Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+       // game_AI=new Game_AI();
         gameWithAi=new GameWithAI();
         Player="O";
         AI="X";
@@ -96,7 +100,7 @@ public class GameScreenWithAIController implements Initializable {
     
     
      //AI
-    @FXML
+   /* @FXML
     void handleOnClick(ActionEvent event) throws IOException {
         
             Button clickedButton = (Button) event.getSource();
@@ -138,8 +142,53 @@ public class GameScreenWithAIController implements Initializable {
                 CurrentPlayer=Player;
             
         }
-    }
+    }*/
 
+    
+    @FXML
+    void handleOnClick(ActionEvent event) throws IOException {
+        
+            Button clickedButton = (Button) event.getSource();
+            Point clickedPosition = getClickedButtonPosition(clickedButton);
+
+            // Handle human player (O) move
+            if (CurrentPlayer.equals("O")) {
+                clickedButton.setText("O");
+                clickedButton.getStyleClass().add("o-button");
+                board[clickedPosition.x][clickedPosition.y]="O";
+                clickedButton.setDisable(true);
+
+                // Check game status after human move
+                status= gameWithAi.checkGameStatus(board);
+                if (status != gameWithAi.UNKNOWN) {
+                    //handleGameEnd();
+                    return;
+                }
+
+                // Switch to AI player
+                CurrentPlayer=AI;
+                
+               
+                // AI (X) makes its move
+                bestMove = Game_AI.findBestMove(board); 
+                Button AIButton = getButtonAt(bestMove.row,bestMove.col);
+                AIButton.setText("X");
+                AIButton.getStyleClass().add("x-button");
+                board[bestMove.row][bestMove.col]="X";
+                AIButton.setDisable(true);
+
+                // Check game status after AI move
+                status= gameWithAi.checkGameStatus(board);
+                if (status != gameWithAi.UNKNOWN) {
+                    //handleGameEnd();
+                    return;
+                }
+
+                // Switch back to human player
+                CurrentPlayer=Player;
+            
+        }
+    }
     /*private void handleGameEnd() {
         switch (game.status) {
             case Game.PLAYER_X_WINS:

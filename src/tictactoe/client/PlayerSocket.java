@@ -50,9 +50,21 @@ public final class PlayerSocket {
 
     public void sendRequest(Request request) {
         try {
+            System.out.println("Sending Request: " + request.getClass().getSimpleName());
             out.writeObject(request);
             out.flush();
             System.out.println("Request sent: " + request.getClass().getSimpleName());
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
+        }
+    }
+    
+    public void sendResponse(Response response) {
+        try {
+            System.out.println("Sending Response: " + response.getClass().getSimpleName());
+            out.writeObject(response);
+            out.flush();
+            System.out.println("Response sent: " + response.getClass().getSimpleName());
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
         }
@@ -64,6 +76,18 @@ public final class PlayerSocket {
             Response response = (Response) in.readObject();
             System.out.println("Response received: " + response.getClass().getSimpleName());
             return response;
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error receiving response: " + ex.getMessage(), ex);
+            return null;
+        }
+    }
+    
+    public Request receiveRequest() {
+        try {
+            System.out.println("Waiting for request...");
+            Request request = (Request) in.readObject();
+            System.out.println("request received: " + request.getClass().getSimpleName());
+            return request;
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error receiving response: " + ex.getMessage(), ex);
             return null;

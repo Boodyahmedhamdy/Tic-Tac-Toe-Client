@@ -25,6 +25,7 @@
    <top>
       <HBox alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="600.0" spacing="10.0" styleClass="level-one-container" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="btnRefresh" mnemonicParsing="false" onAction="#onRefreshBtnClicked" text="Refresh Players" />
             <Text fx:id="textErrorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
                <font>
                   <Font size="18.0" />

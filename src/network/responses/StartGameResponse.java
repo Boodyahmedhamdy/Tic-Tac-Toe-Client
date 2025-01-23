@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Abdelrahman_Elshreif
  */
 
-public class StartGameResponse extends Request implements Serializable {
+public class StartGameResponse extends Response implements Serializable {
     private String username;
 
     public StartGameResponse(String username) {

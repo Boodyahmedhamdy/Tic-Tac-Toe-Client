@@ -86,8 +86,8 @@ public class GameScreenController implements Initializable {
             }
         });
         
-        HumanPlayer playerX = new HumanPlayer('X', "Boody", 0);
-        HumanPlayer playerO = new HumanPlayer('O', "Ahmed", 0);
+        HumanPlayer playerX = new HumanPlayer('X', "Player1", 0);
+        HumanPlayer playerO = new HumanPlayer('O', "Player2", 0);
         
         player2_name.setText(playerX.getUsername());
         player1_name.setText(playerO.getUsername());

@@ -41,13 +41,9 @@ public class GameScreenWithAIController implements Initializable {
     //GameWithAI gameWithAi;
    
     
-    int status;
+   
      @FXML
     private GridPane gridPane;
-    @FXML
-    private Label player1_score;
-    @FXML
-    private Label player2_score;
     @FXML
     private ColumnConstraints HCenter;
     @FXML
@@ -72,18 +68,24 @@ public class GameScreenWithAIController implements Initializable {
     private Label Player_human;
     @FXML
     private Label player_AI;
+    @FXML
     
-    Game_AI game_AI;
-    Game_AI.Move bestMove;
+    
+   
    
     ////////////////
     Button [][] board;
     boolean isGameOver;
     Button[] winningButtons;
-    String difficulty="Hard";
+    public static String difficulty;
     String CurrentPlayer;
     String Player;
     String AI;
+    Video video;
+    @FXML
+    private Label You_score;
+    @FXML
+    private Label AI_score;
     
     
     /**
@@ -100,8 +102,7 @@ public class GameScreenWithAIController implements Initializable {
                 Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        game_AI=new Game_AI();
-       // gameWithAi=new GameWithAI();
+     
         Player="O";
         AI="X";
         CurrentPlayer=Player;
@@ -112,6 +113,10 @@ public class GameScreenWithAIController implements Initializable {
             {AI_btn20,AI_btn21,AI_btn22}
         };
         isGameOver=false;
+        //setDifficulty(difficulty);
+        System.out.println("Difficulty set to: " + difficulty);
+
+        
         
     }    
     
@@ -136,8 +141,11 @@ public class GameScreenWithAIController implements Initializable {
                
                 checkWhoIsTheWinner();
                 
-                if(!isGameOver)
+                if(!isGameOver){
                     computerMove();
+                    
+                }
+                   
             
         }
         clickedButton.setDisable(true);
@@ -172,10 +180,16 @@ public class GameScreenWithAIController implements Initializable {
         if(checkWin("X")){
             isGameOver=true;
             highlightWiningPoints();
+            video=new Video();
+            video.loseVideo();
+            AI_score.setText(String.valueOf(Integer.parseInt(AI_score.getText())+1));
         }
         else if(checkWin("O")){
             isGameOver=true;
             highlightWiningPoints();
+            video=new Video();
+            video.winVideo();
+            You_score.setText(String.valueOf(Integer.parseInt(You_score.getText())+1));
         }
         else if(isBoardFull()){
             isGameOver=true;
@@ -206,7 +220,7 @@ public class GameScreenWithAIController implements Initializable {
                 bestMove=getRandomMove();
                 break;
             case "Medium":
-                bestMove=findBestMove(7);
+                bestMove=findBestMove(3);
                 break;
             case "Hard":
                 bestMove=findBestMove(Integer.MAX_VALUE);
@@ -217,6 +231,8 @@ public class GameScreenWithAIController implements Initializable {
             int row=bestMove[0];
             int col=bestMove[1];
             board[row][col].setText(AI);
+            /*Button clickedButton =getButtonAt(row,col);
+            clickedButton.getStyleClass().add("x-button");*/
             CurrentPlayer=Player;
             checkWhoIsTheWinner();
         }
@@ -232,6 +248,7 @@ public class GameScreenWithAIController implements Initializable {
         }
         
         if(!emptyCells.isEmpty()){
+            
             return emptyCells.get(new Random().nextInt(emptyCells.size()));
         }
         return null;
@@ -348,17 +365,20 @@ public class GameScreenWithAIController implements Initializable {
         } 
     } 
     
-    Point getClickedButtonPosition(Button button) {
-        Integer x = GridPane.getRowIndex(button);
-        Integer y = GridPane.getColumnIndex(button);
-        if(x == null) x = 0;
-        if (y == null) y = 0;
-        return new Point(x, y);
-    }
+    
     
    
     
-     public Button getButtonAt(int x, int y) {
+     
+     
+    private void navigateToScreen(String fxmlFile) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+        Parent root = loader.load();
+        Stage stage = (Stage) gridPane.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+    public Button getButtonAt(int x, int y) {
         for (Node node : gridPane.getChildren()) {
             Integer col = GridPane.getColumnIndex(node);
             Integer row = GridPane.getRowIndex(node);
@@ -370,12 +390,9 @@ public class GameScreenWithAIController implements Initializable {
         }
         throw new IllegalArgumentException("Invalid coordinates: (" + x + ", " + y + "). Button not found.");
     }
-     
-    private void navigateToScreen(String fxmlFile) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-        Parent root = loader.load();
-        Stage stage = (Stage) gridPane.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
+    
+    /*public  void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+        System.out.println("Difficulty set to: " + difficulty);
+    }*/
 }

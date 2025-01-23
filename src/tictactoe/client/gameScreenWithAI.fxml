@@ -23,7 +23,7 @@
             <VBox alignment="CENTER" prefHeight="139.0" prefWidth="150.0">
                <children>
                   <Label id="O" text="O" />
-                  <Label fx:id="Player_human" alignment="CENTER" ellipsisString="" prefHeight="90.0" prefWidth="156.0" textFill="#0384fc" textOverrun="CLIP">
+                  <Label fx:id="Player_human" alignment="CENTER" ellipsisString="" prefHeight="90.0" prefWidth="156.0" text="You" textFill="#0384fc" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -32,7 +32,7 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="120.0" prefWidth="85.0" spacing="5.0">
                <children>
-                  <Label fx:id="player1_score" text="0">
+                  <Label fx:id="You_score" text="0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -42,7 +42,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="player2_score" text="0">
+                  <Label fx:id="AI_score" text="0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -52,7 +52,7 @@
             <VBox alignment="CENTER" prefHeight="137.0" prefWidth="152.0">
                <children>
                   <Label id="X" text="X" />
-                  <Label fx:id="player_AI" alignment="CENTER" ellipsisString="" prefHeight="64.0" prefWidth="161.0" textAlignment="CENTER" textFill="#ff2a2e" textOverrun="CLIP">
+                  <Label fx:id="player_AI" alignment="CENTER" ellipsisString="" prefHeight="64.0" prefWidth="161.0" text="AI" textAlignment="CENTER" textFill="#ff2a2e" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

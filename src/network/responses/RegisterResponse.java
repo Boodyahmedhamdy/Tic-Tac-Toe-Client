@@ -12,13 +12,15 @@ package network.responses;
 import java.io.Serializable;
 
 public class RegisterResponse extends Response {
+
+    private static final long serialVersionUID = 1L;
     boolean status;
-    
+
     public RegisterResponse() {
-        
+
     }
-    
-    public boolean isSuccess(){
+
+    public boolean isSuccess() {
         return status;
     }
 

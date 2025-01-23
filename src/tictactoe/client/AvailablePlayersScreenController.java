@@ -16,8 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import network.NetworkAccessLayer;
 import network.actions.SignOutAction;
+import network.requests.Request;
 import network.requests.StartGameRequest;
 import network.responses.AcceptStartGameResponse;
 import network.responses.RefuseStartGameResponse;
@@ -37,6 +37,8 @@ public class AvailablePlayersScreenController implements Initializable {
     private ListView<UserListItemUiState> lvAvailablePlayers;
     @FXML
     private Text textErrorMessage;
+    
+    PlayerSocket playerSocket;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -48,12 +50,15 @@ public class AvailablePlayersScreenController implements Initializable {
                 textErrorMessage.setText("Error navigating to StartOptionsScreen: " + ex.getMessage());
             }
         });
+        playerSocket = PlayerSocket.getInstance();
 
         // Add dummy players for testing
         lvAvailablePlayers.getItems().addAll(
-                new UserListItemUiState("boody", 33),
+                new UserListItemUiState("player1", 33),
                 new UserListItemUiState("Ahmed", 323)
         );
+        
+        
 
         // Add listener for player selection
         lvAvailablePlayers.getSelectionModel().selectedItemProperty().addListener(
@@ -75,8 +80,10 @@ public class AvailablePlayersScreenController implements Initializable {
     @FXML
     private void onClickSignOut(ActionEvent event) {
         try {
+            System.out.println("Sending SignOut Request");
             SignOutAction signOutAction = new SignOutAction(textPlayerUserName.getText());
-            NetworkAccessLayer.sendSignOutAction(signOutAction);
+//            playerSocket.sendRequest(signOutAction);
+//            NetworkAccessLayer.sendSignOutAction(signOutAction);
             navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
         } catch (IOException ex) {
             Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,14 +93,20 @@ public class AvailablePlayersScreenController implements Initializable {
 
     @FXML
     private void onClickOnPlayer(UserListItemUiState playerUiState) {
-        try {
-            StartGameRequest startGameRequest = new StartGameRequest(playerUiState.getUsername());
-            NetworkAccessLayer.sendStartGameRequest(startGameRequest);
-            System.out.println("Start game request sent to: " + playerUiState.getUsername());
-        } catch (IOException ex) {
-            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-            textErrorMessage.setText("Error sending game request: " + ex.getMessage());
+        
+        System.out.println("sending Start game request sent to: " + playerUiState.getUsername());
+        StartGameRequest startGameRequest = new StartGameRequest(playerUiState.getUsername());
+        playerSocket.sendRequest(startGameRequest);
+        System.out.println("Start game request sent to: " + playerUiState.getUsername());
+
+        // reciving process
+        System.out.println("waiting for StartGameRequest to come....");
+        Request request = playerSocket.receiveRequest();
+        System.out.println("StartGameRequest just arrived with type" + request.getClass().getSimpleName());
+        if(request instanceof StartGameRequest) {
+            onReceiveStartGameRequest((StartGameRequest) request);
         }
+
     }
 
     /**
@@ -105,7 +118,8 @@ public class AvailablePlayersScreenController implements Initializable {
                 () -> {
                     try {
                         // On "Yes"
-                        NetworkAccessLayer.sendStartGameResponse(new AcceptStartGameResponse(startGameRequest.getUsername()));
+                        AcceptStartGameResponse response = new AcceptStartGameResponse(startGameRequest.getUsername());
+                        playerSocket.sendResponse(response);
                         navigateToScreen("gameScreen.fxml", btnSignOut); // Navigate to the game screen
                     } catch (IOException ex) {
                         Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,22 +127,18 @@ public class AvailablePlayersScreenController implements Initializable {
                     }
                 },
                 () -> {
-                    try {
-                        // On "No"
-                        NetworkAccessLayer.sendStartGameResponse(new RefuseStartGameResponse(startGameRequest.getUsername()));
-                    } catch (IOException ex) {
-                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                        textErrorMessage.setText("Error refusing game request: " + ex.getMessage());
-                    }
+
+                    // On "No"
+                    RefuseStartGameResponse response = new RefuseStartGameResponse(startGameRequest.getUsername());
+                    playerSocket.sendResponse(response);
+
                 },
                 () -> {
-                    try {
-                        // On "Close"
-                        NetworkAccessLayer.sendStartGameResponse(new RefuseStartGameResponse(startGameRequest.getUsername()));
-                    } catch (IOException ex) {
-                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                        textErrorMessage.setText("Error handling game request: " + ex.getMessage());
-                    }
+                    
+                    // On "Close"
+                    RefuseStartGameResponse response = new RefuseStartGameResponse(startGameRequest.getUsername());
+                    playerSocket.sendResponse(response);
+
                 }
         );
     }

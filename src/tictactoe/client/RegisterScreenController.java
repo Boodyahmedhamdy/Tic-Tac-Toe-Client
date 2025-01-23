@@ -65,8 +65,7 @@ public class RegisterScreenController implements Initializable {
             return;
         }
 
-        // Send registration request to the server
-        RegisterRequest registerRequest = new RegisterRequest(username, email, password);
+        RegisterRequest registerRequest = new RegisterRequest(username, password,email);
         playerSocket.sendRequest(registerRequest);
 
         // Wait for the response

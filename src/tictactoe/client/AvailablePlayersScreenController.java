@@ -2,10 +2,14 @@ package tictactoe.client;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,11 +21,15 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.actions.SignOutAction;
+import network.requests.GetAvailablePlayersRequest;
 import network.requests.Request;
 import network.requests.StartGameRequest;
 import network.responses.AcceptStartGameResponse;
+import network.responses.GetAvailablePlayersResponse;
 import network.responses.RefuseStartGameResponse;
+import network.responses.Response;
 import network.responses.StartGameResponse;
+import network.responses.SuccessGetAvaialbePlayersResponse;
 import tictactoe.client.ui.UiUtils;
 import tictactoe.client.ui.states.UserListItemUiState;
 
@@ -34,11 +42,16 @@ public class AvailablePlayersScreenController implements Initializable {
     @FXML
     private Button btnSignOut;
     @FXML
-    private ListView<UserListItemUiState> lvAvailablePlayers;
+    private ListView<String> lvAvailablePlayers;
     @FXML
     private Text textErrorMessage;
     
+    private List<String> availabePlayers;
+    
     PlayerSocket playerSocket;
+    
+    @FXML
+    private Button btnRefresh;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -53,16 +66,18 @@ public class AvailablePlayersScreenController implements Initializable {
         playerSocket = PlayerSocket.getInstance();
 
         // Add dummy players for testing
-        lvAvailablePlayers.getItems().addAll(
-                new UserListItemUiState("player1", 33),
-                new UserListItemUiState("Ahmed", 323)
-        );
-        
+//        lvAvailablePlayers.getItems().addAll(
+//                new UserListItemUiState("player1", 33),
+//                new UserListItemUiState("Ahmed", 323)
+//        );
+
+        availabePlayers = new ArrayList<>();
+        lvAvailablePlayers.setItems(FXCollections.observableArrayList(availabePlayers));
         
 
         // Add listener for player selection
         lvAvailablePlayers.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends UserListItemUiState> observable, UserListItemUiState oldValue, UserListItemUiState newValue) -> {
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
                     if (newValue != null) {
                         onClickOnPlayer(newValue);
                     }
@@ -83,7 +98,6 @@ public class AvailablePlayersScreenController implements Initializable {
             System.out.println("Sending SignOut Request");
             SignOutAction signOutAction = new SignOutAction(textPlayerUserName.getText());
 //            playerSocket.sendRequest(signOutAction);
-//            NetworkAccessLayer.sendSignOutAction(signOutAction);
             navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
         } catch (IOException ex) {
             Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,13 +105,12 @@ public class AvailablePlayersScreenController implements Initializable {
         }
     }
 
-    @FXML
-    private void onClickOnPlayer(UserListItemUiState playerUiState) {
+    private void onClickOnPlayer(String username) {
         
-        System.out.println("sending Start game request sent to: " + playerUiState.getUsername());
-        StartGameRequest startGameRequest = new StartGameRequest(playerUiState.getUsername());
+        System.out.println("sending Start game request sent to: " + username);
+        StartGameRequest startGameRequest = new StartGameRequest(username);
         playerSocket.sendRequest(startGameRequest);
-        System.out.println("Start game request sent to: " + playerUiState.getUsername());
+        System.out.println("Start game request sent to: " + username);
 
         // reciving process
         System.out.println("waiting for StartGameRequest to come....");
@@ -107,6 +120,29 @@ public class AvailablePlayersScreenController implements Initializable {
             onReceiveStartGameRequest((StartGameRequest) request);
         }
 
+    }
+    
+    @FXML
+    private void onRefreshBtnClicked(ActionEvent event) {
+        System.out.println("sending GetAvailabePlayers Request...");
+        GetAvailablePlayersRequest request = new GetAvailablePlayersRequest();
+        playerSocket.sendRequest(request);
+        System.out.println("GetAvaialblePlayersRequest sent");
+        
+        // blocking code here
+        System.out.println("reciving GetAvaialblePlayersResponse");
+        GetAvailablePlayersResponse response = (GetAvailablePlayersResponse) playerSocket.receiveResponse();
+        if(response instanceof SuccessGetAvaialbePlayersResponse) {
+            SuccessGetAvaialbePlayersResponse successResponse = 
+                    (SuccessGetAvaialbePlayersResponse) response;
+            System.out.println("before updating list " + availabePlayers);
+            availabePlayers = successResponse.getUsernames();
+            lvAvailablePlayers.setItems(FXCollections.observableArrayList(availabePlayers));
+            System.out.println("after updating list - recieved successfully the list " + availabePlayers);
+            
+        } else {
+            System.out.println("Failure happend");
+        }
     }
 
     /**

@@ -10,14 +10,17 @@ package network.responses;
  * @author HP
  */
 import java.io.Serializable;
+
 public class LoginResponse extends Response {
+
+    private static final long serialVersionUID = 1L;
     boolean status;
 
     public LoginResponse() {
-        
+
     }
-    
-    public boolean isSuccess(){
+
+    public boolean isSuccess() {
         return status;
     }
 
@@ -25,5 +28,4 @@ public class LoginResponse extends Response {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-   
 }

@@ -49,9 +49,11 @@ public class LoginScreenController implements Initializable {
 
         // Send login request to the server
         LoginRequest loginRequest = new LoginRequest(username, password);
+        System.out.println("Sending LoginRequest for username: " + username);
         playerSocket.sendRequest(loginRequest);
 
         // Wait for the response
+        System.out.println("Waiting for LoginResponse...");
         LoginResponse loginResponse = (LoginResponse) playerSocket.receiveResponse();
 
         if (loginResponse instanceof SuccessLoginResponse) {

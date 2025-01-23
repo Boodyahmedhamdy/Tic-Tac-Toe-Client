@@ -12,5 +12,7 @@ import java.io.Serializable;
  * @author HP
  */
 public abstract class Request implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     // Base class for all requests
 }

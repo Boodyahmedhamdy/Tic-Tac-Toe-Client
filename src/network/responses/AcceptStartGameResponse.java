@@ -9,8 +9,8 @@ package network.responses;
  *
  * @author Abdelrahman_Elshreif
  */
-public class RefuseStartGameResponse extends StartGameResponse {
-    public RefuseStartGameResponse(String username) {
+public class AcceptStartGameResponse extends StartGameResponse {
+    public AcceptStartGameResponse(String username) {
         super(username);
     }
 }

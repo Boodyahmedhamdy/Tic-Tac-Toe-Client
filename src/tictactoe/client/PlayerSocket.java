@@ -9,15 +9,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.requests.Request;
+import network.requests.StartGameRequest;
+import network.responses.RefuseStartGameResponse;
 import network.responses.Response;
+import network.responses.StartGameResponse;
 
 public final class PlayerSocket {
 
-    private static PlayerSocket instance; // Singleton instance
+    private static PlayerSocket instance;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
+    private Thread listenerThread;
 
     private PlayerSocket() {
         this.socket = new Socket();
@@ -48,6 +52,45 @@ public final class PlayerSocket {
         }
     }
 
+    public void startListenerThread() {
+        listenerThread = new Thread(() -> {
+            while (running.get()) {
+                try {
+
+                    Object incomingObject = in.readObject();
+
+                    if (incomingObject instanceof Request) {
+                        Request request = (Request) incomingObject;
+                        System.out.println("Handling request: " + request.getClass().getSimpleName());
+
+                        if (request instanceof StartGameRequest) {
+                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getUsername());
+                            handleStartGame((StartGameRequest) request);
+                        }
+
+                    }
+
+                    if (incomingObject instanceof Response) {
+                        Response response = (Response) incomingObject;
+                        System.out.println("Handling response: " + response.getClass().getSimpleName());
+
+                        if (response instanceof RefuseStartGameResponse) {
+                            System.out.println("Refuse Start Game Response received.");
+                            handleRefuseStartGame((RefuseStartGameResponse) response);
+                        }
+
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "I/O error in listener thread: " + ex.getMessage(), ex);
+                    break; // Exit the loop on I/O errors
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Class not found in listener thread: " + ex.getMessage(), ex);
+                }
+            }
+        });
+        listenerThread.start();
+    }
+
     public void sendRequest(Request request) {
         try {
             System.out.println("Sending Request: " + request.getClass().getSimpleName());
@@ -58,7 +101,7 @@ public final class PlayerSocket {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
         }
     }
-    
+
     public void sendResponse(Response response) {
         try {
             System.out.println("Sending Response: " + response.getClass().getSimpleName());
@@ -81,7 +124,7 @@ public final class PlayerSocket {
             return null;
         }
     }
-    
+
     public Request receiveRequest() {
         try {
             System.out.println("Waiting for request...");
@@ -106,12 +149,24 @@ public final class PlayerSocket {
             if (in != null) {
                 in.close();
             }
-        } catch (IOException ex) {
+            if (listenerThread != null) {
+
+                listenerThread.join();
+            }
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error closing resources", ex);
         }
     }
 
     public boolean isConnected() {
         return socket != null && socket.isConnected() && !socket.isClosed() && out != null && in != null;
+    }
+
+    private void handleStartGame(StartGameRequest startGameRequest) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void handleRefuseStartGame(StartGameResponse startGameResponse) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -2,13 +2,12 @@
     -fx-opacity: 1;
 }
 
-/* Grid Pane Styles */
 #grid-pane {
 
     -fx-hgap: 5;
     -fx-vgap: 5;
     -fx-background-color: black;
-    /*-fx-border-color: black*/
+  
     -fx-opacity: 1;
 }
 
@@ -28,7 +27,6 @@
 
 }
 
-/* Screen Background */
 #screen {
     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);
     -fx-opacity: 1;
@@ -41,19 +39,17 @@
     -fx-opacity: 1;
     
 }
-
 .o-button {
     -fx-text-fill: #0384fc;
     -fx-background-color: white;
     -fx-opacity: 1;
 }
 
-/* Gameplay Screen Background */
-/*#gameplayScreen {
-    -fx-background-image: url(3.jpg);
+#gameplayScreen {
+    -fx-background-image: url(xor.jpg);
     -fx-background-size: cover;
     -fx-opacity: 1;
-}*/
+}
 
 #X{
     -fx-text-fill: #ff2a2e;

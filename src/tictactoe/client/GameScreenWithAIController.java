@@ -5,7 +5,6 @@
  */
 package tictactoe.client;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import tictactoe.client.game.GameWithAI;
-import tictactoe.client.game.Game_AI;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -65,16 +62,6 @@ public class GameScreenWithAIController implements Initializable {
     private Button AI_btn21;
     @FXML
     private Button AI_btn22;
-    @FXML
-    private Label Player_human;
-    @FXML
-    private Label player_AI;
-    @FXML
-    
-    
-   
-   
-    ////////////////
     Button [][] board;
     boolean isGameOver;
     Button[] winningButtons;
@@ -88,6 +75,10 @@ public class GameScreenWithAIController implements Initializable {
     @FXML
     private Label AI_score;
     String Result;
+    @FXML
+    private Label Player_human;
+    @FXML
+    private Label player_AI;
     
     
     /**
@@ -153,7 +144,7 @@ public class GameScreenWithAIController implements Initializable {
                 }
                    
             
-        }
+            }
         clickedButton.setDisable(true);
 
     }

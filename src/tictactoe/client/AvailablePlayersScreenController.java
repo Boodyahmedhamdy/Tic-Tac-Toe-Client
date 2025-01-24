@@ -50,6 +50,8 @@ public class AvailablePlayersScreenController implements Initializable {
     
     PlayerSocket playerSocket;
     
+    PlayerInfo playerInfo;
+    
     @FXML
     private Button btnRefresh;
 
@@ -64,6 +66,9 @@ public class AvailablePlayersScreenController implements Initializable {
             }
         });
         playerSocket = PlayerSocket.getInstance();
+        playerInfo = PlayerInfo.getInstance();
+        textPlayerUserName.setText(playerInfo.getUserName());
+        textPlayerScore.setText(playerInfo.getRank() + " points");
 
         // Add dummy players for testing
 //        lvAvailablePlayers.getItems().addAll(
@@ -96,7 +101,7 @@ public class AvailablePlayersScreenController implements Initializable {
     private void onClickSignOut(ActionEvent event) {
         try {
             System.out.println("Sending SignOut Request");
-            SignOutAction signOutAction = new SignOutAction(textPlayerUserName.getText());
+            SignOutAction signOutAction = new SignOutAction(playerInfo.getUserName());
 //            playerSocket.sendRequest(signOutAction);
             navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
         } catch (IOException ex) {

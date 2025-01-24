@@ -31,6 +31,8 @@ public class LoginScreenController implements Initializable {
     private Button registerbtn;
 
     private PlayerSocket playerSocket;
+    
+    private PlayerInfo playerInfo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -58,6 +60,9 @@ public class LoginScreenController implements Initializable {
 
         if (loginResponse instanceof SuccessLoginResponse) {
             SuccessLoginResponse successResponse = (SuccessLoginResponse) loginResponse;
+            playerInfo = PlayerInfo.getInstance();
+            playerInfo.setUserName(successResponse.getUsername());
+            playerInfo.setRank(successResponse.getScore());
             System.out.println("Login successful for user: " + successResponse.getUsername());
             navigateToScreen("AvailablePlayersScreen.fxml", loginbtn);
         } else if (loginResponse instanceof FailLoginResponse) {

@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import tictactoe.client.game.Game;
@@ -46,9 +47,10 @@ public class GameScreenController implements Initializable {
     private Label player2_name;
     @FXML
     private GridPane board;
-
+    
     public static boolean isRecording;
-
+    
+    Alert alert;
     Game game;
     Video video;
 
@@ -71,11 +73,11 @@ public class GameScreenController implements Initializable {
 
         HumanPlayer playerX = new HumanPlayer('X', "Freind", 0);
         HumanPlayer playerO = new HumanPlayer('O', "You", 0);
-
-        player1_name.setText(playerX.getUsername());
-        player2_name.setText(playerO.getUsername());
-        player1_score.setText(playerX.getScore().toString());
-        player2_score.setText(playerO.getScore().toString());
+        
+        player2_name.setText(playerX.getUsername());
+        player1_name.setText(playerO.getUsername());
+        player2_score.setText(playerX.getScore().toString());
+        player1_score.setText(playerO.getScore().toString());
 
         video = new Video();
 
@@ -87,8 +89,7 @@ public class GameScreenController implements Initializable {
 
     }
 
-    Alert alert;
-
+ 
     @FXML
     void handleOnClick(ActionEvent event) throws IOException {
         if (game.isDone) {
@@ -155,8 +156,9 @@ public class GameScreenController implements Initializable {
                                 restartGame();
                             },
                             () -> {
-                                /* Go Home Screen*/
-                                System.out.println("I will Go Home");
+
+                               System.out.println("I will Go Home"); 
+
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
                                 } catch (IOException ex) {
@@ -283,3 +285,4 @@ public class GameScreenController implements Initializable {
     }
 
 }
+

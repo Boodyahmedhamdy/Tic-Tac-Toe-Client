@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.requests.Request;
 import network.requests.StartGameRequest;
+import network.responses.GetAvailablePlayersResponse;
 import network.responses.RefuseStartGameResponse;
 import network.responses.Response;
 import network.responses.StartGameResponse;
@@ -44,7 +45,11 @@ public final class PlayerSocket {
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
-
+            
+            // connected successfully to the server
+            // now run the listening thread -- called only one time here
+//            startListenerThread();
+            
             return true;
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server: " + ex.getMessage(), ex);
@@ -54,18 +59,20 @@ public final class PlayerSocket {
 
     public void startListenerThread() {
         listenerThread = new Thread(() -> {
+            System.out.println("Listening Thread started running ...");
             while (running.get()) {
                 try {
-
+                    System.out.println("****ON LISTENING THREAD BEFORE READING ***********");
                     Object incomingObject = in.readObject();
-
+                    System.out.println("****ON LISTENING THREAD AFTER READING ***********" + incomingObject.getClass().getSimpleName());
+                    
                     if (incomingObject instanceof Request) {
                         Request request = (Request) incomingObject;
                         System.out.println("Handling request: " + request.getClass().getSimpleName());
 
                         if (request instanceof StartGameRequest) {
-                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getUsername());
-                            handleStartGame((StartGameRequest) request);
+                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getRecieverUsername());
+                            handleStartGameRequest((StartGameRequest) request);
                         }
 
                     }
@@ -74,9 +81,13 @@ public final class PlayerSocket {
                         Response response = (Response) incomingObject;
                         System.out.println("Handling response: " + response.getClass().getSimpleName());
 
-                        if (response instanceof RefuseStartGameResponse) {
-                            System.out.println("Refuse Start Game Response received.");
-                            handleRefuseStartGame((RefuseStartGameResponse) response);
+                        if (response instanceof StartGameResponse) {
+                            System.out.println("Start Game Response received.");
+                            handleStartGameResponse((StartGameResponse) response);
+                            
+                        } else if (response instanceof GetAvailablePlayersResponse) {
+                            System.out.println("GetAvailablePlayersResponse recieved");
+                            handleGetAvailablePlayersResponse((GetAvailablePlayersResponse) response);
                         }
 
                     }
@@ -162,11 +173,20 @@ public final class PlayerSocket {
         return socket != null && socket.isConnected() && !socket.isClosed() && out != null && in != null;
     }
 
-    private void handleStartGame(StartGameRequest startGameRequest) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void handleStartGameRequest(StartGameRequest startGameRequest) {
+        System.out.println("waiting for StartGameRequest to come....");
+        System.out.println("StartGameRequest just arrived with type" + startGameRequest.getClass().getSimpleName());
+        AvailablePlayersScreenController.onReceiveStartGameRequest(startGameRequest);
+
     }
 
-    private void handleRefuseStartGame(StartGameResponse startGameResponse) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void handleStartGameResponse(StartGameResponse startGameResponse) {
+        System.out.println("waiting for StartGameResponse to come....");
+        System.out.println("StartGameResponse just arrived with type" + startGameResponse.getClass().getSimpleName());
+        AvailablePlayersScreenController.onReceiveStartGameResponse(startGameResponse);
+    }
+    
+    private void handleGetAvailablePlayersResponse(GetAvailablePlayersResponse response) {
+        AvailablePlayersScreenController.onRecieveGetAvailablePlayersResponse(response);
     }
 }

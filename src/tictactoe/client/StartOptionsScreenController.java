@@ -1,4 +1,3 @@
-
 package tictactoe.client;
 
 import java.io.IOException;
@@ -54,11 +53,18 @@ private Button prevRecordsBtn;
     @FXML
     private void handlePlayWithAI() {
         System.out.println("Play With AI");
+        try {
+            
+            navigateToScreen("levels.fxml", playWithAIbtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @FXML
     private void handlePlayWithFriend() {
-        UiUtils.showReplayAlert("Do you want to record the game ?", () -> {
+
+            UiUtils.showReplayAlert("Do you want to record the game ?", () -> {
             GameScreenController.isRecording = true;
             try {
                 navigateToScreen("gameScreen.fxml", playWithFreindBtn);
@@ -73,6 +79,7 @@ private Button prevRecordsBtn;
             } catch (IOException ex) {
                 Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
+
 
         }, () -> {
             System.out.println("Dialog Closed");

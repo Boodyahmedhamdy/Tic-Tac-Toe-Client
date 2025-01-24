@@ -47,6 +47,6 @@
 
 #big-screen{
     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
-   
+   -fx-pref-height: 800;
     -fx-pref-width: 1100;
 }

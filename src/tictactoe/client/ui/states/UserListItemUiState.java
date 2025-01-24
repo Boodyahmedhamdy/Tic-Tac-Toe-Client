@@ -1,22 +1,24 @@
 package tictactoe.client.ui.states;
 
 public class UserListItemUiState {
-
-    public String username;
-    public int score;
+    private String username;
+    private int score;
 
     public UserListItemUiState(String username, int score) {
         this.username = username;
         this.score = score;
     }
 
-    public UserListItemUiState(String username) {
-        this.username = username;
+    public String getUsername() {
+        return username;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     @Override
     public String toString() {
-        return username + " -> " + score + " points";
+        return username + " (" + score + " points)";
     }
-
 }

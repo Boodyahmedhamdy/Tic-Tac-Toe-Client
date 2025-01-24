@@ -1,10 +1,10 @@
-/* Main FXML Class Styles */
 .mainFxmlClass {
     -fx-opacity: 1;
 }
 
 /* Grid Pane Styles */
 #grid-pane {
+
     -fx-hgap: 5;
     -fx-vgap: 5;
     -fx-background-color: black;

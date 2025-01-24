@@ -11,7 +11,7 @@ import java.awt.Point;
  *
  * @author HP
  */
-public class Game {
+public abstract class Game {
     
     public String[][] board = new String[3][3];
     public boolean isDone = false;
@@ -242,5 +242,4 @@ public class Game {
             return playerX;
         } else return playerO;
     }
-    
 }

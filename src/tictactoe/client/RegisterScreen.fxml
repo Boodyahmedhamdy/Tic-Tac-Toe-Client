@@ -16,7 +16,7 @@
    <top>
       <FlowPane columnHalignment="CENTER" prefHeight="53.0" prefWidth="600.0" style="-fx-alignment: center;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="backbtn" mnemonicParsing="false" text="&lt;">
+            <Button fx:id="backbtn" mnemonicParsing="false" onAction="#handleBack" text="&lt;">
                <FlowPane.margin>
                   <Insets left="20.0" top="50.0" />
                </FlowPane.margin>
@@ -58,7 +58,7 @@
                   </GridPane>
                   <FlowPane prefHeight="66.0" prefWidth="584.0">
                      <children>
-                    <Button fx:id="registerbtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" style="-fx-alignment: right;" styleClass="centerButton" text="Register">
+                        <Button fx:id="registerbtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" onAction="#handleRegister" style="-fx-alignment: right;" styleClass="centerButton" text="Register">
                            <FlowPane.margin>
                               <Insets left="380.0" top="10.0" />
                            </FlowPane.margin>

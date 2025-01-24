@@ -33,21 +33,21 @@
 
 
 .button {
-    -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6); /* Gradient background */
-    -fx-text-fill: #333333; /* Dark text color */
-    -fx-font-size: 30px; /* Larger font size */
-    -fx-font-family: "Arabic Typesetting"; /* Font family */
-    -fx-padding: 15px 40px; /* Inner padding for button size */
-    -fx-border-width: 2px; /* Border thickness */
-    -fx-border-radius: 20px; /* More rounded corners */
-    -fx-background-radius: 20px; /* Matching rounded corners */
-    -fx-cursor: hand; /* Pointer cursor on hover */
-    -fx-transition: 0.3s ease-in-out; /* Smooth transition for hover effect */
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    -fx-text-fill: #333333; 
+    -fx-font-size: 30px; 
+    -fx-font-family: "Arabic Typesetting"; 
+    -fx-padding: 15px 40px;  
+    -fx-border-width: 2px;  
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px; 
+    -fx-cursor: hand; 
+    -fx-transition: 0.3s ease-in-out;
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); /* Reverse gradient on hover */
-    -fx-border-color: #cccccc; /* Lighter border on hover */
+    -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); 
+    -fx-border-color: #cccccc; 
 }
 
 /*
@@ -64,19 +64,19 @@
 }*/
 
 .button-others {
-    -fx-border-color: #16a085; /* Cyan border */
-    -fx-text-fill: #16a085; /* Cyan text */
+    -fx-border-color: #16a085; 
+    -fx-text-fill: #16a085; 
     -fx-background-color: linear-gradient(to bottom, #e2f8f5, #c8ecea); /* Cyan gradient */
 }
 
 .button-settings {
-    -fx-border-color: #f39c12; /* Orange border */
-    -fx-text-fill: #f39c12; /* Orange text */
-    -fx-background-color: linear-gradient(to bottom, #fff4e6, #ffe4c8); /* Orange gradient */
+    -fx-border-color: #f39c12; 
+    -fx-text-fill: #f39c12; 
+    -fx-background-color: linear-gradient(to bottom, #fff4e6, #ffe4c8); 
 }
 
 .button:pressed {
-    -fx-background-color: #d9d9d9; /* Slightly darker gray for pressed state */
+    -fx-background-color: #d9d9d9; 
 }
 
 #grid-pane {

@@ -22,7 +22,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.stage.Stage;
 
-public class PreviousRecordsScreenController implements Initializable {
+public class GameScreenRecordController implements Initializable {
+
+    private static final String GAME_RECORDS_FILE = "gameRecords.txt";
+    private static final int REPLAY_DELAY_MS = 1000; // 1 second delay between moves
 
     @FXML
     private Label recordsLabel;
@@ -33,16 +36,20 @@ public class PreviousRecordsScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        String filePath = "gameRecords.txt";
-        List<RecordListItem> recordedGames;
-        recordedGames = GameRecordParser.parseSavedGames(filePath);
+        loadRecordedGames();
+        setupListView();
+    }
 
+    private void loadRecordedGames() {
+        List<RecordListItem> recordedGames = GameRecordParser.parseSavedGames(GAME_RECORDS_FILE);
         if (recordedGames.isEmpty()) {
             recordsLabel.setText("No recorded games found.");
         } else {
             recordsListView.getItems().addAll(recordedGames);
         }
+    }
 
+    private void setupListView() {
         recordsListView.setCellFactory(param -> new ListCell<RecordListItem>() {
             @Override
             protected void updateItem(RecordListItem item, boolean empty) {
@@ -78,62 +85,59 @@ public class PreviousRecordsScreenController implements Initializable {
         }
 
         try {
-            // Load the GameScreen
             FXMLLoader loader = new FXMLLoader(getClass().getResource("gameScreen.fxml"));
             Parent root = loader.load();
             GameScreenController gameScreenController = loader.getController();
 
-            // Show the GameScreen
             Stage stage = (Stage) recordsListView.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-            gameScreenController.disableAllButtons();
 
-            new Thread(() -> {
-                for (int i = 0; i < moves.size(); i++) {
-                    String move = moves.get(i);
-
-                    if (!move.matches("[XO]:\\(\\d+, \\d+\\)")) {
-                        System.out.println("Skipping Winner Line " + move);
-                        continue;
-                    }
-
-                    String[] parts = move.split(":");
-                    char playerSymbol = parts[0].charAt(0); // 'X' or 'O'
-                    String[] coordinates = parts[1].replace("(", "").replace(")", "").split(",");
-                    if (coordinates.length < 2) {
-                        System.out.println("Invalid coordinates: " + move);
-                        continue;
-                    }
-
-                    int row = Integer.parseInt(coordinates[0].trim());
-                    int col = Integer.parseInt(coordinates[1].trim());
-
-                    System.out.println("Parsed move: " + playerSymbol + " at (" + row + ", " + col + ")");
-
-                    Platform.runLater(() -> {
-                        // Update the button text and disable it
-                        Button button = gameScreenController.getButtonAtPosition(new Point(row, col));
-
-                        if ("X".equals(String.valueOf(playerSymbol))) {
-                            button.getStyleClass().add("x-button");
-                        } else if ("O".equals(String.valueOf(playerSymbol))) {
-                            button.getStyleClass().add("o-button");
+            Task<Void> replayTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    for (String move : moves) {
+                        if (isCancelled()) {
+                            break;
                         }
-                        button.setText(String.valueOf(playerSymbol));
-                        button.setDisable(true);
 
-                    });
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        if (!isValidMove(move)) {
+                            System.out.println("Skipping invalid move: " + move);
+                            continue;
+                        }
+
+                        Point position = parseMove(move);
+                        char playerSymbol = move.charAt(0);
+
+                        Platform.runLater(() -> {
+                            Button button = gameScreenController.getButtonAtPosition(position);
+                            if (button != null) {
+                                button.setText(String.valueOf(playerSymbol));
+                                button.setDisable(true);
+                            }
+                        });
+
+                        Thread.sleep(REPLAY_DELAY_MS);
                     }
+                    return null;
                 }
-            }).start();
+            };
+
+            new Thread(replayTask).start();
         } catch (IOException ex) {
             Logger.getLogger(PreviousRecordsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    private boolean isValidMove(String move) {
+        return move.matches("[XO]:\\(\\d+, \\d+\\)");
+    }
+
+    private Point parseMove(String move) {
+        String[] parts = move.split(":");
+        String[] coordinates = parts[1].replace("(", "").replace(")", "").split(",");
+        int row = Integer.parseInt(coordinates[0].trim());
+        int col = Integer.parseInt(coordinates[1].trim());
+        return new Point(row, col);
+    }
 }

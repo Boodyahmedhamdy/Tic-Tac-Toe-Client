@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import tictactoe.client.PlayerSocket;
+import tictactoe.client.ui.UiUtils;
 
 public class StartOptionsScreenController implements Initializable {
 
@@ -49,18 +50,44 @@ public class StartOptionsScreenController implements Initializable {
 
     }
 
+    @FXML
     private void handlePlayWithAI() {
         System.out.println("Play With AI");
-    }
-
-    private void handlePlayWithFriend() {
         try {
-            navigateToScreen("gameScreen.fxml", playWithAIbtn);
+            
+            navigateToScreen("levels.fxml", playWithAIbtn);
         } catch (IOException ex) {
             Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @FXML
+    private void handlePlayWithFriend() {
 
+            UiUtils.showReplayAlert("Do you want to record the game ?", () -> {
+            GameScreenController.isRecording = true;
+            try {
+                navigateToScreen("gameScreen.fxml", playWithFreindBtn);
+            } catch (IOException ex) {
+                Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }, () -> {
+            GameScreenController.isRecording = false;
+            System.out.println("Game Will Not Be Recorded");
+            try {
+                navigateToScreen("gameScreen.fxml", playWithFreindBtn);
+            } catch (IOException ex) {
+                Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
+        }, () -> {
+            System.out.println("Dialog Closed");
+        });
+
+    }
+    
+    @FXML
     private void handlePlayOnline() {
         Alert ipError = new Alert(AlertType.ERROR);
         TextInputDialog ipPicker = new TextInputDialog("");
@@ -83,7 +110,8 @@ public class StartOptionsScreenController implements Initializable {
             }
         });
     }
-
+    
+    @FXML
     private void handlePreviousRecords() {
         try {
             navigateToScreen("PreviousRecordsScreen.fxml", prevRecordsBtn);
@@ -102,20 +130,25 @@ public class StartOptionsScreenController implements Initializable {
 
         try {
             InetSocketAddress serverAddress = new InetSocketAddress(serverIP, 9800);
+            System.out.println("Attempting to connect to server at: " + serverAddress);
+
             PlayerSocket socket = PlayerSocket.getInstance();
             if (!socket.isConnected()) {
-
                 boolean connected = socket.connect(serverAddress, 1000); // Timeout of 1 second
                 connecting.close();
                 if (connected) {
-                    socket.startCommunication();
+                    System.out.println("Successfully connected to the server.");
+                } else {
+                    System.out.println("Failed to connect to the server.");
                 }
                 return connected;
+
             } else {
                 connecting.close();
                 System.out.println("Already connected to the server.");
                 return true;
             }
+
         } catch (Exception e) {
             connecting.close();
             Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, "Connection failed", e);

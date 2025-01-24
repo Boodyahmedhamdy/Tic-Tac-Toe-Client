@@ -9,11 +9,10 @@ package network.responses;
  *
  * @author HP
  */
-public class FailRegisterResponse extends RegisterResponse {
-    
+public class FailGetAvailablePlayersResponse extends GetAvailablePlayersResponse{
     private String message;
 
-    public FailRegisterResponse(String message) {
+    public FailGetAvailablePlayersResponse(String message) {
         this.message = message;
     }
 
@@ -24,7 +23,5 @@ public class FailRegisterResponse extends RegisterResponse {
     public void setMessage(String message) {
         this.message = message;
     }
-    
-    
     
 }

@@ -65,12 +65,12 @@
                               <Insets />
                            </FlowPane.margin>
                         </Text>
-                        <Button fx:id="registerbtn" mnemonicParsing="false" text="Register">
+                        <Button fx:id="registerbtn" mnemonicParsing="false" onAction="#handleRegister" text="Register">
                            <FlowPane.margin>
                               <Insets left="10.0" />
                            </FlowPane.margin>
                         </Button>
-                        <Button fx:id="loginbtn" defaultButton="true" mnemonicParsing="false" text="Login" textAlignment="CENTER">
+                        <Button fx:id="loginbtn" defaultButton="true" mnemonicParsing="false" onAction="#handleLogin" text="Login" textAlignment="CENTER">
                            <FlowPane.margin>
                               <Insets left="30.0" />
                            </FlowPane.margin>

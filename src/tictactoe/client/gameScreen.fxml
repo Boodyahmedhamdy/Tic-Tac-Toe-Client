@@ -19,7 +19,6 @@
          </VBox.margin>
          <children>
             <Button fx:id="back" mnemonicParsing="false" text="&lt;" />
-            <Button id="recordBtn" fx:id="recordBtn" mnemonicParsing="false" text="Record" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="68.0" prefWidth="600.0" spacing="40.0">

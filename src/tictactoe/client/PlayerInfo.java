@@ -20,12 +20,24 @@ public class PlayerInfo implements Serializable {
     private int matchesNum;
     private boolean isOnLine;
     private boolean isPlaying;
-     public PlayerInfo (String userName, String password) {
+    
+    private static PlayerInfo instance = null;
+    
+    private PlayerInfo() {}
+    
+    public static PlayerInfo getInstance() {
+        if(instance == null) {
+            instance = new PlayerInfo();
+        }
+        return instance;
+    }
+    
+     private PlayerInfo (String userName, String password) {
         this.userName = userName;
         this.password = password;
 
     }
-    public PlayerInfo (String userName, String password, int rank, int matchesNum, boolean isOnLine, boolean isPlaying) {
+    private PlayerInfo (String userName, String password, int rank, int matchesNum, boolean isOnLine, boolean isPlaying) {
         this.userName = userName;
         this.password = password;
         this.rank = rank;

@@ -12,13 +12,7 @@ import java.io.Serializable;
  * @author HP
  */
 public abstract class Request implements Serializable {
-    private String requestType; 
 
-    public Request(String requestType) {
-        this.requestType = requestType;
-    }
-
-    public String getRequestType() {
-        return requestType;
-    }
+    private static final long serialVersionUID = 1L;
+    // Base class for all requests
 }

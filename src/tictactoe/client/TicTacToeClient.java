@@ -19,7 +19,7 @@ public class TicTacToeClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
+        SceneNavigator.setMainStage(primaryStage);
         SplashScreen splashScreen = new SplashScreen();
         splashScreen.show();
         splashScreen.transitionTo(() -> {
@@ -33,7 +33,7 @@ public class TicTacToeClient extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, javafx.util.Duration.seconds(3));
+        }, javafx.util.Duration.seconds(2));
     }
 
     public static void main(String[] args) {

@@ -71,7 +71,7 @@ public final class PlayerSocket {
                         System.out.println("Handling request: " + request.getClass().getSimpleName());
 
                         if (request instanceof StartGameRequest) {
-                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getUsername());
+                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getRecieverUsername());
                             handleStartGameRequest((StartGameRequest) request);
                         }
 

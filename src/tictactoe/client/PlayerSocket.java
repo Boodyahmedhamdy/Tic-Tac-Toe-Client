@@ -13,6 +13,7 @@ import network.requests.StartGameRequest;
 import network.responses.GetAvailablePlayersResponse;
 import network.responses.RefuseStartGameResponse;
 import network.responses.Response;
+import network.responses.SignOutResponse;
 import network.responses.StartGameResponse;
 
 public final class PlayerSocket {
@@ -88,6 +89,9 @@ public final class PlayerSocket {
                         } else if (response instanceof GetAvailablePlayersResponse) {
                             System.out.println("GetAvailablePlayersResponse recieved");
                             handleGetAvailablePlayersResponse((GetAvailablePlayersResponse) response);
+                        } else if (response instanceof SignOutResponse) {
+                            System.out.println("SignOutResponse recieved");
+                            handleSignOutResponse( (SignOutResponse) incomingObject);
                         }
 
                     }
@@ -188,5 +192,9 @@ public final class PlayerSocket {
     
     private void handleGetAvailablePlayersResponse(GetAvailablePlayersResponse response) {
         AvailablePlayersScreenController.onRecieveGetAvailablePlayersResponse(response);
+    }
+
+    private void handleSignOutResponse(SignOutResponse signOutResponse) {
+        AvailablePlayersScreenController.onRecieveSignOutResponse(signOutResponse);
     }
 }

@@ -27,7 +27,7 @@ public class SplashScreen {
         splashStage = new Stage();
         splashStage.initStyle(StageStyle.UNDECORATED); 
 
-        ImageView splashImage = new ImageView(new Image("file:C:\\Users\\Laptop World\\Downloads\\Animation - 1736889197440.gif"));
+        ImageView splashImage = new ImageView(new Image("resources/Animation.gif"));
         splashImage.setFitWidth(300); 
         splashImage.setPreserveRatio(true); 
 

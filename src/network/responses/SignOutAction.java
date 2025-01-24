@@ -1,4 +1,4 @@
-package network.actions;
+package network.responses;
 
 import network.requests.Request;
 import java.io.Serializable;

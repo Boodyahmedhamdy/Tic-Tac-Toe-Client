@@ -15,7 +15,6 @@ public class RegisterRequest extends Request {
     private String email;
 
     public RegisterRequest(String username, String password, String email) {
-        super("REGISTER");
         this.username = username;
         this.password = password;
         this.email = email;

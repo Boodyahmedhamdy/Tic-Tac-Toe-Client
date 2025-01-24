@@ -19,10 +19,10 @@ public abstract class Game {
     public Point[] winingPoints = new Point[3];
     public Integer status = UNKNOWN;
     
-    public static final int UNKNOWN = 0;
-    public static final int PLAYER_X_WINS = 1;
-    public static final int PLAYER_O_WINS = 2;
-    public static final int DRAW = 3;
+    public static final int UNKNOWN = 1;
+    public static final int PLAYER_X_WINS = 2;
+    public static final int PLAYER_O_WINS = -2;
+    public static final int DRAW = 0;
 
     protected Player playerX;
     protected Player playerO;
@@ -40,7 +40,9 @@ public abstract class Game {
     public Game(Player playerX, Player playerO) {
         this.playerX = playerX;
         this.playerO = playerO;
-        this.currentPlayer = this.playerX;
+        //this.currentPlayer = this.playerX;
+        this.currentPlayer = this.playerO;
+
         initBoard();
     }
     
@@ -76,6 +78,7 @@ public abstract class Game {
             checkDraw();
         }
     }
+    
 
     /**
      * iterates over all rows and checks them all

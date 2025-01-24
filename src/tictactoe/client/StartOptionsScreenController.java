@@ -50,12 +50,21 @@ public class StartOptionsScreenController implements Initializable {
 
     }
 
+    @FXML
     private void handlePlayWithAI() {
         System.out.println("Play With AI");
+        try {
+            
+            navigateToScreen("levels.fxml", playWithAIbtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+    
+    @FXML
     private void handlePlayWithFriend() {
-        UiUtils.showReplayAlert("Do you want to record the game ?", () -> {
+
+            UiUtils.showReplayAlert("Do you want to record the game ?", () -> {
             GameScreenController.isRecording = true;
             try {
                 navigateToScreen("gameScreen.fxml", playWithFreindBtn);
@@ -71,12 +80,14 @@ public class StartOptionsScreenController implements Initializable {
                 Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+
         }, () -> {
             System.out.println("Dialog Closed");
         });
 
     }
-
+    
+    @FXML
     private void handlePlayOnline() {
         Alert ipError = new Alert(AlertType.ERROR);
         TextInputDialog ipPicker = new TextInputDialog("");
@@ -99,7 +110,8 @@ public class StartOptionsScreenController implements Initializable {
             }
         });
     }
-
+    
+    @FXML
     private void handlePreviousRecords() {
         try {
             navigateToScreen("PreviousRecordsScreen.fxml", prevRecordsBtn);
@@ -136,6 +148,7 @@ public class StartOptionsScreenController implements Initializable {
                 System.out.println("Already connected to the server.");
                 return true;
             }
+
         } catch (Exception e) {
             connecting.close();
             Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, "Connection failed", e);

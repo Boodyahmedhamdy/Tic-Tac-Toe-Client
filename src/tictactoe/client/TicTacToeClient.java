@@ -33,7 +33,7 @@ public class TicTacToeClient extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, javafx.util.Duration.seconds(3));
+        }, javafx.util.Duration.seconds(2));
     }
 
     public static void main(String[] args) {

@@ -36,7 +36,7 @@ public class StartOptionsScreenController implements Initializable {
     @FXML
     private Button playOnlineBtn;
     @FXML
-    private Button prevRecordsBtn;
+private Button prevRecordsBtn;
 
     private void setupButtonActions() {
         playWithAIbtn.setOnAction(event -> handlePlayWithAI());

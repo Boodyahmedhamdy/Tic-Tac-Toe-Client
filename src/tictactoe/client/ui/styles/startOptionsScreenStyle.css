@@ -5,7 +5,12 @@
 #BorderPane{
      -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
 }
-
+.big-screen {
+     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
+   
+    -fx-pref-width: 1100;
+    -fx-pref-height: 800;
+}
 
 
 /* Styling for the label (title) */
@@ -43,6 +48,16 @@
     -fx-background-radius: 20px; 
     -fx-cursor: hand; 
     -fx-transition: 0.3s ease-in-out;
+}
+.backbutton {
+    /*-fx-background-color: linear-gradient(to bottom, #D87DFD, #13C1D7);*/
+    -fx-font-size: 30px; 
+    -fx-font-weight: bold; 
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 10px; 
+    -fx-background-radius: 10px; 
+    -fx-cursor: hand; 
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1); 
 }
 
 .button:hover {

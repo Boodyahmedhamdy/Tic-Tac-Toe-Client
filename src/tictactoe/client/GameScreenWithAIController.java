@@ -28,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import tictactoe.client.game.GameWithAI;
 import tictactoe.client.game.Game_AI;
+import tictactoe.client.ui.UiUtils;
 
 /**
  * FXML Controller class
@@ -86,6 +87,7 @@ public class GameScreenWithAIController implements Initializable {
     private Label You_score;
     @FXML
     private Label AI_score;
+    String Result;
     
     
     /**
@@ -106,6 +108,8 @@ public class GameScreenWithAIController implements Initializable {
         Player="O";
         AI="X";
         CurrentPlayer=Player;
+        //Player_human.setStyle("-fx-background-color:#D3D3D3;");
+        //player_AI.setStyle("-fx-background-color:none;");
         //////////////
         board=new Button[][]{
             {AI_btn00,AI_btn01,AI_btn02},
@@ -115,6 +119,7 @@ public class GameScreenWithAIController implements Initializable {
         isGameOver=false;
         //setDifficulty(difficulty);
         System.out.println("Difficulty set to: " + difficulty);
+        
 
         
         
@@ -131,13 +136,14 @@ public class GameScreenWithAIController implements Initializable {
             Button clickedButton = (Button) event.getSource();
             if(!clickedButton.getText().isEmpty()) 
                 return;
-            if (CurrentPlayer.equals("O")) {
-                clickedButton.setText("O");
-                clickedButton.getStyleClass().add("o-button");
+            if (CurrentPlayer.equals(Player)) {
+                clickedButton.setText(Player);
+                //clickedButton.getStyleClass().add("o-button");
 
                 // Switch to AI player
                 CurrentPlayer=AI;
-                
+                //player_AI.setStyle("-fx-background-color:#D3D3D3;");
+                //Player_human.setStyle("-fx-background-color:none;");
                
                 checkWhoIsTheWinner();
                 
@@ -177,23 +183,32 @@ public class GameScreenWithAIController implements Initializable {
         return false;
     }
     void checkWhoIsTheWinner(){
-        if(checkWin("X")){
+        if(checkWin(AI)){
             isGameOver=true;
             highlightWiningPoints();
             video=new Video();
             video.loseVideo();
             AI_score.setText(String.valueOf(Integer.parseInt(AI_score.getText())+1));
+            Result="AI won, ";
+            Replay();
         }
-        else if(checkWin("O")){
+        else if(checkWin(Player)){
             isGameOver=true;
             highlightWiningPoints();
             video=new Video();
             video.winVideo();
             You_score.setText(String.valueOf(Integer.parseInt(You_score.getText())+1));
+            Result="You won, ";
+            Replay();
         }
         else if(isBoardFull()){
             isGameOver=true;
+            Result="Tie, ";
+            Replay();
         }
+        
+        //Player_human.setStyle("-fx-background-color:none;");
+        //player_AI.setStyle("-fx-background-color:none;");
     }
     private boolean isBoardFull() {
         for (int i = 0; i < 3; i++) {
@@ -210,8 +225,7 @@ public class GameScreenWithAIController implements Initializable {
         for(Button button :winningButtons) {
             button.setStyle("-fx-background-color:yellow;");
         }
-        //vedio win or lose
-        //video.winVideo();   
+          
     }
     void computerMove(){
         int[] bestMove=null;
@@ -234,6 +248,8 @@ public class GameScreenWithAIController implements Initializable {
             /*Button clickedButton =getButtonAt(row,col);
             clickedButton.getStyleClass().add("x-button");*/
             CurrentPlayer=Player;
+            //Player_human.setStyle("-fx-background-color:#D3D3D3;");
+            //player_AI.setStyle("-fx-background-color:none;");
             checkWhoIsTheWinner();
         }
     }
@@ -391,8 +407,41 @@ public class GameScreenWithAIController implements Initializable {
         throw new IllegalArgumentException("Invalid coordinates: (" + x + ", " + y + "). Button not found.");
     }
     
-    /*public  void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
-        System.out.println("Difficulty set to: " + difficulty);
-    }*/
+    private void Replay(){
+        
+        UiUtils.showReplayAlert( Result + "Do you want to Replay??",
+                            () -> { restartGame(); } ,
+                            () -> { 
+                                try {
+                                    navigateToScreen("StartOptionsScreen.fxml");
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    System.out.println("error happend");
+                                }
+                            },
+                            () -> {
+                                System.out.println("Dialog was closed"); 
+                                    try {
+                                        navigateToScreen("StartOptionsScreen.fxml");
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                        System.out.println("error happend");
+                                    }
+                            }  );
+    
+    }
+
+   
+    private void restartGame() {
+        isGameOver=false;
+        gridPane.getChildren().forEach((node) -> {
+            ((Button) node).setText("");
+            ((Button) node).setStyle("-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);");
+            ((Button) node).setDisable(false);
+        });
+        //CurrentPlayer=Player;
+    }
+    
+    
+    
 }

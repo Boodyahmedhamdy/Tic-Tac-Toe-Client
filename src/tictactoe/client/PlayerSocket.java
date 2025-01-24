@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,21 +40,27 @@ public final class PlayerSocket {
     public boolean connect(InetSocketAddress ip, int timeout) {
         try {
             System.out.println("Connecting to server: " + ip);
-            socket.connect(ip, timeout);
+            try {
+                socket.connect(ip, timeout);
+            } catch (SocketTimeoutException ex) {
+                System.out.println("Can't Connect");
+                resetSocket();
+                return false;
+            }
             System.out.println("Connected to the server.");
 
             // Initialize the streams after the socket is connected
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
-            
+
             // connected successfully to the server
             // now run the listening thread -- called only one time here
 //            startListenerThread();
-            
             return true;
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server: " + ex.getMessage(), ex);
+            resetSocket();
             return false;
         }
     }
@@ -66,7 +73,7 @@ public final class PlayerSocket {
                     System.out.println("****ON LISTENING THREAD BEFORE READING ***********");
                     Object incomingObject = in.readObject();
                     System.out.println("****ON LISTENING THREAD AFTER READING ***********" + incomingObject.getClass().getSimpleName());
-                    
+
                     if (incomingObject instanceof Request) {
                         Request request = (Request) incomingObject;
                         System.out.println("Handling request: " + request.getClass().getSimpleName());
@@ -85,13 +92,13 @@ public final class PlayerSocket {
                         if (response instanceof StartGameResponse) {
                             System.out.println("Start Game Response received.");
                             handleStartGameResponse((StartGameResponse) response);
-                            
+
                         } else if (response instanceof GetAvailablePlayersResponse) {
                             System.out.println("GetAvailablePlayersResponse recieved");
                             handleGetAvailablePlayersResponse((GetAvailablePlayersResponse) response);
                         } else if (response instanceof SignOutResponse) {
                             System.out.println("SignOutResponse recieved");
-                            handleSignOutResponse( (SignOutResponse) incomingObject);
+                            handleSignOutResponse((SignOutResponse) incomingObject);
                         }
 
                     }
@@ -189,12 +196,24 @@ public final class PlayerSocket {
         System.out.println("StartGameResponse just arrived with type" + startGameResponse.getClass().getSimpleName());
         AvailablePlayersScreenController.onReceiveStartGameResponse(startGameResponse);
     }
-    
+
     private void handleGetAvailablePlayersResponse(GetAvailablePlayersResponse response) {
         AvailablePlayersScreenController.onRecieveGetAvailablePlayersResponse(response);
     }
 
     private void handleSignOutResponse(SignOutResponse signOutResponse) {
         AvailablePlayersScreenController.onRecieveSignOutResponse(signOutResponse);
+    }
+
+    private void resetSocket() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            socket = new Socket();
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
+        }
+        
     }
 }

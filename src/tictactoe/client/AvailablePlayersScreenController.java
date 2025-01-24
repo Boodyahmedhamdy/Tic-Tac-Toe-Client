@@ -51,7 +51,7 @@ public class AvailablePlayersScreenController implements Initializable {
     
     public static PlayerSocket playerSocket;
     
-    PlayerInfo playerInfo;
+    public static PlayerInfo playerInfo;
     
     @FXML
     private Button btnRefresh;
@@ -66,7 +66,7 @@ public class AvailablePlayersScreenController implements Initializable {
 //                textErrorMessage.setText("Error navigating to StartOptionsScreen: " + ex.getMessage());
 //            }
 //        });
-
+        
         playerSocket = PlayerSocket.getInstance();
         playerSocket.startListenerThread();
         playerInfo = PlayerInfo.getInstance();
@@ -89,8 +89,8 @@ public class AvailablePlayersScreenController implements Initializable {
                 });
     }
 
-    private void navigateToScreen(String fxmlFile, Button b) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+    private static void navigateToScreen(String fxmlFile, Button b) throws IOException {
+        FXMLLoader loader = new FXMLLoader(TicTacToeClient.class.getResource(fxmlFile));
         Parent root = loader.load();
         Stage stage = (Stage) b.getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -113,7 +113,7 @@ public class AvailablePlayersScreenController implements Initializable {
     private void onClickOnPlayer(String username) {
         
         System.out.println("sending Start game request sent to: " + username);
-        StartGameRequest startGameRequest = new StartGameRequest(username);
+        StartGameRequest startGameRequest = new StartGameRequest(playerInfo.getUserName(), username);
         playerSocket.sendRequest(startGameRequest);
         System.out.println("Start game request sent to: " + username);
     }
@@ -145,40 +145,50 @@ public class AvailablePlayersScreenController implements Initializable {
 
     /**
      * Called when a start game request is received from another player via the server.
+     * @param startGameRequest
      */
     public static void onReceiveStartGameRequest(StartGameRequest startGameRequest) {
         Platform.runLater(() -> {
         
          UiUtils.showReplayAlert(
-                startGameRequest.getUsername() + " wants to have a game with you. Do you agree?",
+                startGameRequest.getSenderUsername()+ " wants to have a game with you. Do you agree?",
                 () -> {
                     
                         // On "Yes"
-                        AcceptStartGameResponse response = new AcceptStartGameResponse(startGameRequest.getUsername());
-                        System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getUsername());
+                        AcceptStartGameResponse response =
+                                new AcceptStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
+                        System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
                         playerSocket.sendResponse(response);
-                        System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getUsername());
+                        System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
 
-//                      navigateToScreen("gameScreen.fxml", btnSignOut); // Navigate to the game screen
-                    
+                        try {
+//                            navigateToScreen("gameScreen.fxml", btnSignOut);
+
+                            SceneNavigator.loadNewScene("gameScreen.fxml");
+                        } catch (IOException ex) {
+                            System.out.println("error while navigating to gameScreen");
+                            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                 },
                 () -> {
 
                     // On "No"
-                    RefuseStartGameResponse response = new RefuseStartGameResponse(startGameRequest.getUsername());
-                    System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getUsername());
+                    RefuseStartGameResponse response =
+                            new RefuseStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
+                    System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
                     playerSocket.sendResponse(response);
-                    System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getUsername());
+                    System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
 
 
                 },
                 () -> {
                     
                     // On "Close"
-                    RefuseStartGameResponse response = new RefuseStartGameResponse(startGameRequest.getUsername());
-                    System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getUsername());
+                    RefuseStartGameResponse response =
+                            new RefuseStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
+                    System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
                     playerSocket.sendResponse(response);
-                    System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getUsername());
+                    System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
 
 
                 }
@@ -191,18 +201,30 @@ public class AvailablePlayersScreenController implements Initializable {
 
     /**
      * Called when a start game response is received from another player via the server.
+     * @param startGameResponse
      */
     public static void onReceiveStartGameResponse(StartGameResponse startGameResponse) {
         if (startGameResponse instanceof AcceptStartGameResponse) {
             // Handle acceptance (e.g., navigate to the game screen)
-            
+//                AcceptStartGameResponse responseBack = 
+//                        new AcceptStartGameResponse(startGameResponse.getRecieverUsername(), startGameResponse.getSenderUsername());
+//                playerSocket.sendResponse(responseBack);
                 System.out.println("AcceptStartGameResponse has come and navigating to GameScreen");
-//                navigateToScreen("gameScreen.fxml", btnSignOut);
+                Platform.runLater(()-> {
+                    try {
+//                        navigateToScreen("gameScreen.fxml", btnSignOut);
+                        SceneNavigator.loadNewScene("gameScreen.fxml");
+                    } catch (IOException ex) {
+                        System.out.println("error while navigating to gameScreen");
+                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+            
             
         } else if (startGameResponse instanceof RefuseStartGameResponse) {
             // Handle refusal
             Platform.runLater(() -> {
-                UiUtils.showValidationAlert("Your invitation to " + startGameResponse.getUsername() + " was refused.");
+                UiUtils.showValidationAlert("Your invitation to " + startGameResponse.getSenderUsername()+ " was refused.");
             });
         }
     }

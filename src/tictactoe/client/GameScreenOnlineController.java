@@ -67,8 +67,8 @@ public class GameScreenOnlineController implements Initializable {
     Button [][] board;
     boolean isGameOver;
     Button[] winningButtons;
-    String mySymbol;
-    String oppositeSymbol;
+    public static String mySymbol;
+    public static String oppositeSymbol;
     String CurrentPlayer;
     Video video;
     String winnerSymbol;
@@ -76,8 +76,8 @@ public class GameScreenOnlineController implements Initializable {
     String loserSymbol;
     int loserScore;
     String Result;
-    String oppositeName="rofaida2";
-    String myName="rofaida";
+    public static String oppositeName;
+    public static String myName;
     private PlayerSocket playerSocket;
     
     /**

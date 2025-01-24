@@ -3,8 +3,7 @@
     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
 }
 #BorderPane{
-     /*-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);*/ 
-     -fx-background-image: url("src/tictactoe/client/ui/styles/3.jpg");
+     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
 }
 
 
@@ -17,19 +16,27 @@
     -fx-alignment: center; /* Center alignment */
     -fx-padding: 30px; /* Padding around the label */
 }
-
-/* VBox styling for vertical alignment and spacing */
-.vbox {
-    -fx-alignment: center; /* Center alignment */
-    -fx-spacing: 25px; /* Increased space between buttons for better layout */
+.titleLable {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 100px; 
+    -fx-font-weight: bold; 
+    -fx-font-family: "Arabic Typesetting"; 
+    -fx-alignment: center; 
+    -fx-padding: 30px; 
 }
 
-/* Base button styling */
+
+.vbox {
+    -fx-alignment: center; 
+    -fx-spacing: 25px;
+}
+
+
 .button {
     -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6); /* Gradient background */
     -fx-text-fill: #333333; /* Dark text color */
-    -fx-font-size: 20px; /* Larger font size */
-    -fx-font-family: "Arial"; /* Font family */
+    -fx-font-size: 30px; /* Larger font size */
+    -fx-font-family: "Arabic Typesetting"; /* Font family */
     -fx-padding: 15px 40px; /* Inner padding for button size */
     -fx-border-width: 2px; /* Border thickness */
     -fx-border-radius: 20px; /* More rounded corners */
@@ -38,24 +45,23 @@
     -fx-transition: 0.3s ease-in-out; /* Smooth transition for hover effect */
 }
 
-/* Hover effect for buttons */
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); /* Reverse gradient on hover */
     -fx-border-color: #cccccc; /* Lighter border on hover */
 }
 
-/* Button-specific colors (can use these classes in FXML) */
+/*
 .button-ai {
-    -fx-border-color: #8e44ad; /* Purple border */
-    -fx-text-fill: #8e44ad; /* Purple text */
-    -fx-background-color: linear-gradient(to bottom, #f5e6ff, #e8d4f5); /* Purple gradient */
-}
-
+    -fx-border-color: #8e44ad; 
+    -fx-text-fill: #8e44ad; 
+    -fx-background-color: linear-gradient(to bottom, #f5e6ff, #e8d4f5); 
+}*/
+/*
 .button-friend {
-    -fx-border-color: #27ae60; /* Green border */
-    -fx-text-fill: #27ae60; /* Green text */
-    -fx-background-color: linear-gradient(to bottom, #e8fbe4, #d1f5cf); /* Green gradient */
-}
+    -fx-border-color: #27ae60; 
+    -fx-text-fill: #27ae60; 
+    -fx-background-color: linear-gradient(to bottom, #e8fbe4, #d1f5cf); 
+}*/
 
 .button-others {
     -fx-border-color: #16a085; /* Cyan border */
@@ -69,7 +75,6 @@
     -fx-background-color: linear-gradient(to bottom, #fff4e6, #ffe4c8); /* Orange gradient */
 }
 
-/* Pressed button effect */
 .button:pressed {
     -fx-background-color: #d9d9d9; /* Slightly darker gray for pressed state */
 }
@@ -79,14 +84,10 @@
     -fx-border-width: 2;
     -fx-border-style: solid;
 }
-/*.big-screen {
-    -fx-background-image: url('3.jpeg');
-    -fx-background-size: cover;
-}*/
+
 
 
 #AnchorPane{
-     -fx-background-image: url(3.jpg);
+     -fx-background-image: url(xor.jpg);
      
-/*     -fx-background-color:#f39c12;*/
 }

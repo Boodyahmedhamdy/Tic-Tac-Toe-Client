@@ -24,13 +24,17 @@ import javafx.stage.Stage;
 import network.actions.SignOutAction;
 import network.requests.GetAvailablePlayersRequest;
 import network.requests.Request;
+import network.requests.SignOutRequest;
 import network.requests.StartGameRequest;
 import network.responses.AcceptStartGameResponse;
+import network.responses.FailSignOutResponse;
 import network.responses.GetAvailablePlayersResponse;
 import network.responses.RefuseStartGameResponse;
 import network.responses.Response;
+import network.responses.SignOutResponse;
 import network.responses.StartGameResponse;
 import network.responses.SuccessGetAvaialbePlayersResponse;
+import network.responses.SuccessSignOutResponse;
 import tictactoe.client.ui.UiUtils;
 import tictactoe.client.ui.states.UserListItemUiState;
 
@@ -58,22 +62,14 @@ public class AvailablePlayersScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        btnSignOut.setOnAction((event) -> {
-//            try {
-//                navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
-//            } catch (IOException ex) {
-//                Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-//                textErrorMessage.setText("Error navigating to StartOptionsScreen: " + ex.getMessage());
-//            }
-//        });
-        
+
         playerSocket = PlayerSocket.getInstance();
         playerSocket.startListenerThread();
         playerInfo = PlayerInfo.getInstance();
         textPlayerUserName.setText(playerInfo.getUserName());
         textPlayerScore.setText(playerInfo.getRank() + " points");
 
-//        availabePlayers = FXCollections.observableArrayList();
+
         availabePlayers = FXCollections.observableArrayList();
         lvAvailablePlayers.setItems(
                 availabePlayers
@@ -99,15 +95,10 @@ public class AvailablePlayersScreenController implements Initializable {
 
     @FXML
     private void onClickSignOut(ActionEvent event) {
-        try {
-            System.out.println("Sending SignOut Request");
-            SignOutAction signOutAction = new SignOutAction(playerInfo.getUserName());
-//            playerSocket.sendRequest(signOutAction);
-            navigateToScreen("StartOptionsScreen.fxml", btnSignOut);
-        } catch (IOException ex) {
-            Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-            textErrorMessage.setText("Error signing out: " + ex.getMessage());
-        }
+        System.out.println("Sending SignOut Request");
+        SignOutRequest signOutRequest = new SignOutRequest(playerInfo.getUserName());
+        playerSocket.sendRequest(signOutRequest);
+        System.out.println("Sent SignOutRequest from client " + playerInfo.getUserName());
     }
 
     private void onClickOnPlayer(String username) {
@@ -226,6 +217,32 @@ public class AvailablePlayersScreenController implements Initializable {
             Platform.runLater(() -> {
                 UiUtils.showValidationAlert("Your invitation to " + startGameResponse.getSenderUsername()+ " was refused.");
             });
+        }
+    }
+    
+    
+    public static void onRecieveSignOutResponse(SignOutResponse signOutResponse) {
+        if(signOutResponse instanceof SuccessSignOutResponse) {
+            SuccessSignOutResponse successResponse = (SuccessSignOutResponse) signOutResponse;
+            System.out.println("SignOut is Successfull");
+            playerSocket.close();
+            Platform.runLater( () -> {
+                try {
+                    SceneNavigator.loadNewScene("LoginScreen.fxml");
+                } catch (IOException ex) {
+                    System.out.println("Error while navigating after Signout");
+                    Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } else if(signOutResponse instanceof FailSignOutResponse) {
+            FailSignOutResponse failResponse = (FailSignOutResponse) signOutResponse;
+            System.out.println("SignOut is Failed");
+            Platform.runLater(() -> {
+                textErrorMessage.setText("SignOut Failed");
+            });
+        } else {
+            System.out.println("Something unexpected happend in SignOut");
         }
     }
 }

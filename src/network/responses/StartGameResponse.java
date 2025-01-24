@@ -4,22 +4,34 @@
  * and open the template in the editor.
  */
 package network.responses;
-import network.requests.Request;
-import java.io.Serializable;
 
 /**
  *
  * @author Abdelrahman_Elshreif
  */
 
-public class StartGameResponse extends Response implements Serializable {
-    private String username;
+public class StartGameResponse extends Response {
+    private String senderUsername;
+    private String recieverUsername;
 
-    public StartGameResponse(String username) {
-        this.username = username;
+    public String getSenderUsername() {
+        return senderUsername;
     }
 
-    public String getUsername() {
-        return username;
+    public void setSenderUsername(String senderUsername) {
+        this.senderUsername = senderUsername;
+    }
+
+    public String getRecieverUsername() {
+        return recieverUsername;
+    }
+
+    public void setRecieverUsername(String recieverUsername) {
+        this.recieverUsername = recieverUsername;
+    }
+
+    public StartGameResponse(String senderUsername, String recieverUsername) {
+        this.senderUsername = senderUsername;
+        this.recieverUsername = recieverUsername;
     }
 }

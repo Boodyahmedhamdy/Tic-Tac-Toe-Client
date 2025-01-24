@@ -10,9 +10,10 @@ package tictactoe.client.game;
  * @author HP
  */
 public class RobotPlayer extends Player{
-
+    
     public RobotPlayer(Character symbol, String username, Integer score) {
         super(symbol, username, score);
+        
     }
 
     
@@ -22,5 +23,7 @@ public class RobotPlayer extends Player{
         // here you have to call the min max algorithm
         board[x][y] = this.getSymbol().toString();
     }
+    
+   
     
 }

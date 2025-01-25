@@ -154,8 +154,8 @@ public class AvailablePlayersScreenController implements Initializable {
 
                         try {
 //                            navigateToScreen("gameScreen.fxml", btnSignOut);
-                            GameScreenOnlineController.myName=startGameRequest.getSenderUsername();
-                            GameScreenOnlineController.oppositeName=startGameRequest.getRecieverUsername();
+                            GameScreenOnlineController.myName=startGameRequest.getRecieverUsername();
+                            GameScreenOnlineController.oppositeName=startGameRequest.getSenderUsername();
 
                             SceneNavigator.loadNewScene("GameScreenOnline.fxml");
                             //SceneNavigator.loadNewScene("gameScreen.fxml");

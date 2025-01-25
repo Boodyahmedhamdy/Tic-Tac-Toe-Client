@@ -35,7 +35,7 @@ public class StartOptionsScreenController implements Initializable {
     @FXML
     private Button playOnlineBtn;
     @FXML
-    private Button prevRecordsBtn;
+private Button prevRecordsBtn;
 
     private void setupButtonActions() {
         playWithAIbtn.setOnAction(event -> handlePlayWithAI());
@@ -110,6 +110,14 @@ public class StartOptionsScreenController implements Initializable {
             }
         });
     }
+    ////Rofaida Test
+    /*private void handlePlayOnline() {
+        try {
+            navigateToScreen("GameScreenOnline.fxml", playOnlineBtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
     
     @FXML
     private void handlePreviousRecords() {

@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="gameplayScreen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="big-screen" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenWithAIController">
+<VBox id="gameplayScreen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="big-screen" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenOnlineController">
    <children>
-      <Button fx:id="back" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="63.0" prefWidth="44.0" style="-fx-text-fill: black;" styleClass="backbutton" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="&lt;">
+      <Button fx:id="back" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" opacity="0.0" prefHeight="43.0" prefWidth="56.0" text="&lt;">
          <VBox.margin>
             <Insets left="20.0" top="50.0" />
          </VBox.margin>
@@ -23,7 +23,7 @@
             <VBox alignment="CENTER" prefHeight="139.0" prefWidth="150.0">
                <children>
                   <Label id="O" text="O" />
-                  <Label fx:id="Player_human" alignment="CENTER" ellipsisString="" prefHeight="90.0" prefWidth="156.0" text="You" textFill="#0384fc" textOverrun="CLIP">
+                  <Label fx:id="PlayerO_name" alignment="CENTER" ellipsisString="" prefHeight="90.0" prefWidth="156.0" text="You" textFill="#0384fc" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -32,7 +32,7 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="120.0" prefWidth="85.0" spacing="5.0">
                <children>
-                  <Label fx:id="You_score" text="0">
+                  <Label fx:id="PlayerO_score" text="0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -42,7 +42,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="AI_score" text="0">
+                  <Label fx:id="PlayerX_score" text="0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -52,7 +52,7 @@
             <VBox alignment="CENTER" prefHeight="137.0" prefWidth="152.0">
                <children>
                   <Label id="X" text="X" />
-                  <Label fx:id="player_AI" alignment="CENTER" ellipsisString="" prefHeight="64.0" prefWidth="161.0" text="AI" textAlignment="CENTER" textFill="#ff2a2e" textOverrun="CLIP">
+                  <Label fx:id="PlayerX_name" alignment="CENTER" ellipsisString="" prefHeight="64.0" prefWidth="161.0" text="AI" textAlignment="CENTER" textFill="#ff2a2e" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

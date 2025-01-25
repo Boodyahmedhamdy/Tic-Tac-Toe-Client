@@ -32,10 +32,10 @@ public class SplashScreen {
         splashImage.setPreserveRatio(true); 
 
         Label loadingLabel = new Label("Loading...");
-        loadingLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #000000;"); 
+        loadingLabel.setStyle("-fx-font-size: 60px; -fx-text-fill:#FFFFFF; -fx-font-family: \"Arabic Typesetting\"; "); 
         VBox splashLayout = new VBox(20, splashImage, loadingLabel);
         splashLayout.setAlignment(Pos.CENTER);
-        splashLayout.setStyle("-fx-background-color: #FFFFFF;"); 
+       splashLayout.setStyle("-fx-background-color: linear-gradient(to bottom, #D87DFD, #13C1D7);");
         Scene splashScene = new Scene(splashLayout, 1100, 800);
         splashStage.setScene(splashScene);
     }

@@ -121,13 +121,15 @@ public final class PlayerSocket {
                     }
                 } catch (SocketException | EOFException ex) {
                     System.out.println("Server disconnected.");
-                    close();
+                    resetSocket();
                     break;
                 } catch (IOException ex) {
                     Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "I/O error in listener thread: " + ex.getMessage(), ex);
                     break;
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Class not found in listener thread: " + ex.getMessage(), ex);
+                } finally {
+                    close();
                 }
             }
         });

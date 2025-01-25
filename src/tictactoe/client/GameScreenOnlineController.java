@@ -64,7 +64,7 @@ public class GameScreenOnlineController implements Initializable {
     @FXML
     private Button AI_btn22;
     
-    Button [][] board;
+    public static Button [][] board;
     boolean isGameOver;
     Button[] winningButtons;
     public static String mySymbol;
@@ -130,7 +130,7 @@ public class GameScreenOnlineController implements Initializable {
                 checkWhoIsTheWinner();
                 
                 if(!isGameOver){
-                    oppositeSymbolMove();
+                    
                     
                 }
         } 
@@ -283,12 +283,15 @@ public class GameScreenOnlineController implements Initializable {
         return true;
     }
     
-    void oppositeSymbolMove(){
-        System.out.println("Waiting for LoginResponse...");
-        PlayAtResponse playAtResponse = (PlayAtResponse) playerSocket.receiveResponse();
+    /*void oppositeSymbolMove(PlayAtResponse playAtResponse ){
+        System.out.println("Waiting for Player Action...");
+       // PlayAtResponse playAtResponse= (PlayAtResponse) playerSocket.receiveResponse();
+        board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
+    }*/
+    public static void OnReceivePlayerAction(PlayAtResponse playAtResponse){
+        System.out.println("Waiting for Player Action...");
         board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
     }
-    
     Point getClickedButtonPosition(Button button) {
         Integer x = GridPane.getRowIndex(button);
         Integer y = GridPane.getColumnIndex(button);

@@ -82,18 +82,7 @@
     -fx-border-color: #cccccc; 
 }
 
-/*
-.button-ai {
-    -fx-border-color: #8e44ad; 
-    -fx-text-fill: #8e44ad; 
-    -fx-background-color: linear-gradient(to bottom, #f5e6ff, #e8d4f5); 
-}*/
-/*
-.button-friend {
-    -fx-border-color: #27ae60; 
-    -fx-text-fill: #27ae60; 
-    -fx-background-color: linear-gradient(to bottom, #e8fbe4, #d1f5cf); 
-}*/
+
 
 .button-others {
     -fx-border-color: #16a085; 

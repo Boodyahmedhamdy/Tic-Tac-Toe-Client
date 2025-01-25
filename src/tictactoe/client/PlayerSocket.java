@@ -25,9 +25,11 @@ public final class PlayerSocket {
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
     private Thread listenerThread;
+    private GameScreenOnlineController gameScreenOnlineController ;
 
     private PlayerSocket() {
         this.socket = new Socket();
+        //this.gameScreenOnlineController=gameScreenOnlineController;
     }
 
     public static synchronized PlayerSocket getInstance() {
@@ -204,6 +206,9 @@ public final class PlayerSocket {
     }
     private void handlePlayAtResponse(PlayAtResponse playAtResponse) {
         
-        GameScreenOnlineController.OnReceivePlayerAction(playAtResponse);
+        gameScreenOnlineController.OnReceivePlayerAction(playAtResponse);
+    }
+    public void setGameScreenOnlineController(GameScreenOnlineController gameScreenOnlineController){
+        this.gameScreenOnlineController=gameScreenOnlineController;
     }
 }

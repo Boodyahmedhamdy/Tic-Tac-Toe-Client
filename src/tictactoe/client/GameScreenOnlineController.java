@@ -88,6 +88,7 @@ public class GameScreenOnlineController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         playerSocket = PlayerSocket.getInstance();
+        playerSocket.setGameScreenOnlineController(this);
         board=new Button[][]{
             {AI_btn00,AI_btn01,AI_btn02},
             {AI_btn10,AI_btn11,AI_btn12},
@@ -290,7 +291,7 @@ public class GameScreenOnlineController implements Initializable {
        // PlayAtResponse playAtResponse= (PlayAtResponse) playerSocket.receiveResponse();
         board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
     }*/
-    public static void OnReceivePlayerAction(PlayAtResponse playAtResponse){
+    public  void OnReceivePlayerAction(PlayAtResponse playAtResponse){
         
         System.out.println("Waiting for Player Action...");
         Platform.runLater(()->{
@@ -300,10 +301,10 @@ public class GameScreenOnlineController implements Initializable {
         CurrentPlayer=mySymbol;
         
                 
-        /*if(isGameOver){
+        if(!isGameOver){
 
             checkWhoIsTheWinner();
-        }*/
+        }
     }
     Point getClickedButtonPosition(Button button) {
         Integer x = GridPane.getRowIndex(button);

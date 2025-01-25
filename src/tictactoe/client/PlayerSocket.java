@@ -50,7 +50,7 @@ public final class PlayerSocket {
             
             // connected successfully to the server
             // now run the listening thread -- called only one time here
-            startListenerThread();
+            //startListenerThread();
             
             return true;
         } catch (IOException ex) {
@@ -94,10 +94,10 @@ public final class PlayerSocket {
                             System.out.println("SignOutResponse recieved");
                             handleSignOutResponse( (SignOutResponse) incomingObject);
                         }
-                        /*else if (response instanceof PlayAtResponse) {
+                        else if (response instanceof PlayAtResponse) {
                             System.out.println("PlayAtResponse recieved");
                             handlePlayAtResponse( (PlayAtResponse) incomingObject);
-                        }*/
+                        }
 
                     }
                 } catch (IOException ex) {

@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -289,8 +290,11 @@ public class GameScreenOnlineController implements Initializable {
         board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
     }*/
     public static void OnReceivePlayerAction(PlayAtResponse playAtResponse){
+        
         System.out.println("Waiting for Player Action...");
-        board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
+        Platform.runLater(()->{
+            board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
+        });
     }
     Point getClickedButtonPosition(Button button) {
         Integer x = GridPane.getRowIndex(button);

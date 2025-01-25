@@ -124,18 +124,18 @@ public class GameScreenOnlineController implements Initializable {
                 clickedButton.setText(mySymbol);
                 clickedButton.setDisable(true);
                 // Send PlayAt request to the server
-                PlayAtRequest playAtRequest = new PlayAtRequest(myName, oppositeName,clickedPosition.x,clickedPosition.y,"O");
+                checkWhoIsTheWinner();
+                PlayAtRequest playAtRequest = new PlayAtRequest(myName, oppositeName,clickedPosition.x,clickedPosition.y,"O",isGameOver);
                 System.out.println("Sending PlayAtRequest To sever from username : " + myName);
                 playerSocket.sendRequest(playAtRequest);
-                
-                CurrentPlayer=oppositeSymbol;
-                
-                checkWhoIsTheWinner();
-                
-                /*if(!isGameOver){
+                //checkWhoIsTheWinner();
+                System.out.println("after "+myName+"'s move isGameOver= "+isGameOver);
+               
+                /*if(isGameOver){
                     
-                    
+                    Replay();
                 }*/
+                CurrentPlayer=oppositeSymbol;
         } 
         
     }
@@ -144,29 +144,29 @@ public class GameScreenOnlineController implements Initializable {
         if(checkWin(oppositeSymbol)){
             isGameOver=true;
             highlightWiningPoints();
-            video=new Video();
-            video.loseVideo();
-            updateScoreUI(oppositeSymbol);
+            //video=new Video();
+            //video.loseVideo();
+            //updateScoreUI(oppositeSymbol);
             //updateScoreDB()
-            Result=oppositeName+" won, ";
-            Replay();//need update
+            //Result=oppositeName+" won, ";
+            //Replay();//need update
         }
         else if(checkWin(mySymbol)){
             isGameOver=true;
             highlightWiningPoints();
-            video=new Video();
-            video.winVideo();
-            updateScoreUI(mySymbol);
+            //video=new Video();
+            //video.winVideo();
+            //updateScoreUI(mySymbol);
             //updateScoreDB()
-            Result=mySymbol+" won, ";
-            Replay();//need update
+            //Result=mySymbol+" won, ";
+            //Replay();//need update
         }
         else if(isBoardFull()){
             isGameOver=true;
-            updateScoreUI("");
+            //updateScoreUI("");
             //updateScoreDB()
-            Result="Tie, ";
-            Replay();//need update
+            //Result="Tie, ";
+            //Replay();//need update
         }
         
        
@@ -179,30 +179,34 @@ public class GameScreenOnlineController implements Initializable {
         for (int i = 0; i < 3; i++) {
             if (board[i][0].getText().equals(symbol) && board[i][1].getText().equals(symbol) && board[i][2].getText().equals(symbol)) {
                 winningButtons=new Button[]{board[i][0],board[i][1],board[i][2]};
+                System.out.println("winner is : row"+i);
                 return true;
             }
             if(board[0][i].getText().equals(symbol) && board[1][i].getText().equals(symbol) && board[2][i].getText().equals(symbol)) {
                 winningButtons=new Button[]{board[0][i],board[1][i],board[2][i]};
+                System.out.println("winner is : column"+i);
                 return true;
             }
         }
         
         if (board[0][0].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[2][2].getText().equals(symbol)){
             winningButtons=new Button[]{board[0][0],board[1][1],board[2][2]};
+            System.out.println("winner is : diagonal1");
             return true;
         }
         if(board[0][2].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[2][0].getText().equals(symbol)) {
             winningButtons=new Button[]{board[0][2],board[1][1],board[2][0]};
+            System.out.println("winner is : diagonal2");
             return true;
         }
         return false;
     }
     
-    void highlightWiningPoints() {
+    void highlightWiningPoints() {   
         for(Button button :winningButtons) {
             button.setStyle("-fx-background-color:yellow;");
         }
-          
+           
     }
     
     void updateScoreUI(String playerSymobol){
@@ -297,12 +301,18 @@ public class GameScreenOnlineController implements Initializable {
         Platform.runLater(()->{
             board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
         });
+        isGameOver=playAtResponse.IsGameOver();
         
+        System.out.println("after "+oppositeName+"'s move isGameOver= "+isGameOver);
         CurrentPlayer=mySymbol;
         
-                
-        if(!isGameOver){
+         
+        if(isGameOver){
 
+            checkWin(oppositeSymbol);
+            highlightWiningPoints();
+            
+        }else{
             checkWhoIsTheWinner();
         }
     }

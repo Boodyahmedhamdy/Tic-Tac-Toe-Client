@@ -55,9 +55,6 @@ public final class PlayerSocket {
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
 
-            // connected successfully to the server
-            // now run the listening thread -- called only one time here
-            startListenerThread();
             
             return true;
         } catch (IOException ex) {
@@ -102,10 +99,6 @@ public final class PlayerSocket {
                             System.out.println("SignOutResponse recieved");
                             handleSignOutResponse((SignOutResponse) incomingObject);
                         }
-                        /*else if (response instanceof PlayAtResponse) {
-                            System.out.println("PlayAtResponse recieved");
-                            handlePlayAtResponse( (PlayAtResponse) incomingObject);
-                        }*/
 
                     }
                 } catch (IOException ex) {
@@ -220,7 +213,8 @@ public final class PlayerSocket {
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
         }
-        
+    }
+    
     private void handlePlayAtResponse(PlayAtResponse playAtResponse) {
         
         GameScreenOnlineController.OnReceivePlayerAction(playAtResponse);

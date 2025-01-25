@@ -66,11 +66,11 @@ public class GameScreenOnlineController implements Initializable {
     private Button AI_btn22;
     
     public static Button [][] board;
-    boolean isGameOver;
+    public static boolean isGameOver;
     Button[] winningButtons;
     public static String mySymbol;
     public static String oppositeSymbol;
-    String CurrentPlayer;
+    public static String CurrentPlayer;
     Video video;
     String winnerSymbol;
     int winnerScore;
@@ -121,24 +121,25 @@ public class GameScreenOnlineController implements Initializable {
             );
         if (CurrentPlayer.equals(mySymbol)) {
                 clickedButton.setText(mySymbol);
+                clickedButton.setDisable(true);
                 // Send PlayAt request to the server
-                PlayAtRequest playAtRequest = new PlayAtRequest(myName, oppositeName,clickedPosition.x,clickedPosition.y,mySymbol);
-                System.out.println("Sending PlayAtRequest for username: " + myName);
+                PlayAtRequest playAtRequest = new PlayAtRequest(myName, oppositeName,clickedPosition.x,clickedPosition.y,"O");
+                System.out.println("Sending PlayAtRequest To sever from username : " + myName);
                 playerSocket.sendRequest(playAtRequest);
                 
                 CurrentPlayer=oppositeSymbol;
                 
                 checkWhoIsTheWinner();
                 
-                if(!isGameOver){
+                /*if(!isGameOver){
                     
                     
-                }
+                }*/
         } 
-        clickedButton.setDisable(true);
+        
     }
     
-    void checkWhoIsTheWinner(){
+    public  void checkWhoIsTheWinner(){
         if(checkWin(oppositeSymbol)){
             isGameOver=true;
             highlightWiningPoints();
@@ -295,6 +296,14 @@ public class GameScreenOnlineController implements Initializable {
         Platform.runLater(()->{
             board[playAtResponse.getX()][playAtResponse.getY()].setText(playAtResponse.getSymbol());
         });
+        
+        CurrentPlayer=mySymbol;
+        
+                
+        /*if(isGameOver){
+
+            checkWhoIsTheWinner();
+        }*/
     }
     Point getClickedButtonPosition(Button button) {
         Integer x = GridPane.getRowIndex(button);

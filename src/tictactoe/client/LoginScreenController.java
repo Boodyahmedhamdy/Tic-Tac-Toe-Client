@@ -45,7 +45,6 @@ public class LoginScreenController implements Initializable {
     private void handleLogin() {
         String username = nameField.getText();
         String password = passwordField.getText();
-
         if (username.isEmpty() || password.isEmpty()) {
             UiUtils.showValidationAlert("Required fields are empty!");
             return;

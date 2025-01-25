@@ -18,7 +18,10 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <ListView fx:id="lvAvailablePlayers" prefHeight="585.0" prefWidth="579.0" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="lvAvailablePlayers" prefHeight="585.0" prefWidth="579.0" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="10.0" />
+               </VBox.margin></ListView>
          </children>
       </VBox>
    </left>

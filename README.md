@@ -12,6 +12,14 @@ this repo is the client side of the famous Tic-Tac-Teo Game. the game is separat
     - Send Game invitation for any player on the server
     - Accept / Refuse invitations that sent to you
 
+
+# How to Run
+1. clone the project
+2. open it using netbeans IDE
+3. enjoy ❤
+
+
+
 # Technology used
 - java8
 - javafx

@@ -14,6 +14,7 @@ import network.requests.StartGameRequest;
 import network.responses.GetAvailablePlayersResponse;
 import network.responses.PlayAtResponse;
 import network.responses.RefuseStartGameResponse;
+import network.responses.ReplayResponse;
 import network.responses.Response;
 import network.responses.SignOutResponse;
 import network.responses.StartGameResponse;
@@ -104,6 +105,10 @@ public final class PlayerSocket {
                         else if (response instanceof PlayAtResponse) {
                             System.out.println("PlayAtResponse recieved");
                             handlePlayAtResponse( (PlayAtResponse) incomingObject);
+                        }
+                        else if (response instanceof ReplayResponse) {
+                            System.out.println("ReplayResponse recieved");
+                            handleReplayResponse( (ReplayResponse) incomingObject);
                         }
 
 
@@ -228,5 +233,10 @@ public final class PlayerSocket {
     }
     public void setGameScreenOnlineController(GameScreenOnlineController gameScreenOnlineController){
         this.gameScreenOnlineController=gameScreenOnlineController;
+    }
+    
+    private void  handleReplayResponse(ReplayResponse replayResponse){
+        //gameScreenOnlineController.OppositeReplayAnswered=replayResponse.getFrom();
+        //gameScreenOnlineController.OnReceiveReplayAction(replayResponse);
     }
 }

@@ -13,17 +13,14 @@ this repo is the client side of the famous Tic-Tac-Teo Game. the game is separat
     - Accept / Refuse invitations that sent to you
 
 # Technology used
-- java
 - java8
 - javafx
 - sockets to handle client-server communications
-
-
-- netbeans version 8.2 as the main IDE
+- **netbeans** version 8.2 as the main IDE
 
 
 # Team
-- Abdelrahman Ahmed Hamdy
-- Abdelrahman Elshirif
-- Yomna Ashraf
-- Rofiada Sobhy
+- Abdelrahman Ahmed Hamdy (https://github.com/Boodyahmedhamdy)
+- Abdelrahman Elshirif (https://github.com/abdelrahmanelshreif)
+- Yomna Ashraf (https://github.com/youmna-o)
+- Rofiada Sobhy (https://github.com/RofaidaSobhy)

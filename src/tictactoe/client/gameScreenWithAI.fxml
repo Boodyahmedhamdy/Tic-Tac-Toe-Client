@@ -13,7 +13,7 @@
 
 <VBox id="gameplayScreen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="big-screen" stylesheets="@ui/styles/gamescreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.GameScreenWithAIController">
    <children>
-      <Button fx:id="back" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="43.0" prefWidth="56.0" text="&lt;">
+      <Button fx:id="back" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="63.0" prefWidth="44.0" style="-fx-text-fill: black;" styleClass="backbutton" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="&lt;">
          <VBox.margin>
             <Insets left="20.0" top="50.0" />
          </VBox.margin>

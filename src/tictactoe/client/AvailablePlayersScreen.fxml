@@ -55,4 +55,16 @@
          </padding>
       </HBox>
    </top>
+   <center>
+      <VBox alignment="TOP_CENTER" prefHeight="477.0" prefWidth="240.0" styleClass="level-one-container" BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white;" styleClass="titleLable" text="Available Players" wrappingWidth="477.783203125">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <ListView fx:id="lvAvailablePlayers" prefHeight="585.0" prefWidth="579.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </center>
 </BorderPane>

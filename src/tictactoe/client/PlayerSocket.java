@@ -1,14 +1,17 @@
 package tictactoe.client;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import network.requests.Request;
 import network.requests.StartGameRequest;
 import network.responses.GetAvailablePlayersResponse;
@@ -27,11 +30,10 @@ public final class PlayerSocket {
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
     private Thread listenerThread;
-    private GameScreenOnlineController gameScreenOnlineController ;
+    private static GameScreenOnlineController gameScreenOnlineController;
 
     private PlayerSocket() {
         this.socket = new Socket();
-        //this.gameScreenOnlineController=gameScreenOnlineController;
     }
 
     public static synchronized PlayerSocket getInstance() {
@@ -57,7 +59,7 @@ public final class PlayerSocket {
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
-            
+
             return true;
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server: " + ex.getMessage(), ex);
@@ -95,11 +97,14 @@ public final class PlayerSocket {
                             handleStartGameResponse((StartGameResponse) response);
 
                         } else if (response instanceof GetAvailablePlayersResponse) {
-                            System.out.println("GetAvailablePlayersResponse recieved");
+                            System.out.println("GetAvailablePlayersResponse received");
                             handleGetAvailablePlayersResponse((GetAvailablePlayersResponse) response);
                         } else if (response instanceof SignOutResponse) {
-                            System.out.println("SignOutResponse recieved");
+                            System.out.println("SignOutResponse received");
                             handleSignOutResponse((SignOutResponse) incomingObject);
+                        } else if (response instanceof PlayAtResponse) {
+                            System.out.println("PlayAtResponse received");
+                            handlePlayAtResponse((PlayAtResponse) incomingObject);
                         }
 
                         else if (response instanceof PlayAtResponse) {
@@ -112,10 +117,15 @@ public final class PlayerSocket {
                         }
 
 
+
                     }
+                } catch (SocketException | EOFException ex) {
+                    System.out.println("Server disconnected.");
+                    close();
+                    break;
                 } catch (IOException ex) {
                     Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "I/O error in listener thread: " + ex.getMessage(), ex);
-                    break; // Exit the loop on I/O errors
+                    break;
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Class not found in listener thread: " + ex.getMessage(), ex);
                 }
@@ -125,6 +135,10 @@ public final class PlayerSocket {
     }
 
     public void sendRequest(Request request) {
+        if (!isConnected()) {
+            System.out.println("Your Disconnected To The Server");
+            return;
+        }
         try {
             System.out.println("Sending Request: " + request.getClass().getSimpleName());
             out.writeObject(request);
@@ -132,28 +146,37 @@ public final class PlayerSocket {
             System.out.println("Request sent: " + request.getClass().getSimpleName());
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
+            close();
         }
     }
 
     public void sendResponse(Response response) {
-        try {
-            System.out.println("Sending Response: " + response.getClass().getSimpleName());
-            out.writeObject(response);
-            out.flush();
-            System.out.println("Response sent: " + response.getClass().getSimpleName());
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
+        if (isConnected()) {
+            try {
+                System.out.println("Sending Response: " + response.getClass().getSimpleName());
+                out.writeObject(response);
+                out.flush();
+                System.out.println("Response sent: " + response.getClass().getSimpleName());
+            } catch (IOException ex) {
+                Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
+            }
+        } else {
+            return;
         }
     }
 
     public Response receiveResponse() {
-        try {
-            System.out.println("Waiting for response...");
-            Response response = (Response) in.readObject();
-            System.out.println("Response received: " + response.getClass().getSimpleName());
-            return response;
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error receiving response: " + ex.getMessage(), ex);
+        if (isConnected()) {
+            try {
+                System.out.println("Waiting for response...");
+                Response response = (Response) in.readObject();
+                System.out.println("Response received: " + response.getClass().getSimpleName());
+                return response;
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error receiving response: " + ex.getMessage(), ex);
+                return null;
+            }
+        } else {
             return null;
         }
     }
@@ -192,7 +215,7 @@ public final class PlayerSocket {
     }
 
     public boolean isConnected() {
-        return socket != null && socket.isConnected() && !socket.isClosed() && out != null && in != null;
+        return socket != null && socket.isConnected() && !socket.isClosed();
     }
 
     private void handleStartGameRequest(StartGameRequest startGameRequest) {
@@ -226,13 +249,14 @@ public final class PlayerSocket {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
         }
     }
-    
+
     private void handlePlayAtResponse(PlayAtResponse playAtResponse) {
-        
+
         gameScreenOnlineController.OnReceivePlayerAction(playAtResponse);
     }
-    public void setGameScreenOnlineController(GameScreenOnlineController gameScreenOnlineController){
-        this.gameScreenOnlineController=gameScreenOnlineController;
+
+    public void setGameScreenOnlineController(GameScreenOnlineController gameScreenOnlineController) {
+        this.gameScreenOnlineController = gameScreenOnlineController;
     }
     
     private void  handleReplayResponse(ReplayResponse replayResponse){

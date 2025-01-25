@@ -13,10 +13,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import javax.sound.midi.ControllerEventListener;
 import network.requests.LoginRequest;
 import network.responses.LoginResponse;
 import network.responses.SuccessLoginResponse;
 import network.responses.FailLoginResponse;
+import tictactoe.client.ui.NavigationUtils;
 import tictactoe.client.ui.UiUtils;
 
 public class LoginScreenController implements Initializable {
@@ -31,12 +33,13 @@ public class LoginScreenController implements Initializable {
     private Button registerbtn;
 
     private PlayerSocket playerSocket;
-    
-    private PlayerInfo playerInfo;
+
+    private static PlayerInfo playerInfo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         playerSocket = PlayerSocket.getInstance();
+        playerSocket.setLoginScreenController(this);
     }
 
     @FXML
@@ -54,23 +57,29 @@ public class LoginScreenController implements Initializable {
         System.out.println("Sending LoginRequest for username: " + username);
         playerSocket.sendRequest(loginRequest);
 
+        //--------------------------------------------------------------------
+        //--------------------------------------------------------------------
+        //--------------------------------------------------------------------
         // Wait for the response
         System.out.println("Waiting for LoginResponse...");
-        LoginResponse loginResponse = (LoginResponse) playerSocket.receiveResponse();
+    }
 
-        if (loginResponse instanceof SuccessLoginResponse) {
-            SuccessLoginResponse successResponse = (SuccessLoginResponse) loginResponse;
-            playerInfo = PlayerInfo.getInstance();
-            playerInfo.setUserName(successResponse.getUsername());
-            playerInfo.setRank(successResponse.getScore());
-            System.out.println("Login successful for user: " + successResponse.getUsername());
+    public void onSuccessLogin(SuccessLoginResponse successResponse) {
+        playerInfo = PlayerInfo.getInstance();
+        playerInfo.setUserName(successResponse.getUsername());
+        playerInfo.setRank(successResponse.getScore());
+        System.out.println("Login successful for user: " + successResponse.getUsername());
+
+        if (loginbtn != null) {
+            System.out.println("loginbtn is not null. Navigating to the next screen...");
             navigateToScreen("AvailablePlayersScreen.fxml", loginbtn);
-        } else if (loginResponse instanceof FailLoginResponse) {
-            FailLoginResponse failResponse = (FailLoginResponse) loginResponse;
-            UiUtils.showValidationAlert(failResponse.getMessage());
         } else {
-            UiUtils.showValidationAlert("Unexpected response from the server.");
+            System.err.println("loginbtn is null. Cannot navigate to the next screen.");
         }
+    }
+
+    public void onFailLogin(FailLoginResponse failResponse) {
+        UiUtils.showValidationAlert(failResponse.getMessage());
     }
 
     @FXML
@@ -78,9 +87,19 @@ public class LoginScreenController implements Initializable {
         navigateToScreen("RegisterScreen.fxml", registerbtn);
     }
 
-    private void navigateToScreen(String fxmlFile, Button button) {
+    public static void navigateToScreen(String fxmlFile, Button button) {
+        if (button == null) {
+            System.err.println("Button is null. Cannot navigate to screen.");
+            return;
+        }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            URL url = LoginScreenController.class.getResource(fxmlFile);
+            if (url == null) {
+                System.err.println("FXML file not found: " + fxmlFile);
+                return;
+            }
+            System.out.println("Loading FXML from: " + url);
+            FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Stage stage = (Stage) button.getScene().getWindow();
             stage.setScene(new Scene(root));

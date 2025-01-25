@@ -9,14 +9,17 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import network.requests.Request;
 import network.requests.StartGameRequest;
+import network.responses.FailLoginResponse;
 import network.responses.GetAvailablePlayersResponse;
 import network.responses.PlayAtResponse;
 import network.responses.RefuseStartGameResponse;
 import network.responses.Response;
 import network.responses.SignOutResponse;
 import network.responses.StartGameResponse;
+import network.responses.SuccessLoginResponse;
 
 public final class PlayerSocket {
 
@@ -26,9 +29,11 @@ public final class PlayerSocket {
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
     private Thread listenerThread;
+    private LoginScreenController loginScreenController;
 
     private PlayerSocket() {
         this.socket = new Socket();
+        this.loginScreenController = loginScreenController;
     }
 
     public static synchronized PlayerSocket getInstance() {
@@ -36,6 +41,10 @@ public final class PlayerSocket {
             instance = new PlayerSocket();
         }
         return instance;
+    }
+
+    public void setLoginScreenController(LoginScreenController loginScreenController) {
+        this.loginScreenController = loginScreenController;
     }
 
     public boolean connect(InetSocketAddress ip, int timeout) {
@@ -58,7 +67,7 @@ public final class PlayerSocket {
             // connected successfully to the server
             // now run the listening thread -- called only one time here
             startListenerThread();
-            
+
             return true;
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server: " + ex.getMessage(), ex);
@@ -94,6 +103,14 @@ public final class PlayerSocket {
                         if (response instanceof StartGameResponse) {
                             System.out.println("Start Game Response received.");
                             handleStartGameResponse((StartGameResponse) response);
+
+                        } else if (response instanceof SuccessLoginResponse) {
+                            System.out.println("Success Login At Server - Response Back To You");
+                            handleLoginSuccess((SuccessLoginResponse) response);
+
+                        } else if (response instanceof FailLoginResponse) {
+                            System.out.println("Fail Login At Server - Response Back To You");
+                            handleLoginFail((FailLoginResponse) response);
 
                         } else if (response instanceof GetAvailablePlayersResponse) {
                             System.out.println("GetAvailablePlayersResponse recieved");
@@ -220,9 +237,30 @@ public final class PlayerSocket {
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
         }
-        
+    }
+
     private void handlePlayAtResponse(PlayAtResponse playAtResponse) {
-        
+
         GameScreenOnlineController.OnReceivePlayerAction(playAtResponse);
+    }
+
+    private void handleLoginSuccess(SuccessLoginResponse successLoginResponse) {
+        Platform.runLater(() -> {
+            if (loginScreenController != null) {
+                loginScreenController.onSuccessLogin(successLoginResponse);
+            } else {
+                System.err.println("LoginScreenController is null. Cannot handle login success.");
+            }
+        });
+    }
+
+    private void handleLoginFail(FailLoginResponse failLoginResponse) {
+        Platform.runLater(() -> {
+            if (loginScreenController != null) {
+                loginScreenController.onFailLogin(failLoginResponse);
+            } else {
+                System.err.println("LoginScreenController is null. Cannot handle login fail.");
+            }
+        });
     }
 }

@@ -225,10 +225,11 @@ public class AvailablePlayersScreenController implements Initializable {
         if(signOutResponse instanceof SuccessSignOutResponse) {
             SuccessSignOutResponse successResponse = (SuccessSignOutResponse) signOutResponse;
             System.out.println("SignOut is Successfull");
-            playerSocket.close();
+            
             Platform.runLater( () -> {
                 try {
-                    SceneNavigator.loadNewScene("LoginScreen.fxml");
+                    playerSocket.close();
+                    SceneNavigator.loadNewScene("StartOptionsScreen.fxml");
                 } catch (IOException ex) {
                     System.out.println("Error while navigating after Signout");
                     Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);

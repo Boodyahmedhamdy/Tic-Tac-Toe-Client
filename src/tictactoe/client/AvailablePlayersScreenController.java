@@ -57,6 +57,8 @@ public class AvailablePlayersScreenController implements Initializable {
     
     public static PlayerInfo playerInfo;
     
+    public static boolean runListeningThreadHere;
+    
     @FXML
     private Button btnRefresh;
 
@@ -64,7 +66,9 @@ public class AvailablePlayersScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         playerSocket = PlayerSocket.getInstance();
-        playerSocket.startListenerThread();
+        if(runListeningThreadHere) {
+            playerSocket.startListenerThread();
+        }
         playerInfo = PlayerInfo.getInstance();
         textPlayerUserName.setText(playerInfo.getUserName());
         textPlayerScore.setText(playerInfo.getRank() + " points");

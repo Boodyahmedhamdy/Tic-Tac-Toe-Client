@@ -66,6 +66,7 @@ public class LoginScreenController implements Initializable {
             playerInfo.setUserName(successResponse.getUsername());
             playerInfo.setRank(successResponse.getScore());
             System.out.println("Login successful for user: " + successResponse.getUsername());
+            AvailablePlayersScreenController.runListeningThreadHere = true;
             navigateToScreen("AvailablePlayersScreen.fxml", loginbtn);
         } else if (loginResponse instanceof FailLoginResponse) {
             FailLoginResponse failResponse = (FailLoginResponse) loginResponse;

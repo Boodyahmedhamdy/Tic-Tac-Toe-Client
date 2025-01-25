@@ -14,14 +14,14 @@
 
 <BorderPane id="registerScreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="big-screen" stylesheets="@ui/styles/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.RegisterScreenController">
    <top>
-      <FlowPane columnHalignment="CENTER" prefHeight="53.0" prefWidth="600.0" style="-fx-alignment: center;" BorderPane.alignment="CENTER">
+      <FlowPane columnHalignment="CENTER" prefHeight="53.0" prefWidth="600.0" style="-fx-alignment: center;" stylesheets="@ui/styles/startOptionsScreenStyle.css" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="backbtn" mnemonicParsing="false" onAction="#handleBack" text="&lt;">
+            <Button fx:id="backbtn" mnemonicParsing="false" onAction="#handleBack" prefHeight="41.0" prefWidth="46.0" styleClass="backbutton" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="&lt;">
                <FlowPane.margin>
                   <Insets left="20.0" top="50.0" />
                </FlowPane.margin>
             </Button>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="🎮 Register to Tic Tac Toe! 🎮" textAlignment="CENTER" wrappingWidth="916.65673828125">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center; -fx-fill: white;" styleClass="titleLable" text=" Register to Tic Tac Toe ! " textAlignment="CENTER" wrappingWidth="964.65673828125">
                <FlowPane.margin>
                   <Insets left="20.0" top="50.0" />
                </FlowPane.margin>
@@ -34,10 +34,10 @@
          <center>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="299.0" prefWidth="584.0">
                <children>
-                  <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="181.0" prefWidth="600.0">
+                  <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="204.0" prefWidth="629.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="190.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="453.0" minWidth="10.0" prefWidth="410.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="238.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="453.0" minWidth="10.0" prefWidth="346.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -47,8 +47,8 @@
                     </rowConstraints>
                      <children>
                         <Text fill="#323136" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  User name" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Password" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Confirm password" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Password" wrappingWidth="190.6015625" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="  Confirm password" wrappingWidth="249.1953125" GridPane.rowIndex="3" />
                         <TextField fx:id="nameField" maxWidth="-Infinity" prefHeight="31.0" prefWidth="316.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="emailField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="31.0" prefWidth="316.0" GridPane.columnIndex="1" />
                         <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="31.0" prefWidth="316.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -58,7 +58,7 @@
                   </GridPane>
                   <FlowPane prefHeight="66.0" prefWidth="584.0">
                      <children>
-                        <Button fx:id="registerbtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" onAction="#handleRegister" style="-fx-alignment: right;" styleClass="centerButton" text="Register">
+                        <Button fx:id="registerbtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" onAction="#handleRegister" style="-fx-alignment: right;" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="Register">
                            <FlowPane.margin>
                               <Insets left="380.0" top="10.0" />
                            </FlowPane.margin>

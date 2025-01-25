@@ -42,7 +42,7 @@
     -fx-text-fill: #333333; 
     -fx-font-size: 30px; 
     -fx-font-family: "Arabic Typesetting"; 
-    -fx-padding: 15px 40px;  
+    -fx-padding: 10px 10px;  
     -fx-border-width: 2px;  
     -fx-border-radius: 20px;
     -fx-background-radius: 20px; 
@@ -58,6 +58,9 @@
     -fx-background-radius: 10px; 
     -fx-cursor: hand; 
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1); 
+}
+#mytext{
+    -fx-text-fill: #FFFFFF;
 }
 
 .button:hover {

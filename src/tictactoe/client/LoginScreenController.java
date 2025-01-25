@@ -33,6 +33,8 @@ public class LoginScreenController implements Initializable {
     private PlayerSocket playerSocket;
     
     private PlayerInfo playerInfo;
+    @FXML
+    private Button backBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -76,6 +78,10 @@ public class LoginScreenController implements Initializable {
     @FXML
     private void handleRegister() {
         navigateToScreen("RegisterScreen.fxml", registerbtn);
+    }
+    @FXML
+    private void handleBack() {
+        navigateToScreen("StartOptionsScreen.fxml", backBtn);
     }
 
     private void navigateToScreen(String fxmlFile, Button button) {

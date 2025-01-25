@@ -5,14 +5,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.requests.Request;
 import network.requests.StartGameRequest;
 import network.responses.GetAvailablePlayersResponse;
+import network.responses.PlayAtResponse;
 import network.responses.RefuseStartGameResponse;
 import network.responses.Response;
+import network.responses.SignOutResponse;
 import network.responses.StartGameResponse;
 
 public final class PlayerSocket {
@@ -23,9 +26,11 @@ public final class PlayerSocket {
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
     private Thread listenerThread;
+    private GameScreenOnlineController gameScreenOnlineController ;
 
     private PlayerSocket() {
         this.socket = new Socket();
+        //this.gameScreenOnlineController=gameScreenOnlineController;
     }
 
     public static synchronized PlayerSocket getInstance() {
@@ -38,7 +43,13 @@ public final class PlayerSocket {
     public boolean connect(InetSocketAddress ip, int timeout) {
         try {
             System.out.println("Connecting to server: " + ip);
-            socket.connect(ip, timeout);
+            try {
+                socket.connect(ip, timeout);
+            } catch (SocketTimeoutException ex) {
+                System.out.println("Can't Connect");
+                resetSocket();
+                return false;
+            }
             System.out.println("Connected to the server.");
 
             // Initialize the streams after the socket is connected
@@ -46,13 +57,10 @@ public final class PlayerSocket {
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
             
-            // connected successfully to the server
-            // now run the listening thread -- called only one time here
-//            startListenerThread();
-            
             return true;
         } catch (IOException ex) {
             Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Failed to connect to server: " + ex.getMessage(), ex);
+            resetSocket();
             return false;
         }
     }
@@ -65,13 +73,13 @@ public final class PlayerSocket {
                     System.out.println("****ON LISTENING THREAD BEFORE READING ***********");
                     Object incomingObject = in.readObject();
                     System.out.println("****ON LISTENING THREAD AFTER READING ***********" + incomingObject.getClass().getSimpleName());
-                    
+
                     if (incomingObject instanceof Request) {
                         Request request = (Request) incomingObject;
                         System.out.println("Handling request: " + request.getClass().getSimpleName());
 
                         if (request instanceof StartGameRequest) {
-                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getUsername());
+                            System.out.println("Start Game request received for username: " + ((StartGameRequest) request).getRecieverUsername());
                             handleStartGameRequest((StartGameRequest) request);
                         }
 
@@ -84,11 +92,20 @@ public final class PlayerSocket {
                         if (response instanceof StartGameResponse) {
                             System.out.println("Start Game Response received.");
                             handleStartGameResponse((StartGameResponse) response);
-                            
+
                         } else if (response instanceof GetAvailablePlayersResponse) {
                             System.out.println("GetAvailablePlayersResponse recieved");
                             handleGetAvailablePlayersResponse((GetAvailablePlayersResponse) response);
+                        } else if (response instanceof SignOutResponse) {
+                            System.out.println("SignOutResponse recieved");
+                            handleSignOutResponse((SignOutResponse) incomingObject);
                         }
+
+                        else if (response instanceof PlayAtResponse) {
+                            System.out.println("PlayAtResponse recieved");
+                            handlePlayAtResponse( (PlayAtResponse) incomingObject);
+                        }
+
 
                     }
                 } catch (IOException ex) {
@@ -185,8 +202,31 @@ public final class PlayerSocket {
         System.out.println("StartGameResponse just arrived with type" + startGameResponse.getClass().getSimpleName());
         AvailablePlayersScreenController.onReceiveStartGameResponse(startGameResponse);
     }
-    
+
     private void handleGetAvailablePlayersResponse(GetAvailablePlayersResponse response) {
         AvailablePlayersScreenController.onRecieveGetAvailablePlayersResponse(response);
+    }
+
+    private void handleSignOutResponse(SignOutResponse signOutResponse) {
+        AvailablePlayersScreenController.onRecieveSignOutResponse(signOutResponse);
+    }
+
+    private void resetSocket() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            socket = new Socket();
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
+        }
+    }
+    
+    private void handlePlayAtResponse(PlayAtResponse playAtResponse) {
+        
+        gameScreenOnlineController.OnReceivePlayerAction(playAtResponse);
+    }
+    public void setGameScreenOnlineController(GameScreenOnlineController gameScreenOnlineController){
+        this.gameScreenOnlineController=gameScreenOnlineController;
     }
 }

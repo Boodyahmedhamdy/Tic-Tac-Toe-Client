@@ -3,10 +3,14 @@
     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
 }
 #BorderPane{
-     /*-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);*/ 
-     -fx-background-image: url("src/tictactoe/client/ui/styles/3.jpg");
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
 }
+.big-screen {
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
 
+    -fx-pref-width: 1100;
+    -fx-pref-height: 800;
+}
 
 
 /* Styling for the label (title) */
@@ -17,61 +21,77 @@
     -fx-alignment: center; /* Center alignment */
     -fx-padding: 30px; /* Padding around the label */
 }
+.titleLable {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 100px; 
+    -fx-font-weight: bold; 
+    -fx-font-family: "Arabic Typesetting"; 
+    -fx-alignment: center; 
+    -fx-padding: 30px; 
+}
 
-/* VBox styling for vertical alignment and spacing */
+
 .vbox {
-    -fx-alignment: center; /* Center alignment */
-    -fx-spacing: 25px; /* Increased space between buttons for better layout */
+    -fx-alignment: center; 
+    -fx-spacing: 25px;
 }
 
-/* Base button styling */
+
 .button {
-    -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6); /* Gradient background */
-    -fx-text-fill: #333333; /* Dark text color */
-    -fx-font-size: 20px; /* Larger font size */
-    -fx-font-family: "Arial"; /* Font family */
-    -fx-padding: 15px 40px; /* Inner padding for button size */
-    -fx-border-width: 2px; /* Border thickness */
-    -fx-border-radius: 20px; /* More rounded corners */
-    -fx-background-radius: 20px; /* Matching rounded corners */
-    -fx-cursor: hand; /* Pointer cursor on hover */
-    -fx-transition: 0.3s ease-in-out; /* Smooth transition for hover effect */
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    -fx-text-fill: #333333; 
+    -fx-font-size: 30px; 
+    -fx-font-family: "Arabic Typesetting"; 
+    -fx-padding: 15px 40px;  
+    -fx-border-width: 2px;  
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px; 
+    -fx-cursor: hand; 
+    -fx-transition: 0.3s ease-in-out;
+}
+.backbutton {
+    /*-fx-background-color: linear-gradient(to bottom, #D87DFD, #13C1D7);*/
+    -fx-font-size: 30px; 
+    -fx-font-weight: bold; 
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 10px; 
+    -fx-background-radius: 10px; 
+    -fx-cursor: hand; 
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1); 
 }
 
-/* Hover effect for buttons */
 .button:hover {
-    -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); /* Reverse gradient on hover */
-    -fx-border-color: #cccccc; /* Lighter border on hover */
+    -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); 
+    -fx-border-color: #cccccc; 
 }
 
-/* Button-specific colors (can use these classes in FXML) */
+/*
 .button-ai {
-    -fx-border-color: #8e44ad; /* Purple border */
-    -fx-text-fill: #8e44ad; /* Purple text */
-    -fx-background-color: linear-gradient(to bottom, #f5e6ff, #e8d4f5); /* Purple gradient */
-}
-
+    -fx-border-color: #8e44ad; 
+    -fx-text-fill: #8e44ad; 
+    -fx-background-color: linear-gradient(to bottom, #f5e6ff, #e8d4f5); 
+}*/
+/*
 .button-friend {
-    -fx-border-color: #27ae60; /* Green border */
-    -fx-text-fill: #27ae60; /* Green text */
-    -fx-background-color: linear-gradient(to bottom, #e8fbe4, #d1f5cf); /* Green gradient */
-}
+    -fx-border-color: #27ae60; 
+    -fx-text-fill: #27ae60; 
+    -fx-background-color: linear-gradient(to bottom, #e8fbe4, #d1f5cf); 
+}*/
 
 .button-others {
-    -fx-border-color: #16a085; /* Cyan border */
-    -fx-text-fill: #16a085; /* Cyan text */
+    -fx-border-color: #16a085; 
+    -fx-text-fill: #16a085; 
     -fx-background-color: linear-gradient(to bottom, #e2f8f5, #c8ecea); /* Cyan gradient */
 }
 
 .button-settings {
-    -fx-border-color: #f39c12; /* Orange border */
-    -fx-text-fill: #f39c12; /* Orange text */
-    -fx-background-color: linear-gradient(to bottom, #fff4e6, #ffe4c8); /* Orange gradient */
+    -fx-border-color: #f39c12; 
+    -fx-text-fill: #f39c12; 
+    -fx-background-color: linear-gradient(to bottom, #fff4e6, #ffe4c8); 
 }
 
-/* Pressed button effect */
 .button:pressed {
-    -fx-background-color: #d9d9d9; /* Slightly darker gray for pressed state */
+    -fx-background-color: #d9d9d9; 
 }
 
 #grid-pane {
@@ -79,14 +99,23 @@
     -fx-border-width: 2;
     -fx-border-style: solid;
 }
-/*.big-screen {
-    -fx-background-image: url('3.jpeg');
-    -fx-background-size: cover;
-}*/
+
 
 
 #AnchorPane{
-     -fx-background-image: url(3.jpg);
-     
-/*     -fx-background-color:#f39c12;*/
+    -fx-background-image: url(xor.jpg);
+
+}
+
+#previousRecordScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+
+}
+
+#loginScreen, #registerScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
 }

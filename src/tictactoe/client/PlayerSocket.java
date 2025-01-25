@@ -25,11 +25,10 @@ public final class PlayerSocket {
     private Socket socket;
     private final AtomicBoolean running = new AtomicBoolean(true);
     private Thread listenerThread;
-    private GameScreenOnlineController gameScreenOnlineController ;
+    private static GameScreenOnlineController gameScreenOnlineController ;
 
     private PlayerSocket() {
         this.socket = new Socket();
-        //this.gameScreenOnlineController=gameScreenOnlineController;
     }
 
     public static synchronized PlayerSocket getInstance() {

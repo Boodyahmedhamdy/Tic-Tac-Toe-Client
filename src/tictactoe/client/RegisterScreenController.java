@@ -69,8 +69,10 @@ public class RegisterScreenController implements Initializable {
         playerSocket.sendRequest(registerRequest);
 
         // Wait for the response
+        System.out.println("sent registeration request and waiting for the response");
         RegisterResponse registerResponse = (RegisterResponse) playerSocket.receiveResponse();
-
+        System.out.println("Register Response has come");  
+        
         if (registerResponse instanceof SuccessRegisterResponse) {
             SuccessRegisterResponse successResponse = (SuccessRegisterResponse) registerResponse;
             System.out.println("Registration successful for user: " + successResponse.getUsername());

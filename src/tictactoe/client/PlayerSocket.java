@@ -118,11 +118,10 @@ public final class PlayerSocket {
                         } else if (response instanceof SignOutResponse) {
                             System.out.println("SignOutResponse recieved");
                             handleSignOutResponse((SignOutResponse) incomingObject);
-                        }
-                        /*else if (response instanceof PlayAtResponse) {
+                        } else if (response instanceof PlayAtResponse) {
                             System.out.println("PlayAtResponse recieved");
-                            handlePlayAtResponse( (PlayAtResponse) incomingObject);
-                        }*/
+                            handlePlayAtResponse((PlayAtResponse) incomingObject);
+                        }
 
                     }
                 } catch (IOException ex) {
@@ -136,9 +135,10 @@ public final class PlayerSocket {
         listenerThread.start();
     }
 
-    public void sendRequest(Request request) {
+    public synchronized void sendRequest(Request request) {
         try {
             System.out.println("Sending Request: " + request.getClass().getSimpleName());
+            out.reset();    
             out.writeObject(request);
             out.flush();
             System.out.println("Request sent: " + request.getClass().getSimpleName());
@@ -147,14 +147,15 @@ public final class PlayerSocket {
         }
     }
 
-    public void sendResponse(Response response) {
+    public synchronized void sendResponse(Response response) {
         try {
             System.out.println("Sending Response: " + response.getClass().getSimpleName());
+            out.reset();
             out.writeObject(response);
             out.flush();
             System.out.println("Response sent: " + response.getClass().getSimpleName());
         } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending request: " + ex.getMessage(), ex);
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error sending response: " + ex.getMessage(), ex);
         }
     }
 
@@ -195,7 +196,6 @@ public final class PlayerSocket {
                 in.close();
             }
             if (listenerThread != null) {
-
                 listenerThread.join();
             }
         } catch (IOException | InterruptedException ex) {
@@ -228,17 +228,6 @@ public final class PlayerSocket {
         AvailablePlayersScreenController.onRecieveSignOutResponse(signOutResponse);
     }
 
-    private void resetSocket() {
-        try {
-            if (socket != null && !socket.isClosed()) {
-                socket.close();
-            }
-            socket = new Socket();
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
-        }
-    }
-
     private void handlePlayAtResponse(PlayAtResponse playAtResponse) {
 
         GameScreenOnlineController.OnReceivePlayerAction(playAtResponse);
@@ -262,5 +251,24 @@ public final class PlayerSocket {
                 System.err.println("LoginScreenController is null. Cannot handle login fail.");
             }
         });
+    }
+
+    private void resetSocket() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+            socket = new Socket();
+            out = null;
+            in = null;
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerSocket.class.getName()).log(Level.SEVERE, "Error resetting socket", ex);
+        }
     }
 }

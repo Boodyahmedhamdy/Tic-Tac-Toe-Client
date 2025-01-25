@@ -50,13 +50,13 @@ public class AvailablePlayersScreenController implements Initializable {
     private ListView<String> lvAvailablePlayers;
     @FXML
     private static Text textErrorMessage;
-    
+
     private static ObservableList<String> availabePlayers;
-    
+
     public static PlayerSocket playerSocket;
-    
+
     public static PlayerInfo playerInfo;
-    
+
     @FXML
     private Button btnRefresh;
 
@@ -69,12 +69,10 @@ public class AvailablePlayersScreenController implements Initializable {
         textPlayerUserName.setText(playerInfo.getUserName());
         textPlayerScore.setText(playerInfo.getRank() + " points");
 
-
         availabePlayers = FXCollections.observableArrayList();
         lvAvailablePlayers.setItems(
                 availabePlayers
         );
-        
 
         // Add listener for player selection
         lvAvailablePlayers.getSelectionModel().selectedItemProperty().addListener(
@@ -102,13 +100,13 @@ public class AvailablePlayersScreenController implements Initializable {
     }
 
     private void onClickOnPlayer(String username) {
-        
+
         System.out.println("sending Start game request sent to: " + username);
         StartGameRequest startGameRequest = new StartGameRequest(playerInfo.getUserName(), username);
         playerSocket.sendRequest(startGameRequest);
         System.out.println("Start game request sent to: " + username);
     }
-    
+
     @FXML
     private void onRefreshBtnClicked(ActionEvent event) {
         System.out.println("sending GetAvailabePlayers Request...");
@@ -116,46 +114,49 @@ public class AvailablePlayersScreenController implements Initializable {
         playerSocket.sendRequest(request);
         System.out.println("GetAvaialblePlayersRequest sent");
     }
-    
+
     public static void onRecieveGetAvailablePlayersResponse(GetAvailablePlayersResponse response) {
-        System.out.println("reciving GetAvaialblePlayersResponse");
-        if(response instanceof SuccessGetAvaialbePlayersResponse) {
-            SuccessGetAvaialbePlayersResponse successResponse = 
-                    (SuccessGetAvaialbePlayersResponse) response;
+        System.out.println("receiving GetAvailablePlayersResponse");
+        if (response instanceof SuccessGetAvaialbePlayersResponse) {
+            SuccessGetAvaialbePlayersResponse successResponse = (SuccessGetAvaialbePlayersResponse) response;
             System.out.println("before updating list " + availabePlayers);
             System.out.println("incoming list is " + successResponse.getUsernames());
+
+            // Update the UI on the JavaFX Application Thread
             Platform.runLater(() -> {
-                availabePlayers.setAll(successResponse.getUsernames());
+                availabePlayers.clear(); // Clear the existing list
+                availabePlayers.addAll(successResponse.getUsernames()); // Add the new list
                 System.out.println("after updating list " + availabePlayers);
             });
-            
         } else {
-            System.out.println("Failure happend");
+            System.out.println("Failure happened");
         }
     }
 
     /**
-     * Called when a start game request is received from another player via the server.
+     * Called when a start game request is received from another player via the
+     * server.
+     *
      * @param startGameRequest
      */
     public static void onReceiveStartGameRequest(StartGameRequest startGameRequest) {
         Platform.runLater(() -> {
-        
-         UiUtils.showReplayAlert(
-                startGameRequest.getSenderUsername()+ " wants to have a game with you. Do you agree?",
-                () -> {
-                    
+
+            UiUtils.showReplayAlert(
+                    startGameRequest.getSenderUsername() + " wants to have a game with you. Do you agree?",
+                    () -> {
+
                         // On "Yes"
-                        AcceptStartGameResponse response =
-                                new AcceptStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
+                        AcceptStartGameResponse response
+                        = new AcceptStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
                         System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
                         playerSocket.sendResponse(response);
                         System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
 
                         try {
 //                            navigateToScreen("gameScreen.fxml", btnSignOut);
-                            GameScreenOnlineController.myName=startGameRequest.getRecieverUsername();
-                            GameScreenOnlineController.oppositeName=startGameRequest.getSenderUsername();
+                            GameScreenOnlineController.myName = startGameRequest.getRecieverUsername();
+                            GameScreenOnlineController.oppositeName = startGameRequest.getSenderUsername();
 
                             SceneNavigator.loadNewScene("GameScreenOnline.fxml");
                             //SceneNavigator.loadNewScene("gameScreen.fxml");
@@ -164,38 +165,36 @@ public class AvailablePlayersScreenController implements Initializable {
                             System.out.println("error while navigating to GameScreenOnline");
                             Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                },
-                () -> {
+                    },
+                    () -> {
 
-                    // On "No"
-                    RefuseStartGameResponse response =
-                            new RefuseStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
-                    System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
-                    playerSocket.sendResponse(response);
-                    System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
+                        // On "No"
+                        RefuseStartGameResponse response
+                        = new RefuseStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
+                        System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
+                        playerSocket.sendResponse(response);
+                        System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
 
+                    },
+                    () -> {
 
-                },
-                () -> {
-                    
-                    // On "Close"
-                    RefuseStartGameResponse response =
-                            new RefuseStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
-                    System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
-                    playerSocket.sendResponse(response);
-                    System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
+                        // On "Close"
+                        RefuseStartGameResponse response
+                        = new RefuseStartGameResponse(playerInfo.getUserName(), startGameRequest.getSenderUsername());
+                        System.out.println("sending " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
+                        playerSocket.sendResponse(response);
+                        System.out.println("Sent " + response.getClass().getSimpleName() + " to " + response.getRecieverUsername());
 
-
-                }
+                    }
             );
         });
-        
-        
-       
+
     }
 
     /**
-     * Called when a start game response is received from another player via the server.
+     * Called when a start game response is received from another player via the
+     * server.
+     *
      * @param startGameResponse
      */
     public static void onReceiveStartGameResponse(StartGameResponse startGameResponse) {
@@ -204,36 +203,34 @@ public class AvailablePlayersScreenController implements Initializable {
 //                AcceptStartGameResponse responseBack = 
 //                        new AcceptStartGameResponse(startGameResponse.getRecieverUsername(), startGameResponse.getSenderUsername());
 //                playerSocket.sendResponse(responseBack);
-                System.out.println("AcceptStartGameResponse has come and navigating to GameScreen");
-                Platform.runLater(()-> {
-                    try {
+            System.out.println("AcceptStartGameResponse has come and navigating to GameScreen");
+            Platform.runLater(() -> {
+                try {
 //                        navigateToScreen("gameScreen.fxml", btnSignOut);
-                        GameScreenOnlineController.myName=startGameResponse.getRecieverUsername();
-                        GameScreenOnlineController.oppositeName=startGameResponse.getSenderUsername();
-                        
-                        SceneNavigator.loadNewScene("GameScreenOnline.fxml");
-                    } catch (IOException ex) {
-                        System.out.println("error while navigating to gameScreen");
-                        Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                });
-            
-            
+                    GameScreenOnlineController.myName = startGameResponse.getRecieverUsername();
+                    GameScreenOnlineController.oppositeName = startGameResponse.getSenderUsername();
+
+                    SceneNavigator.loadNewScene("GameScreenOnline.fxml");
+                } catch (IOException ex) {
+                    System.out.println("error while navigating to gameScreen");
+                    Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
         } else if (startGameResponse instanceof RefuseStartGameResponse) {
             // Handle refusal
             Platform.runLater(() -> {
-                UiUtils.showValidationAlert("Your invitation to " + startGameResponse.getSenderUsername()+ " was refused.");
+                UiUtils.showValidationAlert("Your invitation to " + startGameResponse.getSenderUsername() + " was refused.");
             });
         }
     }
-    
-    
+
     public static void onRecieveSignOutResponse(SignOutResponse signOutResponse) {
-        if(signOutResponse instanceof SuccessSignOutResponse) {
+        if (signOutResponse instanceof SuccessSignOutResponse) {
             SuccessSignOutResponse successResponse = (SuccessSignOutResponse) signOutResponse;
             System.out.println("SignOut is Successfull");
             playerSocket.close();
-            Platform.runLater( () -> {
+            Platform.runLater(() -> {
                 try {
                     SceneNavigator.loadNewScene("LoginScreen.fxml");
                 } catch (IOException ex) {
@@ -242,7 +239,7 @@ public class AvailablePlayersScreenController implements Initializable {
                 }
             });
 
-        } else if(signOutResponse instanceof FailSignOutResponse) {
+        } else if (signOutResponse instanceof FailSignOutResponse) {
             FailSignOutResponse failResponse = (FailSignOutResponse) signOutResponse;
             System.out.println("SignOut is Failed");
             Platform.runLater(() -> {

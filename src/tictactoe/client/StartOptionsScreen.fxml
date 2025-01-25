@@ -14,7 +14,7 @@
     <children>
         <HBox alignment="CENTER" layoutX="336.0" prefHeight="177.0" prefWidth="550.0" spacing="20.0" AnchorPane.leftAnchor="336.0" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="50.0">
             <children>
-                <Label id="titleLableStartOption" fx:id="gameTitle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="195.0" prefWidth="400.0" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="Tic Tac Toe">
+                <Label fx:id="gameTitle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="195.0" prefWidth="400.0" styleClass="titleLable" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="Tic Tac Toe">
                     <font>
                         <Font size="45.0" />
                     </font>

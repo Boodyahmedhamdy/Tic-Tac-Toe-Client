@@ -19,6 +19,7 @@ import network.requests.RegisterRequest;
 import network.responses.RegisterResponse;
 import network.responses.FailRegisterResponse;
 import network.responses.SuccessRegisterResponse;
+import static tictactoe.client.AvailablePlayersScreenController.playerInfo;
 import tictactoe.client.ui.UiUtils;
 
 public class RegisterScreenController implements Initializable {
@@ -69,12 +70,19 @@ public class RegisterScreenController implements Initializable {
         playerSocket.sendRequest(registerRequest);
 
         // Wait for the response
+        System.out.println("sent registeration request and waiting for the response");
         RegisterResponse registerResponse = (RegisterResponse) playerSocket.receiveResponse();
-
+        System.out.println("Register Response has come");  
+        
         if (registerResponse instanceof SuccessRegisterResponse) {
             SuccessRegisterResponse successResponse = (SuccessRegisterResponse) registerResponse;
+            playerInfo = PlayerInfo.getInstance();
+            playerInfo.setUserName(successResponse.getUsername());
+            playerInfo.setRank(successResponse.getScore());
             System.out.println("Registration successful for user: " + successResponse.getUsername());
-            navigateToScreen("LoginScreen.fxml", registerbtn);
+            AvailablePlayersScreenController.runListeningThreadHere = true;
+            navigateToScreen("AvailablePlayersScreen.fxml", registerbtn);
+            
         } else if (registerResponse instanceof FailRegisterResponse) {
             FailRegisterResponse failResponse = (FailRegisterResponse) registerResponse;
             UiUtils.showValidationAlert(failResponse.getMessage());

@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="big-screen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1056.0" style="-fx-background-image: cover;" styleClass="big-screen" stylesheets="@ui/styles/startOptionsScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.LoginScreenController">
+<BorderPane id="loginScreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1056.0" styleClass="big-screen" stylesheets="@ui/styles/startOptionsScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.LoginScreenController">
    <top>
       <FlowPane columnHalignment="CENTER" prefHeight="53.0" prefWidth="600.0" style="-fx-alignment: center;" BorderPane.alignment="CENTER">
          <children>

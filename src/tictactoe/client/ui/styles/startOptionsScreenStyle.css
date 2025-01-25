@@ -3,11 +3,11 @@
     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
 }
 #BorderPane{
-     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
 }
 .big-screen {
-     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
-   
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
+
     -fx-pref-width: 1100;
     -fx-pref-height: 800;
 }
@@ -103,6 +103,19 @@
 
 
 #AnchorPane{
-     -fx-background-image: url(xor.jpg);
-     
+    -fx-background-image: url(xor.jpg);
+
+}
+
+#previousRecordScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+
+}
+
+#loginScreen, #registerScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
 }

@@ -154,10 +154,14 @@ public class AvailablePlayersScreenController implements Initializable {
 
                         try {
 //                            navigateToScreen("gameScreen.fxml", btnSignOut);
+                            GameScreenOnlineController.myName=startGameRequest.getRecieverUsername();
+                            GameScreenOnlineController.oppositeName=startGameRequest.getSenderUsername();
 
-                            SceneNavigator.loadNewScene("gameScreen.fxml");
+                            SceneNavigator.loadNewScene("GameScreenOnline.fxml");
+                            //SceneNavigator.loadNewScene("gameScreen.fxml");
                         } catch (IOException ex) {
-                            System.out.println("error while navigating to gameScreen");
+                            //System.out.println("error while navigating to gameScreen");
+                            System.out.println("error while navigating to GameScreenOnline");
                             Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                 },
@@ -204,7 +208,10 @@ public class AvailablePlayersScreenController implements Initializable {
                 Platform.runLater(()-> {
                     try {
 //                        navigateToScreen("gameScreen.fxml", btnSignOut);
-                        SceneNavigator.loadNewScene("gameScreen.fxml");
+                        GameScreenOnlineController.myName=startGameResponse.getRecieverUsername();
+                        GameScreenOnlineController.oppositeName=startGameResponse.getSenderUsername();
+                        
+                        SceneNavigator.loadNewScene("GameScreenOnline.fxml");
                     } catch (IOException ex) {
                         System.out.println("error while navigating to gameScreen");
                         Logger.getLogger(AvailablePlayersScreenController.class.getName()).log(Level.SEVERE, null, ex);

@@ -17,10 +17,13 @@
                <font>
                   <Font size="18.0" />
                </font>
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
             </Text>
             <ListView fx:id="lvAvailablePlayers" prefHeight="585.0" prefWidth="579.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets bottom="20.0" left="10.0" />
+                  <Insets bottom="20.0" left="50.0" />
                </VBox.margin></ListView>
          </children>
       </VBox>
@@ -55,16 +58,4 @@
          </padding>
       </HBox>
    </top>
-   <center>
-      <VBox alignment="TOP_CENTER" prefHeight="477.0" prefWidth="240.0" styleClass="level-one-container" BorderPane.alignment="CENTER">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white;" styleClass="titleLable" text="Available Players" wrappingWidth="477.783203125">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <ListView fx:id="lvAvailablePlayers" prefHeight="585.0" prefWidth="579.0" VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-   </center>
 </BorderPane>

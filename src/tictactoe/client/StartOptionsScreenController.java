@@ -110,6 +110,14 @@ private Button prevRecordsBtn;
             }
         });
     }
+    ////Rofaida Test
+    /*private void handlePlayOnline() {
+        try {
+            navigateToScreen("GameScreenOnline.fxml", playOnlineBtn);
+        } catch (IOException ex) {
+            Logger.getLogger(StartOptionsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
     
     @FXML
     private void handlePreviousRecords() {

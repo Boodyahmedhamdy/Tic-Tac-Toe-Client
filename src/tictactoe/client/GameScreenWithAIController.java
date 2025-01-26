@@ -5,7 +5,6 @@
  */
 package tictactoe.client;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import tictactoe.client.game.GameWithAI;
-import tictactoe.client.game.Game_AI;
 import tictactoe.client.ui.UiUtils;
 
 /**
@@ -65,16 +62,6 @@ public class GameScreenWithAIController implements Initializable {
     private Button AI_btn21;
     @FXML
     private Button AI_btn22;
-    @FXML
-    private Label Player_human;
-    @FXML
-    private Label player_AI;
-    @FXML
-    
-    
-   
-   
-    ////////////////
     Button [][] board;
     boolean isGameOver;
     Button[] winningButtons;
@@ -88,6 +75,11 @@ public class GameScreenWithAIController implements Initializable {
     @FXML
     private Label AI_score;
     String Result;
+    @FXML
+    private Label Player_human;
+    @FXML
+    private Label player_AI;
+    //String[][] status;
     
     
     /**
@@ -118,11 +110,7 @@ public class GameScreenWithAIController implements Initializable {
         };
         isGameOver=false;
         //setDifficulty(difficulty);
-        System.out.println("Difficulty set to: " + difficulty);
-        
-
-        
-        
+        System.out.println("Difficulty set to: " + difficulty); 
     }    
     
     
@@ -130,32 +118,36 @@ public class GameScreenWithAIController implements Initializable {
     
     @FXML
     void handleOnClick(ActionEvent event) throws IOException {
-        
-            if (isGameOver)
-                return;
-            Button clickedButton = (Button) event.getSource();
-            if(!clickedButton.getText().isEmpty()) 
-                return;
-            if (CurrentPlayer.equals(Player)) {
-                clickedButton.setText(Player);
-                //clickedButton.getStyleClass().add("o-button");
-
-                // Switch to AI player
-                CurrentPlayer=AI;
-                //player_AI.setStyle("-fx-background-color:#D3D3D3;");
-                //Player_human.setStyle("-fx-background-color:none;");
-               
-                checkWhoIsTheWinner();
-                
-                if(!isGameOver){
-                    computerMove();
-                    
-                }
-                   
+        if (isGameOver)
+            return;
+        Button clickedButton = (Button) event.getSource();
+        if(!clickedButton.getText().isEmpty()) 
+            return;
+        if (CurrentPlayer.equals(Player)) {
+            clickedButton.setText(Player);
             
-        }
-        clickedButton.setDisable(true);
+            clickedButton.setDisable(true);
+            /*System.out.println("status of board after player move: ");
+            printDisable();*/
+            printBord();
+            //clickedButton.getStyleClass().add("o-button");
 
+            // Switch to AI player
+            CurrentPlayer=AI;
+            //player_AI.setStyle("-fx-background-color:#D3D3D3;");
+            //Player_human.setStyle("-fx-background-color:none;");
+
+            checkWhoIsTheWinner();
+
+            if(!isGameOver&&CurrentPlayer.equals(AI)){
+                computerMove();
+                printBord();
+
+            }
+
+
+        }
+       
     }
    
     boolean checkWin(String symbol){
@@ -434,14 +426,36 @@ public class GameScreenWithAIController implements Initializable {
    
     private void restartGame() {
         isGameOver=false;
+        CurrentPlayer=Player;
         gridPane.getChildren().forEach((node) -> {
             ((Button) node).setText("");
             ((Button) node).setStyle("-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);");
             ((Button) node).setDisable(false);
         });
+        
+        System.out.println("status of board after restart: ");
+        //printDisable();
         //CurrentPlayer=Player;
     }
     
     
     
+    private void printBord(){
+        System.out.println();
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                System.out.print(board[i][j].getText()+" ");
+            }
+            System.out.println();
+        }
+    }
+   /* private void printDisable(){
+        System.out.println();
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                System.out.print(board[i][j].isDisable()+" ");
+            }
+            System.out.println();
+        }
+    }*/
 }

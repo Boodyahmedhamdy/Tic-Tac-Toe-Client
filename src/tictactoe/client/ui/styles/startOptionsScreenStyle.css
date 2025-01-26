@@ -3,11 +3,10 @@
     -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Subtle gradient background */
 }
 #BorderPane{
-     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
 }
 .big-screen {
-     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
-   
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
     -fx-pref-width: 1100;
     -fx-pref-height: 800;
 }
@@ -42,7 +41,19 @@
     -fx-text-fill: #333333; 
     -fx-font-size: 30px; 
     -fx-font-family: "Arabic Typesetting"; 
-    -fx-padding: 15px 40px;  
+    -fx-padding: 10px 10px;  
+    -fx-border-width: 2px;  
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px; 
+    -fx-cursor: hand; 
+    -fx-transition: 0.3s ease-in-out;
+}
+#clickButton {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    -fx-text-fill: #333333; 
+    -fx-font-size: 30px; 
+    -fx-font-family: "Arabic Typesetting"; 
+    -fx-padding: 10px 10px;  
     -fx-border-width: 2px;  
     -fx-border-radius: 20px;
     -fx-background-radius: 20px; 
@@ -59,24 +70,19 @@
     -fx-cursor: hand; 
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1); 
 }
+#mytext{
+    -fx-text-fill: #FFFFFF;
+}
+.text{
+    -fx-text-fill: #FFFFFF;
+}
 
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #e6e6e6, #ffffff); 
     -fx-border-color: #cccccc; 
 }
 
-/*
-.button-ai {
-    -fx-border-color: #8e44ad; 
-    -fx-text-fill: #8e44ad; 
-    -fx-background-color: linear-gradient(to bottom, #f5e6ff, #e8d4f5); 
-}*/
-/*
-.button-friend {
-    -fx-border-color: #27ae60; 
-    -fx-text-fill: #27ae60; 
-    -fx-background-color: linear-gradient(to bottom, #e8fbe4, #d1f5cf); 
-}*/
+
 
 .button-others {
     -fx-border-color: #16a085; 
@@ -103,6 +109,19 @@
 
 
 #AnchorPane{
-     -fx-background-image: url(xor.jpg);
-     
+    -fx-background-image: url(xor.jpg);
+
+}
+
+#previousRecordScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+
+}
+
+#loginScreen, #registerScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
 }

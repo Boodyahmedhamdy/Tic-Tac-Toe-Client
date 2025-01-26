@@ -4,18 +4,18 @@
 }
 
 .big-screen {
-     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
+    -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
     -fx-pref-width: 1100;
     -fx-pref-height: 800;
 }
 
 .text {
     -fx-font-size: 40px;
-      -fx-font-family: "Arabic Typesetting";
+    -fx-font-family: "Arabic Typesetting";
 }
 
 .label {
-     -fx-font-family: "Arabic Typesetting";
+    -fx-font-family: "Arabic Typesetting";
     -fx-text-fill: #333333;
     -fx-font-size: 60px;
     -fx-font-weight: bold;
@@ -47,6 +47,11 @@
 
 #big-screen{
     -fx-background-image: url("src/tictactoe/client/ui/styles/xor.jpg");
-   -fx-pref-height: 800;
+    -fx-pref-height: 800;
     -fx-pref-width: 1100;
+}
+#registerScreen{
+    -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
 }

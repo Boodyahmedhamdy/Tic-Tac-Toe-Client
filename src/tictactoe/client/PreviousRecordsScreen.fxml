@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" style="-fx-background-image: cover;" styleClass="big-screen" stylesheets="@ui/styles/startOptionsScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.PreviousRecordsScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" styleClass="big-screen" stylesheets="@ui/styles/startOptionsScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.PreviousRecordsScreenController">
    <top>
-      <StackPane prefHeight="88.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+      <StackPane id="previousRecordScreen" prefHeight="88.0" prefWidth="900.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="147.0" prefWidth="900.0" spacing="20.0">
+            <HBox alignment="CENTER" prefHeight="264.0" prefWidth="1100.0" spacing="20.0">
                <children>
-                  <Label fx:id="recordsLabel" prefHeight="133.0" prefWidth="375.0" text="Records">
+                  <Label fx:id="recordsLabel" prefHeight="152.0" prefWidth="375.0" styleClass="titleLable" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="Records">
                      <font>
                         <Font size="45.0" />
                      </font>
@@ -34,6 +34,6 @@
       </StackPane>
    </top>
    <center>
-      <ListView fx:id="recordsListView" prefHeight="584.0" prefWidth="900.0" BorderPane.alignment="CENTER" />
+      <ListView id="listViewAtPrevScreen" fx:id="recordsListView" prefHeight="584.0" prefWidth="900.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

@@ -33,6 +33,8 @@ public class LoginScreenController implements Initializable {
     private PlayerSocket playerSocket;
     
     private PlayerInfo playerInfo;
+    @FXML
+    private Button backBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -43,7 +45,6 @@ public class LoginScreenController implements Initializable {
     private void handleLogin() {
         String username = nameField.getText();
         String password = passwordField.getText();
-
         if (username.isEmpty() || password.isEmpty()) {
             UiUtils.showValidationAlert("Required fields are empty!");
             return;
@@ -64,6 +65,7 @@ public class LoginScreenController implements Initializable {
             playerInfo.setUserName(successResponse.getUsername());
             playerInfo.setRank(successResponse.getScore());
             System.out.println("Login successful for user: " + successResponse.getUsername());
+            AvailablePlayersScreenController.runListeningThreadHere = true;
             navigateToScreen("AvailablePlayersScreen.fxml", loginbtn);
         } else if (loginResponse instanceof FailLoginResponse) {
             FailLoginResponse failResponse = (FailLoginResponse) loginResponse;
@@ -76,6 +78,10 @@ public class LoginScreenController implements Initializable {
     @FXML
     private void handleRegister() {
         navigateToScreen("RegisterScreen.fxml", registerbtn);
+    }
+    @FXML
+    private void handleBack() {
+        navigateToScreen("StartOptionsScreen.fxml", backBtn);
     }
 
     private void navigateToScreen(String fxmlFile, Button button) {

@@ -228,17 +228,19 @@
     .root {
         -fx-padding: 10px;
     }
-    
+
     .game-container {
         -fx-padding: 15px;
     }
-    
+
     .cell {
         -fx-pref-width: 80px;
         -fx-pref-height: 80px;
-        -fx-font-size: 40px;
+        -fx-font-size: 56px;  /* Increased from 56px to 72px */
+        -fx-font-weight: 900; /* Made font weight bolder */
+
     }
-    
+
     .game-title {
         -fx-font-size: 36px;
     }
@@ -309,4 +311,17 @@
 /* Remove default content background */
 .dialog-pane > .content {
     -fx-background-color: transparent;
+}
+
+/* ================ *
+ *  Player Markers  *
+ * ================ */
+.x-button {
+    -fx-text-fill: -x-color;
+    -fx-effect: dropshadow(three-pass-box, derive(-x-color, 20%), 15, 0.5, 0, 0);
+}
+
+.o-button {
+    -fx-text-fill: -o-color;
+    -fx-effect: dropshadow(three-pass-box, derive(-o-color, 20%), 15, 0.5, 0, 0);
 }

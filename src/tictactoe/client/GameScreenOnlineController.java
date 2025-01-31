@@ -122,6 +122,7 @@ public class GameScreenOnlineController implements Initializable {
         if (CurrentPlayer.equals(mySymbol)) {
             clickedButton.setText(mySymbol);
             clickedButton.setDisable(true);
+            clickedButton.setStyle("-fx-font-size: 65px;");
             // Send PlayAt request to the server
             checkWhoIsTheWinner();
             PlayAtRequest playAtRequest = new PlayAtRequest(myName, oppositeName, clickedPosition.x, clickedPosition.y, "O", isGameOver);

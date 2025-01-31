@@ -121,8 +121,10 @@ public class GameScreenWithAIController implements Initializable {
         }
         if (CurrentPlayer.equals(Player)) {
             clickedButton.setText(Player);
+            clickedButton.getStyleClass().add("o-button");  // Add this line
 
             clickedButton.setDisable(true);
+            clickedButton.setStyle("-fx-font-size: 65px;");
             /*System.out.println("status of board after player move: ");
             printDisable();*/
             printBord();
@@ -233,6 +235,10 @@ public class GameScreenWithAIController implements Initializable {
             int row = bestMove[0];
             int col = bestMove[1];
             board[row][col].setText(AI);
+            board[row][col].getStyleClass().add("x-button");  // Add this line
+
+            board[row][col].setStyle("-fx-font-size: 65px;");
+
             /*Button clickedButton =getButtonAt(row,col);
             clickedButton.getStyleClass().add("x-button");*/
             CurrentPlayer = Player;
@@ -407,14 +413,13 @@ public class GameScreenWithAIController implements Initializable {
         isGameOver = false;
         CurrentPlayer = Player;
         gridPane.getChildren().forEach((node) -> {
-            ((Button) node).setText("");
-            ((Button) node).setStyle("-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);");
-            ((Button) node).setDisable(false);
+            Button btn = (Button) node;
+            btn.setText("");
+            // Reset to original styling, removing any yellow/white backgrounds
+            btn.setStyle("");
+            btn.getStyleClass().removeAll("x-button", "o-button");
+            btn.setDisable(false);
         });
-
-        System.out.println("status of board after restart: ");
-        //printDisable();
-        //CurrentPlayer=Player;
     }
 
     private void printBord() {

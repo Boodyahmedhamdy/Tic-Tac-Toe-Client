@@ -47,9 +47,9 @@ public class GameScreenController implements Initializable {
     private Label player2_name;
     @FXML
     private GridPane board;
-    
+
     public static boolean isRecording;
-    
+
     Alert alert;
     Game game;
     Video video;
@@ -73,7 +73,7 @@ public class GameScreenController implements Initializable {
 
         HumanPlayer playerX = new HumanPlayer('X', "Freind", 0);
         HumanPlayer playerO = new HumanPlayer('O', "You", 0);
-        
+
         player2_name.setText(playerX.getUsername());
         player1_name.setText(playerO.getUsername());
         player2_score.setText(playerX.getScore().toString());
@@ -89,13 +89,13 @@ public class GameScreenController implements Initializable {
 
     }
 
- 
     @FXML
     void handleOnClick(ActionEvent event) throws IOException {
         if (game.isDone) {
             System.out.println("game is done");
         } else {
             Button clickedButton = (Button) event.getSource();
+            clickedButton.setText("");
 
             Point clickedPosition = getClickedButtonPosition(
                     clickedButton
@@ -103,11 +103,17 @@ public class GameScreenController implements Initializable {
             if (game instanceof RecordedGame) {
                 ((RecordedGame) game).saveMove(game.currentPlayer, clickedPosition.x, clickedPosition.y);
             }
+
             clickedButton.setText(String.valueOf(game.currentPlayer.getSymbol()));
-            if ("X".equals(clickedButton.getText())) {
+            clickedButton.setStyle("-fx-font-size: 65px;");
+            // Set style class based on current player
+            if (game.currentPlayer.getSymbol() == 'X') {
                 clickedButton.getStyleClass().add("x-button");
-            } else if ("O".equals(clickedButton.getText())) {
+
+                clickedButton.setText("X");
+            } else {
                 clickedButton.getStyleClass().add("o-button");
+                clickedButton.setText("O");
             }
             clickedButton.setDisable(true);
 
@@ -157,7 +163,7 @@ public class GameScreenController implements Initializable {
                             },
                             () -> {
 
-                               System.out.println("I will Go Home"); 
+                                System.out.println("I will Go Home");
 
                                 try {
                                     navigateToScreen("StartOptionsScreen.fxml");
@@ -270,9 +276,11 @@ public class GameScreenController implements Initializable {
     private void restartGame() {
         game.restart();
         board.getChildren().forEach((node) -> {
-            ((Button) node).setText("");
-            ((Button) node).setStyle("-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);");
-            ((Button) node).setDisable(false);
+            Button btn = (Button) node;
+            btn.setText("");
+            btn.setStyle("");  // Clear any custom styles
+            btn.getStyleClass().removeAll("x-button", "o-button");  // Remove color classes
+            btn.setDisable(false);
         });
     }
 
@@ -285,4 +293,3 @@ public class GameScreenController implements Initializable {
     }
 
 }
-

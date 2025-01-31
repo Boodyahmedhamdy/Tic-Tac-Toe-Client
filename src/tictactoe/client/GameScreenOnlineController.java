@@ -227,7 +227,7 @@ public class GameScreenOnlineController implements Initializable {
 
     private void Replay() {
         Platform.runLater(() -> {
-            UiUtils.showReplayAlert(Result + "Do you want to Replay??",
+            UiUtils.showReplayAlert("Do you want to Replay??",
                     () -> {
                         restartGame();
                     },
@@ -254,11 +254,14 @@ public class GameScreenOnlineController implements Initializable {
     private void restartGame() {
         Platform.runLater(() -> {
             isGameOver = false;
-            gridPane.getChildren().forEach((node) -> {
-                ((Button) node).setText("");
-                ((Button) node).setStyle("-fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);");
-                ((Button) node).setDisable(false);
-            });
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    board[i][j].setText("");
+                    board[i][j].getStyleClass().removeAll("x-button", "o-button");
+                    board[i][j].setDisable(false);
+                }
+            }
+            CurrentPlayer = mySymbol;
         });
     }
 

@@ -31,6 +31,8 @@
  * ================ */
 .root {
     -fx-background-image: url(xor.jpg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
     -fx-background-color: -primary-gradient;
     -fx-padding: 25px;
     -fx-font-family: "Segoe UI", "Roboto", sans-serif;
@@ -236,9 +238,7 @@
     .cell {
         -fx-pref-width: 80px;
         -fx-pref-height: 80px;
-        -fx-font-size: 56px;  /* Increased from 56px to 72px */
-        -fx-font-weight: 900; /* Made font weight bolder */
-
+        -fx-font-size: 50px; 
     }
 
     .game-title {

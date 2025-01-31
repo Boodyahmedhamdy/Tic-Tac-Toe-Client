@@ -1,63 +1,23 @@
-.mainFxmlClass {
-    -fx-opacity: 1;
+#X {
+    -fx-text-fill: #ff2a2e; /* Red color for X */
+    -fx-font: bold 60px 'Comic Sans MS';
+}
+
+#O {
+    -fx-text-fill: #0384fc; /* Blue color for O */
+    -fx-font: bold 60px 'Comic Sans MS';
 }
 
 #grid-pane {
-
-    -fx-hgap: 5;
-    -fx-vgap: 5;
-    -fx-background-color: black;
-  
-    -fx-opacity: 1;
-}
-
-#grid-pane > * {
-    -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    -fx-background-radius: 0;
-    -fx-font: bold 60px 'Comic Sans MS';
-    -fx-opacity: 1;
-    -fx-pref-width: 165px;
-    -fx-pref-height: 165px;
-}
-
-#grid-pane > *:disabled {
-    -fx-background-color: white;
-    -fx-opacity: 1;
-  
-
+    -fx-background-color: rgba(0, 0, 0, 0.08); /* Slightly dark background for grid */
 }
 
 #screen {
-    -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    -fx-opacity: 1;
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f2f2f2); /* Light gradient */
 }
 
-/* Button Styles */
-.x-button {
-    -fx-text-fill: #ff2a2e;
-    -fx-background-color: white;
-    -fx-opacity: 1;
-    
-}
-.o-button {
-    -fx-text-fill: #0384fc;
-    -fx-background-color: white;
-    -fx-opacity: 1;
-}
-
-#gameplayScreen {
-    -fx-background-image: url(xor.jpg);
-    -fx-background-size: cover;
-    -fx-opacity: 1;
-}
-
-#X{
-    -fx-text-fill: #ff2a2e;
-    -fx-font: bold 60px 'Comic Sans MS';
-    
-}
-#O{
-    -fx-text-fill: #0384fc;
-    -fx-font: bold 60px 'Comic Sans MS';
-    
-}
+  /* #grid-pane > Button {
+      -fx-pref-width: 100%;
+      -fx-pref-height: 100%;
+      -fx-font-size: 36px;
+  } */

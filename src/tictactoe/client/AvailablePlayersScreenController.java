@@ -239,7 +239,7 @@ public class AvailablePlayersScreenController implements Initializable {
             
             Platform.runLater( () -> {
                 try {
-                    playerSocket.close();
+//                    playerSocket.close();
                     SceneNavigator.loadNewScene("StartOptionsScreen.fxml");
                 } catch (IOException ex) {
                     System.out.println("Error while navigating after Signout");

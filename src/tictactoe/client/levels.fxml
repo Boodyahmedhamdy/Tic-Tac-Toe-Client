@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" style="-fx-background-size: cover;" styleClass="big-screen" stylesheets="@ui/styles/startOptionsScreenStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.LevelsController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" style="-fx-background-size: cover;" styleClass="big-screen" stylesheets="@ui/styles/enhanced-tictactoe-styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoe.client.LevelsController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <Label fx:id="gameTitle" prefHeight="133.0" prefWidth="375.0" styleClass="titleLable" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="Level">
+            <Label fx:id="gameTitle" prefHeight="120.0" prefWidth="210.0" styleClass="game-title" stylesheets="@ui/styles/enhanced-tictactoe-styles.css" text="Difficulty">
                <font>
                   <Font size="45.0" />
                </font>
@@ -32,6 +32,6 @@
             <Insets left="220.0" right="220.0" />
          </padding>
       </VBox>
-      <Button fx:id="backBtn" layoutX="25.0" layoutY="48.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="41.0" styleClass="backbutton" stylesheets="@ui/styles/startOptionsScreenStyle.css" text="&lt;" />
+      <Button fx:id="backBtn" layoutX="45.0" layoutY="76.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="41.0" styleClass="backbutton" stylesheets="@ui/styles/enhanced-tictactoe-styles.css" text="&lt;" />
    </children>
 </AnchorPane>

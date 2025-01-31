@@ -48,7 +48,7 @@ public class UiUtils {
             Runnable callbackOnNo, Runnable callbackOnClose) {
         alert = new Alert(Alert.AlertType.INFORMATION, message,
                 ButtonType.YES, ButtonType.NO);
-        alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
+        alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/enhanced-tictactoe-styles.css").toExternalForm());
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
             callbackOnYes.run();
@@ -63,7 +63,7 @@ public class UiUtils {
     }
      public static void  showValidationAlert(String sentence){
          alert = new Alert(Alert.AlertType.INFORMATION);
-         alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/Alert_Dialogs_Style.css").toExternalForm());
+         alert.getDialogPane().getStylesheets().add(TicTacToeClient.class.getResource("ui/styles/enhanced-tictactoe-styles.css").toExternalForm());
          
         alert.setContentText(sentence);
         alert.showAndWait();

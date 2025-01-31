@@ -1,0 +1,312 @@
+/* ==================== *
+ *  Enhanced Tic-Tac-Toe *
+ * ==================== */
+
+/* =============== *
+ *  Color Variables *
+ * =============== */
+.root {
+    /* Base Colors */
+    -primary-gradient: linear-gradient(to right bottom, #2c3e50, #3498db);
+    -secondary-gradient: linear-gradient(to right bottom, #34495e, #2980b9);
+    -x-color: #e74c3c;
+    -o-color: #3498db;
+    -win-color: #2ecc71;
+    -draw-color: #f1c40f;
+    -text-primary: white;
+    -hover-brightness: 1.15;
+}
+
+/* ================ *
+ *  Theme Overrides *
+ * ================ */
+.light-theme {
+    -primary-gradient: linear-gradient(to right bottom, #ecf0f1, #bdc3c7);
+    -secondary-gradient: linear-gradient(to right bottom, #dfe6e9, #a4b0bd);
+    -text-primary: #2c3e50;
+}
+
+/* ================ *
+ *  Base Styles     *
+ * ================ */
+.root {
+    -fx-background-image: url(xor.jpg);
+    -fx-background-color: -primary-gradient;
+    -fx-padding: 25px;
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
+/* ================ *
+ *  Game Containers *
+ * ================ */
+.game-container {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-padding: 30px;
+    -fx-spacing: 25px;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 20, 0.4, 0, 5);
+    -fx-background-insets: 10;
+}
+
+/* ================ *
+ *  Title & Headers *
+ * ================ */
+.game-title {
+    -fx-font-size: 52px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -text-primary;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0, 2);
+    -fx-padding: 25px;
+    -fx-letter-spacing: 2px;
+}
+
+/* ================ *
+ *  Grid & Cells    *
+ * ================ */
+#grid-pane {
+    -fx-background-color: rgba(0, 0, 0, 0.08);
+    -fx-padding: 20px;
+    -fx-border-radius: 18px;
+    -fx-background-radius: 18px;
+    -fx-effect: innershadow(gaussian, rgba(255, 255, 255, 0.2), 15, 0.3, 0, 0);
+}
+
+.cell {
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-pref-width: 130px;
+    -fx-pref-height: 130px;
+    -fx-background-radius: 15px;
+    -fx-cursor: hand;
+    -fx-font-size: 56px;
+    -fx-font-weight: 800;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 2);
+    -fx-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cell:hover {
+    -fx-background-color: derive(-fx-background-color, -hover-brightness);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.4, 0, 3);
+    -fx-translate-y: -3px;
+}
+
+.cell:pressed {
+    -fx-translate-y: 0px;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Player Markers with 3D Effect */
+#X {
+    -fx-text-fill: -x-color;
+    -fx-effect: dropshadow(three-pass-box, derive(-x-color, 20%), 15, 0.5, 0, 0);
+}
+
+#O {
+    -fx-text-fill: -o-color;
+    -fx-effect: dropshadow(three-pass-box, derive(-o-color, 20%), 15, 0.5, 0, 0);
+}
+
+/* ================ *
+ *  Game Controls   *
+ * ================ */
+.control-panel {
+    -fx-spacing: 20px;
+    -fx-padding: 25px;
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 20px;
+    -fx-padding: 15px 35px;
+    -fx-border-radius: 30px;
+    -fx-background-radius: 30px;
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-cursor: hand;
+    -fx-transition: all 0.25s ease;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+    -fx-translate-y: -2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0.4, 0, 3);
+}
+
+/* ================ *
+ *  Dynamic Effects *
+ * ================ */
+.winner-cell {
+    -fx-background-color: rgba(46, 204, 113, 0.3) !important;
+    -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.6), 20, 0.6, 0, 0);
+    -fx-animation: win-glow 1.2s infinite alternate;
+}
+
+.draw-cell {
+    -fx-background-color: rgba(241, 196, 15, 0.2) !important;
+    -fx-effect: dropshadow(gaussian, rgba(241, 196, 15, 0.5), 15, 0.5, 0, 0);
+}
+
+@keyframes win-glow {
+    0% { -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.4), 15, 0.5, 0, 0); }
+    100% { -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.8), 25, 0.7, 0, 0); }
+}
+
+/* ================ *
+ *  Status System   *
+ * ================ */
+.status-label {
+    -fx-font-size: 26px;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 18px 35px;
+    -fx-background-radius: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 2);
+}
+
+.status-win {
+    -fx-background-color: rgba(46, 204, 113, 0.3);
+    -fx-text-fill: #27ae60;
+}
+
+.status-draw {
+    -fx-background-color: rgba(241, 196, 15, 0.3);
+    -fx-text-fill: #f39c12;
+}
+
+.status-turn {
+    -fx-background-color: rgba(52, 152, 219, 0.3);
+    -fx-text-fill: #2980b9;
+}
+
+/* ================ *
+ *  Score Display   *
+ * ================ */
+.score-container {
+    -fx-background-color: rgba(0, 0, 0, 0.15);
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-effect: innershadow(gaussian, rgba(255, 255, 255, 0.1), 10, 0.3, 0, 0);
+}
+
+.score-label {
+    -fx-font-size: 22px;
+    -fx-text-fill: -text-primary;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.2, 0, 1);
+}
+
+/* ================ *
+ *  Advanced Effects*
+ * ================ */
+.button {
+    -fx-perspective: 1000px;
+    -fx-background-insets: 0;
+}
+
+.button:hover {
+    -fx-rotate: 0.5deg;
+    -fx-scale-x: 1.06;
+    -fx-scale-y: 1.06;
+}
+
+.button:pressed {
+    -fx-rotate: -0.3deg;
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+}
+
+/* ================ *
+ *  Responsive Design*
+ * ================ */
+@media (max-width: 600px) {
+    .root {
+        -fx-padding: 10px;
+    }
+    
+    .game-container {
+        -fx-padding: 15px;
+    }
+    
+    .cell {
+        -fx-pref-width: 80px;
+        -fx-pref-height: 80px;
+        -fx-font-size: 40px;
+    }
+    
+    .game-title {
+        -fx-font-size: 36px;
+    }
+}
+/* ================ *
+ *  Alert Dialog    *
+ * ================ */
+.dialog-pane {
+    -fx-background-color: -primary-gradient;
+    -fx-background-insets: 0;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 20, 0.4, 0, 5);
+}
+
+/* Content Area */
+.dialog-pane > .content.label {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+    -fx-padding: 25px;
+    -fx-alignment: center;
+}
+
+/* Header Panel */
+.dialog-pane:header .header-panel {
+    -fx-background-color: transparent;
+    -fx-effect: null;
+}
+
+.dialog-pane:header .header-panel .label {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 24px;
+    -fx-font-weight: 800;
+}
+
+/* Buttons */
+.dialog-pane > .button-bar > .container {
+    -fx-background-color: transparent;
+    -fx-spacing: 15px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-text-fill: -text-primary;
+    -fx-font-weight: 700;
+    -fx-padding: 12px 30px;
+    -fx-background-radius: 30px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-border-radius: 30px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 2);
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+    -fx-translate-y: -2px;
+}
+
+.dialog-pane .button:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Remove default content background */
+.dialog-pane > .content {
+    -fx-background-color: transparent;
+}
